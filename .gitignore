@@ -27,13 +27,7 @@ hf_cache/
 # MM-OR dataset (download via mm-or/download_mm-or.sh)
 mm-or/MM-OR_data/
 
-# Generated pipeline outputs
-hierarchy_output/
-first_annotation_output/
-annotation_output/
-
 # Generated HTML viewers and reports
-*.html
 
 # Logs and temp files
 *.log
@@ -55,5 +49,4 @@ Thumbs.db
 
 #
 /first_annotation_output
-/mm-or
 
