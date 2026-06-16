@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# ML / Hugging Face caches
+.cache/
+hf_cache/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+
+# MM-OR dataset (download via mm-or/download_mm-or.sh)
+mm-or/MM-OR_data/
+
+# Generated pipeline outputs
+hierarchy_output/
+first_annotation_output/
+annotation_output/
+
+# Generated HTML viewers and reports
+*.html
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / editor
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+#
+/first_annotation_output
+/mm-or
+
