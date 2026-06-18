@@ -9,9 +9,10 @@ and loads per-frame scene graphs from the relation_labels directory.
 
 Usage:
     python3 render_hierarchy_video.py \
-        --hierarchy hierarchy_output/001_PKA_hierarchy.json \
-        --colorimage_dir mm-or/MM-OR_data/MM-OR_processed/001_PKA/colorimage \
-        --output hierarchy_video_sync_qwen32b.html
+    --hierarchy hierarchy_output/001_PKA_hierarchy.json \
+    --srt mm-or/MM-OR_data/MM-OR_processed/take_transcripts/001_PKA.srt \
+    --colorimage_dir mm-or/MM-OR_data/MM-OR_processed/001_PKA/colorimage \
+    --output hierarchy_video_sync_qwen32b.html
 
     python3 -m http.server 8080 --directory /mnt/home/nhatvu/dlhm
     http://localhost:8080/hierarchy_video_sync.html
@@ -23,6 +24,8 @@ import argparse
 import json
 import os
 from pathlib import Path
+
+import re
 
 from scene_graph_utils import (
     ENTITY_NAMES,
@@ -79,6 +82,15 @@ def parse_args() -> argparse.Namespace:
         help="Comma-separated camera ids.",
     )
     parser.add_argument(
+        "--simstation_dir", type=Path,
+        default=Path("mm-or/simstation"),
+        help="Directory containing simstation (robot monitor screen) frames.",
+    )
+    parser.add_argument(
+        "--srt", type=Path, default=None,
+        help="Path to SRT transcript file for subtitle display.",
+    )
+    parser.add_argument(
         "--autoplay", action="store_true",
         help="Start playback automatically.",
     )
@@ -87,6 +99,29 @@ def parse_args() -> argparse.Namespace:
         help="HTTP server root for frame paths.",
     )
     return parser.parse_args()
+
+
+def parse_srt(srt_path: Path) -> list[dict]:
+    """Parse an SRT file into a sorted list of {start, end, text} entries (seconds)."""
+    content = srt_path.read_text(encoding="utf-8")
+    blocks = re.split(r"\n\s*\n", content.strip())
+    entries = []
+    for block in blocks:
+        lines = block.strip().split("\n")
+        if len(lines) < 3:
+            continue
+        ts_match = re.match(
+            r"(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2})[,.](\d{3})",
+            lines[1],
+        )
+        if not ts_match:
+            continue
+        g = [int(x) for x in ts_match.groups()]
+        start_s = g[0] * 3600 + g[1] * 60 + g[2] + g[3] / 1000.0
+        end_s = g[4] * 3600 + g[5] * 60 + g[6] + g[7] / 1000.0
+        text = " ".join(lines[2:]).strip()
+        entries.append({"start": round(start_s, 1), "end": round(end_s, 1), "text": text})
+    return entries
 
 
 def infer_web_root(output: Path, colorimage_dir: Path) -> Path:
@@ -117,6 +152,25 @@ def build_camera_grid_html(cameras: list[str]) -> str:
         </div>"""
         )
     return "\n".join(cells)
+
+
+def build_simstation_map(hierarchy: dict) -> dict[int, str]:
+    """
+    Build a mapping from original_timestamp (colorimage second) to the
+    simstation frame id string, so the player can load the correct monitor
+    screen image for each time.
+    """
+    meta = hierarchy.get("metadata", {})
+    take_dir = Path(meta["take_dir"])
+    frame_map = load_frame_map(take_dir)
+
+    ts_to_sim: dict[int, str] = {}
+    for tp_id, info in frame_map.items():
+        ts = info.get("original_timestamp")
+        sim = info.get("simstation")
+        if ts is not None and sim is not None:
+            ts_to_sim[ts] = sim
+    return ts_to_sim
 
 
 def load_scene_graphs(hierarchy: dict) -> dict[int, list]:
@@ -251,9 +305,8 @@ def build_hierarchy_data(hierarchy: dict) -> dict:
         "role_order": _order_roles(roles_data.keys()),
         "time_range": time_range,
         "metadata": meta,
-        # Always-on monitor overlays, synced to the colorimage timeline.
+        # Always-on monitor overlay, synced to the colorimage timeline.
         "monitor_timeline": _build_robot_timeline(hierarchy, "robot_monitor"),
-        "setup_timeline": _build_robot_timeline(hierarchy, "robot_setup"),
     }
 
 
@@ -265,6 +318,9 @@ def build_html(
     serve_dir: Path,
     cameras: list[str],
     autoplay: bool,
+    simstation_dir: str = "",
+    simstation_map: dict[int, str] | None = None,
+    srt_entries: list[dict] | None = None,
 ) -> str:
     data = build_hierarchy_data(hierarchy)
     data_json = json.dumps(data, ensure_ascii=False)
@@ -272,6 +328,11 @@ def build_html(
     entity_names_json = json.dumps(ENTITY_NAMES, ensure_ascii=False)
     predicate_names_json = json.dumps(PREDICATE_NAMES, ensure_ascii=False)
     sg_json = json.dumps(scene_graphs, ensure_ascii=False)
+    transcript_json = json.dumps(srt_entries or [], ensure_ascii=False)
+    simstation_map_json = json.dumps(
+        {str(k): v for k, v in (simstation_map or {}).items()},
+        ensure_ascii=False,
+    )
     html_name = output.name
     serve_dir_posix = serve_dir.resolve().as_posix()
     autoplay_js = "true" if autoplay else "false"
@@ -447,6 +508,21 @@ def build_html(
     .sg-obj {{ color: var(--warn); }}
     .sg-empty {{ color: var(--muted); font-style: italic; font-size: 11px; }}
 
+    /* Transcript status in right panel header */
+    .transcript-status {{
+      margin-top: 6px; padding: 4px 8px;
+      background: rgba(83,168,255,0.08);
+      border: 1px solid rgba(83,168,255,0.2);
+      border-radius: 5px;
+      max-height: 48px; overflow-y: auto;
+    }}
+    .transcript-status .transcript-line {{
+      font-size: 11px; line-height: 1.3; color: #e8ecff;
+    }}
+    .transcript-status .transcript-empty {{
+      font-size: 10px; color: var(--muted); font-style: italic;
+    }}
+
     /* Hierarchy content (L1 steps + L0 segments for current window) */
     .hierarchy-content {{
       flex: 1; overflow-y: auto; padding: 8px 14px;
@@ -524,6 +600,8 @@ def build_html(
       object-fit: contain; background: #000;
     }}
     .camera-cell.span-full {{ grid-column: 1 / -1; }}
+    .camera-cell.monitor-cell {{ border-color: var(--l2); }}
+    .camera-cell.monitor-cell .camera-label {{ background: #1e1040; color: var(--l2); }}
 
     .foot {{
       font-size: 10px; color: var(--muted); padding: 6px 14px;
@@ -586,11 +664,18 @@ def build_html(
     <div class="right-panel">
       <div class="panel-header">
         <h2>Multi-Camera View</h2>
-        <div class="subtitle" id="frameInfo">—</div>
+        <div class="subtitle" id="frameInfo">\u2014</div>
         <div class="monitor-status" id="monitorStatus"></div>
+        <div class="transcript-status" id="transcriptStatus">
+          <span class="transcript-empty">\u2014 silence \u2014</span>
+        </div>
       </div>
       <div id="cameraGrid" class="camera-grid">
 {camera_grid_html}
+        <div class="camera-cell monitor-cell" data-camera="simstation">
+          <div class="camera-label">Robot Monitor Screen</div>
+          <img class="camera-frame" alt="simstation" />
+        </div>
       </div>
     </div>
   </div>
@@ -606,7 +691,9 @@ def build_html(
     const timeStart = {t_start};
     const timeEnd = {t_end};
     const monitorTimeline = hierarchyData.monitor_timeline || [];
-    const setupTimeline = hierarchyData.setup_timeline || [];
+    const simstationDir = {json.dumps(simstation_dir)};
+    const simstationMap = {simstation_map_json};
+    const transcriptEntries = {transcript_json};
 
     const allValidTimes = Object.keys(sceneGraphs).map(Number).sort((a,b) => a - b);
 
@@ -649,15 +736,10 @@ def build_html(
       const el = document.getElementById('monitorStatus');
       if (!el) return;
       const mon = labelAtTime(monitorTimeline, currentTime);
-      const setup = labelAtTime(setupTimeline, currentTime);
       let html = '';
       if (monitorTimeline.length) {{
         html += `<span class="mon-chip"><span class="mon-key">Robot Monitor</span>` +
           `<span class="mon-val">${{mon ? escapeHtml(mon) : '\\u2014'}}</span></span>`;
-      }}
-      if (setupTimeline.length) {{
-        html += `<span class="mon-chip setup"><span class="mon-key">Robot Setup</span>` +
-          `<span class="mon-val">${{setup ? escapeHtml(setup) : '\\u2014'}}</span></span>`;
       }}
       el.innerHTML = html;
     }}
@@ -805,10 +887,23 @@ def build_html(
       }}).join('');
     }}
 
+    function renderTranscript() {{
+      const container = document.getElementById('transcriptStatus');
+      const t = currentTime;
+      const active = transcriptEntries.filter(e => t >= e.start && t <= e.end);
+      if (!active.length) {{
+        container.innerHTML = '<span class="transcript-empty">\u2014 silence \u2014</span>';
+      }} else {{
+        container.innerHTML = active.map(e =>
+          `<div class="transcript-line">"${{escapeHtml(e.text)}}"</div>`
+        ).join('');
+      }}
+    }}
+
     function renderWindow() {{
       if (!windows.length) {{
         document.getElementById('winNum').textContent = 'No phases';
-        document.getElementById('winSummary').textContent = '—';
+        document.getElementById('winSummary').textContent = '\u2014';
         document.getElementById('winTime').textContent = '';
         document.getElementById('winDur').textContent = '';
         document.getElementById('hierarchyContent').innerHTML = '';
@@ -845,7 +940,7 @@ def build_html(
           const dur = seg.duration_s != null ? seg.duration_s + 's' : '?';
           atomicHtml += `<div class="l0-item" data-ts="${{seg.time_start}}" data-te="${{seg.time_end}}">` +
             `<span class="phase-badge l0">L0</span>` +
-            `<span class="l0-time">${{seg.time_start}}–${{seg.time_end}}</span>` +
+            `<span class="l0-time">${{seg.time_start}}\u2013${{seg.time_end}}</span>` +
             `<span class="l0-desc">${{predsHtml}}</span>` +
             `<span class="l0-dur">${{dur}}</span></div>`;
         }});
@@ -853,7 +948,7 @@ def build_html(
         html += `<div class="step-block expanded" data-ts="${{step.time_start}}" data-te="${{step.time_end}}">` +
           `<div class="step-header" onclick="this.parentElement.classList.toggle('expanded')">` +
           `<span class="phase-badge l1">L1</span>` +
-          `<span class="phase-time">${{step.time_start}}–${{step.time_end}}</span>` +
+          `<span class="phase-time">${{step.time_start}}\u2013${{step.time_end}}</span>` +
           `<span class="step-summary">${{escapeHtml(step.summary || '')}}</span>` +
           `<span class="phase-dur">${{dur}}</span></div>` +
           `<div class="step-body">${{atomicHtml}}</div></div>`;
@@ -896,6 +991,9 @@ def build_html(
       // Scene graph
       renderSceneGraph();
 
+      // Transcript subtitle
+      renderTranscript();
+
       // Robot monitor / setup status (always synced to the frame)
       renderMonitorStatus();
 
@@ -918,8 +1016,16 @@ def build_html(
       document.querySelectorAll('.camera-cell').forEach(cell => {{
         const cam = cell.dataset.camera;
         const img = cell.querySelector('.camera-frame');
-        const path = buildFramePath(cam, currentTime);
-        if (img.getAttribute('data-path') !== path) {{
+        let path;
+        if (cam === 'simstation') {{
+          const simFrame = simstationMap[String(currentTime)];
+          path = simFrame
+            ? `${{simstationDir}}/camera01_${{simFrame}}.jpg`
+            : '';
+        }} else {{
+          path = buildFramePath(cam, currentTime);
+        }}
+        if (path && img.getAttribute('data-path') !== path) {{
           img.setAttribute('data-path', path);
           img.src = path;
         }}
@@ -1067,11 +1173,22 @@ def main() -> None:
 
     web_root = args.web_root.resolve() if args.web_root else infer_web_root(args.output, args.colorimage_dir)
     color_dir = color_dir_for_web(args.colorimage_dir, web_root)
+    simstation_dir = color_dir_for_web(args.simstation_dir, web_root) if args.simstation_dir.exists() else ""
     cameras = [c.strip() for c in args.cameras.split(",") if c.strip()]
 
     print("Loading per-frame scene graphs...")
     scene_graphs = load_scene_graphs(hierarchy)
     print(f"  {len(scene_graphs)} frames with scene graph data")
+
+    print("Building simstation frame map...")
+    simstation_map = build_simstation_map(hierarchy)
+    print(f"  {len(simstation_map)} timestamps mapped to simstation frames")
+
+    srt_entries = None
+    if args.srt and args.srt.exists():
+        print(f"Loading transcript from {args.srt} ...")
+        srt_entries = parse_srt(args.srt)
+        print(f"  {len(srt_entries)} transcript entries loaded.")
 
     html = build_html(
         hierarchy=hierarchy,
@@ -1081,6 +1198,9 @@ def main() -> None:
         serve_dir=web_root,
         cameras=cameras,
         autoplay=args.autoplay,
+        simstation_dir=simstation_dir,
+        simstation_map=simstation_map,
+        srt_entries=srt_entries,
     )
     args.output.write_text(html, encoding="utf-8")
     print(f"Wrote {args.output}")

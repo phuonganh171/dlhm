@@ -25,7 +25,7 @@ hf_cache/
 *.ckpt
 
 # MM-OR dataset (download via mm-or/download_mm-or.sh)
-mm-or/MM-OR_data/
+mm-or/
 
 # Generated HTML viewers and reports
 

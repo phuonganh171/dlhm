@@ -9,12 +9,12 @@ Phase 1:
 Usage:
     source /tmp/nhatvu/.venv/bin/activate &&
     python3 build_hierarchy_qwen32b.py \
-        --take_dir mm-or/MM-OR_data/MM-OR_processed/001_PKA \
-        --start_tp 001114 \
-        --max_frames 600 \
-        --level2 \
-        --model Qwen/Qwen3-32B \
-        --output hierarchy_output/001_PKA_hierarchy.json
+    --take_dir mm-or/MM-OR_data/MM-OR_processed/001_PKA \
+    --srt mm-or/MM-OR_data/MM-OR_processed/take_transcripts/001_PKA.srt \
+    --start_tp 001114 --max_frames 600 --level2 \
+    --model Qwen/Qwen3-32B \
+    --output hierarchy_output/001_PKA_hierarchy.json
+
 """
 
 import argparse
@@ -53,6 +53,53 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)],
 )
 logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# SRT transcript loading
+# ---------------------------------------------------------------------------
+
+def parse_srt(srt_path: Path) -> List[Dict[str, Any]]:
+    """Parse an SRT file into a sorted list of {start_s, end_s, text} entries."""
+    content = srt_path.read_text(encoding="utf-8")
+    blocks = re.split(r"\n\s*\n", content.strip())
+    entries = []
+    for block in blocks:
+        lines = block.strip().split("\n")
+        if len(lines) < 3:
+            continue
+        ts_match = re.match(
+            r"(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2})[,.](\d{3})",
+            lines[1],
+        )
+        if not ts_match:
+            continue
+        g = [int(x) for x in ts_match.groups()]
+        start_s = g[0] * 3600 + g[1] * 60 + g[2] + g[3] / 1000.0
+        end_s = g[4] * 3600 + g[5] * 60 + g[6] + g[7] / 1000.0
+        text = " ".join(lines[2:]).strip()
+        entries.append({"start_s": start_s, "end_s": end_s, "text": text})
+    return entries
+
+
+def get_overlapping_transcript(
+    srt_entries: List[Dict[str, Any]],
+    seg_start: float,
+    seg_end: float,
+) -> List[Dict[str, Any]]:
+    """Return transcript entries that overlap with [seg_start, seg_end]."""
+    overlapping = []
+    for entry in srt_entries:
+        if entry["end_s"] < seg_start:
+            continue
+        if entry["start_s"] > seg_end:
+            break
+        overlapping.append({
+            "start": round(entry["start_s"], 1),
+            "end": round(entry["end_s"], 1),
+            "text": entry["text"],
+        })
+    return overlapping
 
 
 # ---------------------------------------------------------------------------
@@ -273,6 +320,7 @@ def build_level0(
     debounce: int = 2,
     take_dir: Optional[Path] = None,
     include_tools: bool = True,
+    srt_entries: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """
     Build the complete level-0 hierarchy for all roles.
@@ -326,6 +374,13 @@ def build_level0(
                 seg["description"] = _auto_describe_tool(role, seg["active_predicates"])
             else:
                 seg["description"] = _auto_describe_l0(role, seg["active_predicates"])
+
+            if srt_entries and ts_start is not None and ts_end is not None:
+                seg["transcript"] = get_overlapping_transcript(
+                    srt_entries, float(ts_start), float(ts_end)
+                )
+            else:
+                seg["transcript"] = []
 
         roles_output[role] = {
             "level0_segments": segments,
@@ -512,11 +567,13 @@ def _auto_describe_tool(role: str, active_predicates: list) -> str:
 # ---------------------------------------------------------------------------
 
 LEVEL1_SYSTEM_PROMPT = """\
-You are a surgical workflow analyst. Always respond in English. \
+You are a surgical workflow analyst. You MUST write ALL output in English only. \
+Do NOT use Chinese, German, or any other language. \
 You will receive a chronological list of \
 level-0 activity segments for one person during a surgical procedure. Each \
 segment represents a period where that person's active interactions stayed \
-constant.
+constant. Each segment also includes a "Speech" field showing what was said \
+in the operating room during that time.
 
 Your task: group consecutive segments into coherent "action steps". An action \
 step is a sequence of related atomic activities that together accomplish a \
@@ -526,7 +583,11 @@ instruments").
 Rules:
 - Groups MUST be consecutive -- no skipping or reordering segments.
 - Every segment must belong to exactly one group.
-- Each group gets a 1-sentence natural language summary.
+- Each group gets a 1-sentence "summary" IN ENGLISH describing the action step \
+(focus on the physical actions).
+- Each group gets a brief "audio_summary" describing the verbal communication \
+pattern during this step (e.g., "surgeon instructs assistant on positioning", \
+"brief confirmations", "no verbal communication").
 - Short idle gaps between related active segments should be included in the \
 same group (the person briefly paused but continued the same task).
 - Long idle periods (>60s with no active interactions) should generally be \
@@ -537,7 +598,8 @@ Output format (JSON array):
 [
   {
     "segment_ids": ["<first_seg_id>", ..., "<last_seg_id>"],
-    "summary": "One sentence describing the action step."
+    "summary": "One sentence IN ENGLISH describing the action step.",
+    "audio_summary": "Brief description of verbal communication during this step."
   },
   ...
 ]"""
@@ -554,6 +616,9 @@ def _lazy_import_llm():
     return build_chat_input, load_model, run_inference_batch, strip_think_tags
 
 
+_MAX_TRANSCRIPT_QUOTES_L0 = 5
+
+
 def _format_l0_for_prompt(role: str, segments: List[Dict[str, Any]]) -> str:
     """Format a role's level-0 segments as the user message for the LLM."""
     role_name = humanize(role)
@@ -561,6 +626,15 @@ def _format_l0_for_prompt(role: str, segments: List[Dict[str, Any]]) -> str:
     for seg in segments:
         t_range = f"t={seg['time_start']}s-{seg['time_end']}s ({seg['duration_s']}s)"
         lines.append(f"  [{seg['segment_id']}] {t_range}: {seg['description']}")
+        transcript = seg.get("transcript", [])
+        if transcript:
+            quotes = [t["text"] for t in transcript[:_MAX_TRANSCRIPT_QUOTES_L0]]
+            speech_str = " / ".join(f'"{q}"' for q in quotes)
+            if len(transcript) > _MAX_TRANSCRIPT_QUOTES_L0:
+                speech_str += f" ... (+{len(transcript) - _MAX_TRANSCRIPT_QUOTES_L0} more)"
+            lines.append(f"      Speech: {speech_str}")
+        else:
+            lines.append("      Speech: \u2014")
     lines.append("\nGroup these into action steps. Output JSON only.")
     return "\n".join(lines)
 
@@ -696,6 +770,9 @@ def build_level1(
         l0_segs = role_data["level0_segments"]
 
         if len(l0_segs) <= 1:
+            child_transcript = []
+            for s in l0_segs:
+                child_transcript.extend(s.get("transcript", []))
             role_data["level1_segments"] = [{
                 "segment_id": f"{role}_L1_000",
                 "role": role,
@@ -705,6 +782,7 @@ def build_level1(
                 "time_start": l0_segs[0]["time_start"] if l0_segs else None,
                 "time_end": l0_segs[-1]["time_end"] if l0_segs else None,
                 "summary": l0_segs[0]["description"] if l0_segs else "No activity",
+                "transcript": child_transcript,
             }]
             role_data["num_level1_segments"] = 1
             logger.info("  %-25s  1 level-1 segment (trivial, <=1 L0)", humanize(role))
@@ -738,6 +816,9 @@ def build_level1(
         for i, group in enumerate(groups):
             child_ids = group.get("segment_ids", [])
             children = [s for s in l0_segs if s["segment_id"] in child_ids]
+            child_transcript = []
+            for child in children:
+                child_transcript.extend(child.get("transcript", []))
             level1_segs.append({
                 "segment_id": f"{role}_L1_{i:03d}",
                 "role": role,
@@ -753,6 +834,8 @@ def build_level1(
                     else None
                 ),
                 "summary": group.get("summary", ""),
+                "audio_summary": group.get("audio_summary", ""),
+                "transcript": child_transcript,
             })
 
         role_data["level1_segments"] = level1_segs
@@ -765,20 +848,28 @@ def build_level1(
 # ---------------------------------------------------------------------------
 
 LEVEL2_SYSTEM_PROMPT = """\
-You are a surgical workflow analyst. Always respond in English. \
+You are a surgical workflow analyst. You MUST write ALL output in English only. \
+Do NOT use Chinese, German, or any other language. \
 You will receive a chronological list of \
 level-1 "action step" segments for one person during a surgical procedure. Each \
-action step groups several atomic activities that accomplish a sub-task.
+action step groups several atomic activities that accomplish a sub-task. Each \
+action step includes an "Audio" field summarizing the verbal communication \
+during that step.
 
 Your task: group consecutive action steps into high-level "surgical phases". \
 A phase represents a major stage of the procedure from this person's perspective \
 (e.g., "patient preparation", "femoral bone work", "robot-assisted implant \
 placement", "wound closure").
 
+For each phase, also provide a brief "audio_summary" that synthesizes the \
+communication patterns across the included action steps into one overall \
+description for the phase.
+
 Rules:
 - Groups MUST be consecutive -- no skipping or reordering segments.
 - Every segment must belong to exactly one group.
-- Each group gets a 1-sentence natural language summary describing the phase.
+- Each group gets a 1-sentence natural language summary IN ENGLISH describing the phase.
+- Each group gets a brief "audio_summary" synthesizing the communication pattern.
 - A role with few action steps may have only 1-2 phases -- that is fine.
 - Output ONLY valid JSON, no other text.
 
@@ -786,7 +877,8 @@ Output format (JSON array):
 [
   {
     "segment_ids": ["<first_L1_id>", ..., "<last_L1_id>"],
-    "summary": "One sentence describing the surgical phase."
+    "summary": "One sentence IN ENGLISH describing the surgical phase.",
+    "audio_summary": "Brief description of communication pattern during this phase."
   },
   ...
 ]"""
@@ -805,6 +897,11 @@ def _format_l1_for_prompt(role: str, segments: List[Dict[str, Any]]) -> str:
             f"  [{seg['segment_id']}] t={t_start}s-{t_end}s ({dur}s, "
             f"{n_children} L0 segments): {seg.get('summary', '')}"
         )
+        audio_summary = seg.get("audio_summary", "")
+        if audio_summary:
+            lines.append(f"      Audio: {audio_summary}")
+        else:
+            lines.append("      Audio: (no verbal communication)")
     lines.append("\nGroup these into surgical phases. Output JSON only.")
     return "\n".join(lines)
 
@@ -824,6 +921,9 @@ def build_level2(
         l1_segs = role_data.get("level1_segments", [])
 
         if len(l1_segs) <= 1:
+            child_transcript = []
+            for s in l1_segs:
+                child_transcript.extend(s.get("transcript", []))
             role_data["level2_segments"] = [{
                 "segment_id": f"{role}_L2_000",
                 "role": role,
@@ -833,6 +933,7 @@ def build_level2(
                 "time_start": l1_segs[0]["time_start"] if l1_segs else None,
                 "time_end": l1_segs[-1]["time_end"] if l1_segs else None,
                 "summary": l1_segs[0].get("summary", "No activity") if l1_segs else "No activity",
+                "transcript": child_transcript,
             }]
             role_data["num_level2_segments"] = 1
             logger.info("  %-25s  1 level-2 segment (trivial, <=1 L1)", humanize(role))
@@ -862,6 +963,9 @@ def build_level2(
         for i, group in enumerate(groups):
             child_ids = group.get("segment_ids", [])
             children = [s for s in l1_segs if s["segment_id"] in child_ids]
+            child_transcript = []
+            for child in children:
+                child_transcript.extend(child.get("transcript", []))
             level2_segs.append({
                 "segment_id": f"{role}_L2_{i:03d}",
                 "role": role,
@@ -877,6 +981,8 @@ def build_level2(
                     else None
                 ),
                 "summary": group.get("summary", ""),
+                "audio_summary": group.get("audio_summary", ""),
+                "transcript": child_transcript,
             })
 
         role_data["level2_segments"] = level2_segs
@@ -915,6 +1021,10 @@ def parse_args():
     parser.add_argument(
         "--no_tool_roles", action="store_true",
         help="Disable the tool/instrument roles (saw, drill, hammer, ...).",
+    )
+    parser.add_argument(
+        "--srt", type=Path, default=None,
+        help="Path to SRT transcript file to attach audio context to segments.",
     )
     parser.add_argument(
         "--output", type=Path,
@@ -960,11 +1070,18 @@ def main():
         entries = entries[:args.max_frames]
         logger.info("Using %d timepoints (--max_frames %d).", len(entries), args.max_frames)
 
+    srt_entries = None
+    if args.srt is not None:
+        logger.info("Loading SRT transcript from %s ...", args.srt)
+        srt_entries = parse_srt(args.srt)
+        logger.info("  %d transcript entries parsed.", len(srt_entries))
+
     logger.info("Building level-0 segmentation (debounce=%d) ...", args.debounce)
     hierarchy = build_level0(
         entries, frame_map, debounce=args.debounce,
         take_dir=None if args.no_robot_roles else args.take_dir,
         include_tools=not args.no_tool_roles,
+        srt_entries=srt_entries,
     )
 
     tp_start = entries[0][0] if entries else None
