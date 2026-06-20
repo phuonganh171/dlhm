@@ -6536,13 +6536,17 @@
           "level": 1,
           "role_human": "assistant surgeon",
           "segment_ids": [
-            "assistant_surgeon_L0_000"
+            "assistant_surgeon_L0_000",
+            "assistant_surgeon_L0_001",
+            "assistant_surgeon_L0_002",
+            "assistant_surgeon_L0_003",
+            "assistant_surgeon_L0_004"
           ],
           "time_start": 3386,
-          "time_end": 3414,
-          "duration_s": 29,
-          "summary": "The assistant surgeon is preparing the patient.",
-          "audio_summary": "Brief confirmations and casual remarks.",
+          "time_end": 3535,
+          "duration_s": 150,
+          "summary": "Assistant surgeon prepares and positions the patient, then briefly assists the head surgeon.",
+          "audio_summary": "Casual remarks and brief confirmations.",
           "transcript": [
             {
               "start": 3385.1,
@@ -6578,23 +6582,7 @@
               "start": 3413.8,
               "end": 3414.8,
               "text": "Yes."
-            }
-          ]
-        },
-        {
-          "segment_id": "assistant_surgeon_L1_001",
-          "role": "assistant_surgeon",
-          "level": 1,
-          "role_human": "assistant surgeon",
-          "segment_ids": [
-            "assistant_surgeon_L0_001"
-          ],
-          "time_start": 3420,
-          "time_end": 3468,
-          "duration_s": 49,
-          "summary": "The assistant surgeon is actively touching the patient.",
-          "audio_summary": "Requests for tools and brief confirmations.",
-          "transcript": [
+            },
             {
               "start": 3419.8,
               "end": 3420.8,
@@ -6619,25 +6607,7 @@
               "start": 3429.8,
               "end": 3430.8,
               "text": "Ah, I have it."
-            }
-          ]
-        },
-        {
-          "segment_id": "assistant_surgeon_L1_002",
-          "role": "assistant_surgeon",
-          "level": 1,
-          "role_human": "assistant surgeon",
-          "segment_ids": [
-            "assistant_surgeon_L0_002",
-            "assistant_surgeon_L0_003",
-            "assistant_surgeon_L0_004"
-          ],
-          "time_start": 3469,
-          "time_end": 3535,
-          "duration_s": 67,
-          "summary": "The assistant surgeon briefly pauses before resuming patient interaction.",
-          "audio_summary": "Minimal verbal communication.",
-          "transcript": [
+            },
             {
               "start": 3479.8,
               "end": 3489.8,
@@ -6666,19 +6636,20 @@
           ]
         },
         {
-          "segment_id": "assistant_surgeon_L1_003",
+          "segment_id": "assistant_surgeon_L1_001",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
           "segment_ids": [
             "assistant_surgeon_L0_005",
-            "assistant_surgeon_L0_006"
+            "assistant_surgeon_L0_006",
+            "assistant_surgeon_L0_007"
           ],
           "time_start": 3541,
-          "time_end": 3655,
-          "duration_s": 115,
-          "summary": "The assistant surgeon resumes assisting the head surgeon while touching the patient.",
-          "audio_summary": "Instructions on surgical technique.",
+          "time_end": 3730,
+          "duration_s": 190,
+          "summary": "Assistant surgeon assists the head surgeon with a surgical procedure involving motion adjustments.",
+          "audio_summary": "Instructions and feedback on surgical technique.",
           "transcript": [
             {
               "start": 3548.6,
@@ -6699,25 +6670,7 @@
               "start": 3648.6,
               "end": 3675.6,
               "text": "Okay, here you move the osteoporosis and close the range of motion."
-            }
-          ]
-        },
-        {
-          "segment_id": "assistant_surgeon_L1_004",
-          "role": "assistant_surgeon",
-          "level": 1,
-          "role_human": "assistant surgeon",
-          "segment_ids": [
-            "assistant_surgeon_L0_007",
-            "assistant_surgeon_L0_008",
-            "assistant_surgeon_L0_009"
-          ],
-          "time_start": 3661,
-          "time_end": 4007,
-          "duration_s": 347,
-          "summary": "The assistant surgeon alternates between touching the patient and brief pauses.",
-          "audio_summary": "Discussion about surgical tools and techniques.",
-          "transcript": [
+            },
             {
               "start": 3648.6,
               "end": 3675.6,
@@ -6797,7 +6750,24 @@
               "start": 3726.6,
               "end": 3728.6,
               "text": "Okay, I think we should start."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "assistant_surgeon_L1_002",
+          "role": "assistant_surgeon",
+          "level": 1,
+          "role_human": "assistant surgeon",
+          "segment_ids": [
+            "assistant_surgeon_L0_008",
+            "assistant_surgeon_L0_009"
+          ],
+          "time_start": 3736,
+          "time_end": 4007,
+          "duration_s": 272,
+          "summary": "Assistant surgeon engages in patient interaction and makes minor adjustments.",
+          "audio_summary": "Discussion about tools and brief confirmations.",
+          "transcript": [
             {
               "start": 3734.6,
               "end": 3736.6,
@@ -6921,19 +6891,23 @@
           ]
         },
         {
-          "segment_id": "assistant_surgeon_L1_005",
+          "segment_id": "assistant_surgeon_L1_003",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
           "segment_ids": [
             "assistant_surgeon_L0_010",
-            "assistant_surgeon_L0_011"
+            "assistant_surgeon_L0_011",
+            "assistant_surgeon_L0_012",
+            "assistant_surgeon_L0_013",
+            "assistant_surgeon_L0_014",
+            "assistant_surgeon_L0_015"
           ],
           "time_start": 4013,
-          "time_end": 4807,
-          "duration_s": 795,
-          "summary": "The assistant surgeon is idle before assisting the head surgeon.",
-          "audio_summary": "Discussion about sutures.",
+          "time_end": 5115,
+          "duration_s": 1103,
+          "summary": "Assistant surgeon briefly assists with suturing before returning to idle.",
+          "audio_summary": "Requests for suture materials and brief confusion.",
           "transcript": [
             {
               "start": 4011.5,
@@ -7554,26 +7528,7 @@
               "start": 4806.9,
               "end": 4808.9,
               "text": "You go in like that, yeah?"
-            }
-          ]
-        },
-        {
-          "segment_id": "assistant_surgeon_L1_006",
-          "role": "assistant_surgeon",
-          "level": 1,
-          "role_human": "assistant surgeon",
-          "segment_ids": [
-            "assistant_surgeon_L0_012",
-            "assistant_surgeon_L0_013",
-            "assistant_surgeon_L0_014",
-            "assistant_surgeon_L0_015"
-          ],
-          "time_start": 4813,
-          "time_end": 5115,
-          "duration_s": 303,
-          "summary": "The assistant surgeon briefly resumes assisting and touching the patient.",
-          "audio_summary": "Minimal verbal communication.",
-          "transcript": [
+            },
             {
               "start": 4808.9,
               "end": 4813.1,
@@ -7752,7 +7707,7 @@
           ]
         },
         {
-          "segment_id": "assistant_surgeon_L1_007",
+          "segment_id": "assistant_surgeon_L1_004",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -7763,8 +7718,8 @@
           "time_start": 5121,
           "time_end": 5234,
           "duration_s": 114,
-          "summary": "The assistant surgeon prepares and performs a drilling action on the patient.",
-          "audio_summary": "Instructions for room personnel during the scan.",
+          "summary": "Assistant surgeon prepares and performs an X-ray scan on the patient.",
+          "audio_summary": "Clear instructions to evacuate the room before scanning.",
           "transcript": [
             {
               "start": 5124.9,
@@ -7949,7 +7904,7 @@
           ]
         },
         {
-          "segment_id": "assistant_surgeon_L1_008",
+          "segment_id": "assistant_surgeon_L1_005",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -7963,8 +7918,8 @@
           "time_start": 5240,
           "time_end": 5396,
           "duration_s": 157,
-          "summary": "The assistant surgeon resumes preparing the patient and handling surgical instruments.",
-          "audio_summary": "Discussion about surgical procedures and tools.",
+          "summary": "Assistant surgeon prepares the patient for the next stage and organizes surgical instruments.",
+          "audio_summary": "Discussion about equipment reliability and procedural readiness.",
           "transcript": [
             {
               "start": 5243.5,
@@ -8104,7 +8059,7 @@
           ]
         }
       ],
-      "num_level1_segments": 9,
+      "num_level1_segments": 6,
       "level2_segments": [
         {
           "segment_id": "assistant_surgeon_L2_000",
@@ -8113,13 +8068,14 @@
           "role_human": "assistant surgeon",
           "child_ids": [
             "assistant_surgeon_L1_000",
-            "assistant_surgeon_L1_001"
+            "assistant_surgeon_L1_001",
+            "assistant_surgeon_L1_002"
           ],
           "time_start": 3386,
-          "time_end": 3468,
-          "duration_s": 83,
-          "summary": "The assistant surgeon prepares the patient and begins direct interaction.",
-          "audio_summary": "Includes brief confirmations, casual remarks, and requests for tools.",
+          "time_end": 4007,
+          "duration_s": 622,
+          "summary": "Initial patient setup and early surgical assistance.",
+          "audio_summary": "Includes casual remarks, instructions on surgical technique, and discussions about tools.",
           "transcript": [
             {
               "start": 3385.1,
@@ -8180,25 +8136,7 @@
               "start": 3429.8,
               "end": 3430.8,
               "text": "Ah, I have it."
-            }
-          ]
-        },
-        {
-          "segment_id": "assistant_surgeon_L2_001",
-          "role": "assistant_surgeon",
-          "level": 2,
-          "role_human": "assistant surgeon",
-          "child_ids": [
-            "assistant_surgeon_L1_002",
-            "assistant_surgeon_L1_003",
-            "assistant_surgeon_L1_004"
-          ],
-          "time_start": 3469,
-          "time_end": 4007,
-          "duration_s": 539,
-          "summary": "The assistant surgeon resumes active assistance while alternating between patient interaction and pauses.",
-          "audio_summary": "Includes instructions on surgical technique and discussions about tools and techniques.",
-          "transcript": [
+            },
             {
               "start": 3479.8,
               "end": 3489.8,
@@ -8447,19 +8385,18 @@
           ]
         },
         {
-          "segment_id": "assistant_surgeon_L2_002",
+          "segment_id": "assistant_surgeon_L2_001",
           "role": "assistant_surgeon",
           "level": 2,
           "role_human": "assistant surgeon",
           "child_ids": [
-            "assistant_surgeon_L1_005",
-            "assistant_surgeon_L1_006"
+            "assistant_surgeon_L1_003"
           ],
           "time_start": 4013,
           "time_end": 5115,
           "duration_s": 1103,
-          "summary": "The assistant surgeon remains idle before briefly resuming limited patient interaction.",
-          "audio_summary": "Includes discussion about sutures and minimal verbal communication.",
+          "summary": "Brief involvement in wound closure and material requests.",
+          "audio_summary": "Involves requests for suture materials and brief confusion about supplies.",
           "transcript": [
             {
               "start": 4011.5,
@@ -9259,19 +9196,19 @@
           ]
         },
         {
-          "segment_id": "assistant_surgeon_L2_003",
+          "segment_id": "assistant_surgeon_L2_002",
           "role": "assistant_surgeon",
           "level": 2,
           "role_human": "assistant surgeon",
           "child_ids": [
-            "assistant_surgeon_L1_007",
-            "assistant_surgeon_L1_008"
+            "assistant_surgeon_L1_004",
+            "assistant_surgeon_L1_005"
           ],
           "time_start": 5121,
           "time_end": 5396,
           "duration_s": 276,
-          "summary": "The assistant surgeon performs a drilling action and resumes preparation and instrument handling.",
-          "audio_summary": "Includes instructions for room personnel during the scan and discussions about procedures and tools.",
+          "summary": "Post-operative imaging and preparation for next stage.",
+          "audio_summary": "Includes clear instructions for X-ray safety and discussions about equipment readiness.",
           "transcript": [
             {
               "start": 5124.9,
@@ -9591,7 +9528,7 @@
           ]
         }
       ],
-      "num_level2_segments": 4
+      "num_level2_segments": 3
     },
     "c_arm": {
       "level0_segments": [
@@ -9720,7 +9657,7 @@
           "time_start": 5389,
           "time_end": 5407,
           "duration_s": 19,
-          "summary": "C-arm is manipulated by the circulator nurse and then transferred to the robot technician.",
+          "summary": "Circulator nurse and robot technician manipulate the C-arm.",
           "audio_summary": "No verbal communication.",
           "transcript": []
         },
@@ -9735,7 +9672,7 @@
           "time_start": 5408,
           "time_end": 5481,
           "duration_s": 74,
-          "summary": "C-arm is idle and not in use.",
+          "summary": "C-arm is idle.",
           "audio_summary": "No verbal communication.",
           "transcript": []
         },
@@ -9750,7 +9687,7 @@
           "time_start": 5487,
           "time_end": 5506,
           "duration_s": 20,
-          "summary": "C-arm is scanned by the circulator nurse.",
+          "summary": "Circulator nurse scans with the C-arm.",
           "audio_summary": "No verbal communication.",
           "transcript": []
         },
@@ -9765,7 +9702,7 @@
           "time_start": 5507,
           "time_end": 5533,
           "duration_s": 27,
-          "summary": "C-arm is idle and not in use.",
+          "summary": "C-arm is idle.",
           "audio_summary": "No verbal communication.",
           "transcript": []
         },
@@ -9780,7 +9717,7 @@
           "time_start": 5539,
           "time_end": 5569,
           "duration_s": 31,
-          "summary": "C-arm is manipulated again by the circulator nurse.",
+          "summary": "Circulator nurse manipulates the C-arm.",
           "audio_summary": "No verbal communication.",
           "transcript": []
         }
@@ -9802,8 +9739,8 @@
           "time_start": 5389,
           "time_end": 5569,
           "duration_s": 181,
-          "summary": "C-arm is handled, scanned, and repositioned by the circulator nurse with intermittent idle periods.",
-          "audio_summary": "No verbal communication observed during this phase.",
+          "summary": "C-arm setup, scanning, and adjustment phase.",
+          "audio_summary": "No verbal communication occurred during the setup, scanning, or adjustment of the C-arm.",
           "transcript": []
         }
       ],
@@ -10530,8 +10467,8 @@
           "time_start": 3386,
           "time_end": 3437,
           "duration_s": 52,
-          "summary": "The circulator nurse is idle with no active interactions.",
-          "audio_summary": "Casual remarks and brief confirmations.",
+          "summary": "The circulator nurse is idle.",
+          "audio_summary": "Casual remarks and brief interactions.",
           "transcript": [
             {
               "start": 3385.1,
@@ -10631,8 +10568,8 @@
           "time_start": 4895,
           "time_end": 4943,
           "duration_s": 49,
-          "summary": "The circulator nurse is holding a surgical instrument.",
-          "audio_summary": "Instructions and coordination regarding patient positioning and reporting.",
+          "summary": "The circulator nurse holds a surgical instrument and communicates about patient preparation.",
+          "audio_summary": "Instructions and confirmation about patient unwrapping and bed transfer.",
           "transcript": [
             {
               "start": 4904.9,
@@ -10702,8 +10639,8 @@
           "time_start": 4955,
           "time_end": 5109,
           "duration_s": 155,
-          "summary": "The circulator nurse is idle with no active interactions.",
-          "audio_summary": "Discussion about the robot and patient care.",
+          "summary": "The circulator nurse is idle.",
+          "audio_summary": "Brief comments about the robot and patient care.",
           "transcript": [
             {
               "start": 5034.9,
@@ -10753,8 +10690,8 @@
           "time_start": 5115,
           "time_end": 5179,
           "duration_s": 65,
-          "summary": "The circulator nurse is holding a surgical instrument.",
-          "audio_summary": "Announcement of an X-ray scan and repeated instructions.",
+          "summary": "The circulator nurse holds a surgical instrument and announces an X-ray scan.",
+          "audio_summary": "Announcement of X-ray scan and repeated instructions.",
           "transcript": [
             {
               "start": 5124.9,
@@ -10819,8 +10756,8 @@
           "time_start": 5216,
           "time_end": 5277,
           "duration_s": 62,
-          "summary": "The circulator nurse is idle with no active interactions.",
-          "audio_summary": "Discussion about patient status and procedural updates.",
+          "summary": "The circulator nurse is idle.",
+          "audio_summary": "Brief updates about patient status and procedural progress.",
           "transcript": [
             {
               "start": 5215.9,
@@ -10938,32 +10875,18 @@
             "circulator_L0_005",
             "circulator_L0_006",
             "circulator_L0_007",
-            "circulator_L0_008"
+            "circulator_L0_008",
+            "circulator_L0_009"
           ],
           "time_start": 5389,
-          "time_end": 5533,
-          "duration_s": 145,
-          "summary": "The circulator nurse briefly manipulates the C-arm, then remains idle.",
-          "audio_summary": "No verbal communication.",
+          "time_end": 5633,
+          "duration_s": 245,
+          "summary": "The circulator nurse manipulates the C-arm for imaging.",
+          "audio_summary": "No verbal communication during the procedure.",
           "transcript": []
         },
         {
           "segment_id": "circulator_L1_006",
-          "role": "circulator",
-          "level": 1,
-          "role_human": "circulator nurse",
-          "segment_ids": [
-            "circulator_L0_009"
-          ],
-          "time_start": 5539,
-          "time_end": 5633,
-          "duration_s": 95,
-          "summary": "The circulator nurse is actively manipulating the C-arm.",
-          "audio_summary": "No verbal communication.",
-          "transcript": []
-        },
-        {
-          "segment_id": "circulator_L1_007",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -10978,7 +10901,7 @@
           "time_start": 5645,
           "time_end": 5690,
           "duration_s": 46,
-          "summary": "The circulator nurse is holding surgical instruments and assisting the scrub nurse and robot technician.",
+          "summary": "The circulator nurse assists with surgical instruments and communicates with team members.",
           "audio_summary": "Brief exchanges about camera issues and equipment status.",
           "transcript": [
             {
@@ -11039,7 +10962,7 @@
           ]
         }
       ],
-      "num_level1_segments": 8,
+      "num_level1_segments": 7,
       "level2_segments": [
         {
           "segment_id": "circulator_L2_000",
@@ -11052,8 +10975,8 @@
           "time_start": 3386,
           "time_end": 3437,
           "duration_s": 52,
-          "summary": "The circulator nurse is idle and not engaged in active surgical tasks.",
-          "audio_summary": "Casual remarks and brief confirmations.",
+          "summary": "Initial idle period before active involvement in the procedure.",
+          "audio_summary": "Casual remarks and brief interactions.",
           "transcript": [
             {
               "start": 3385.1,
@@ -11156,8 +11079,8 @@
           "time_start": 4895,
           "time_end": 5277,
           "duration_s": 383,
-          "summary": "The circulator nurse holds surgical instruments intermittently and is involved in procedural coordination.",
-          "audio_summary": "Instructions and coordination regarding patient positioning, followed by discussions about patient status and procedural updates.",
+          "summary": "Preparation and coordination before imaging procedures.",
+          "audio_summary": "Instructions about patient unwrapping, bed transfer, X-ray scan announcements, and procedural updates.",
           "transcript": [
             {
               "start": 4904.9,
@@ -11412,14 +11335,13 @@
           "level": 2,
           "role_human": "circulator nurse",
           "child_ids": [
-            "circulator_L1_005",
-            "circulator_L1_006"
+            "circulator_L1_005"
           ],
           "time_start": 5389,
           "time_end": 5633,
           "duration_s": 245,
-          "summary": "The circulator nurse manipulates the C-arm for imaging purposes.",
-          "audio_summary": "No verbal communication during C-arm operation.",
+          "summary": "C-arm manipulation for imaging.",
+          "audio_summary": "No verbal communication during the procedure.",
           "transcript": []
         },
         {
@@ -11428,12 +11350,12 @@
           "level": 2,
           "role_human": "circulator nurse",
           "child_ids": [
-            "circulator_L1_007"
+            "circulator_L1_006"
           ],
           "time_start": 5645,
           "time_end": 5690,
           "duration_s": 46,
-          "summary": "The circulator nurse assists with surgical instruments and supports the scrub nurse and robot technician.",
+          "summary": "Assisting with surgical instruments and addressing equipment issues.",
           "audio_summary": "Brief exchanges about camera issues and equipment status.",
           "transcript": [
             {
@@ -12995,8 +12917,8 @@
           "time_start": 3386,
           "time_end": 3510,
           "duration_s": 125,
-          "summary": "Head surgeon drills while holding the drill, with brief handoff to scrub nurse.",
-          "audio_summary": "Brief instructions and confirmations.",
+          "summary": "The head surgeon resumes drilling after a brief handoff and verbal coordination.",
+          "audio_summary": "Brief confirmations and instructions about positioning and tool readiness.",
           "transcript": [
             {
               "start": 3385.1,
@@ -13122,8 +13044,8 @@
           "time_start": 3511,
           "time_end": 5144,
           "duration_s": 1634,
-          "summary": "Head surgeon continues drilling while maintaining control of the drill.",
-          "audio_summary": "Minimal verbal communication with occasional statements.",
+          "summary": "The head surgeon continues drilling for an extended period.",
+          "audio_summary": "Minimal verbal communication with occasional remarks and requests.",
           "transcript": [
             {
               "start": 3509.8,
@@ -14213,8 +14135,8 @@
           "time_start": 5145,
           "time_end": 5234,
           "duration_s": 90,
-          "summary": "Assistant surgeon takes over drilling while holding the drill.",
-          "audio_summary": "Instructions for room personnel and procedural updates.",
+          "summary": "The assistant surgeon takes over drilling while the head surgeon steps aside.",
+          "audio_summary": "Clear verbal instructions for team coordination and confirmation of task completion.",
           "transcript": [
             {
               "start": 5143.9,
@@ -14383,8 +14305,8 @@
           "time_start": 3386,
           "time_end": 5144,
           "duration_s": 1759,
-          "summary": "The head surgeon performs initial and continued drilling with minimal interruptions.",
-          "audio_summary": "Brief instructions and confirmations followed by minimal verbal communication.",
+          "summary": "Primary drilling phase led by the head surgeon.",
+          "audio_summary": "Initial brief coordination followed by extended minimal communication during drilling.",
           "transcript": [
             {
               "start": 3385.1,
@@ -15584,8 +15506,8 @@
           "time_start": 5145,
           "time_end": 5234,
           "duration_s": 90,
-          "summary": "The assistant surgeon takes over the drilling task.",
-          "audio_summary": "Instructions for room personnel and procedural updates.",
+          "summary": "Transition and completion phase with assistant surgeon taking over.",
+          "audio_summary": "Clear verbal instructions for task handoff and completion confirmation.",
           "transcript": [
             {
               "start": 5143.9,
@@ -15935,7 +15857,7 @@
           "time_start": 4770,
           "time_end": 5047,
           "duration_s": 278,
-          "summary": "Head surgeon hammers while holding the tool, with brief transfer to scrub nurse.",
+          "summary": "Head surgeon continues hammering while interacting with the scrub nurse.",
           "audio_summary": "Brief confirmations and instructions.",
           "transcript": [
             {
@@ -16020,7 +15942,7 @@
           "time_end": 3726,
           "duration_s": 4,
           "summary": "Initial use of the hammer by the head surgeon.",
-          "audio_summary": "No verbal communication.",
+          "audio_summary": "No verbal communication during the initial hammer use.",
           "transcript": []
         },
         {
@@ -16034,8 +15956,8 @@
           "time_start": 4770,
           "time_end": 5047,
           "duration_s": 278,
-          "summary": "Extended hammer use by the head surgeon with brief tool transfer to the scrub nurse.",
-          "audio_summary": "Brief confirmations and instructions.",
+          "summary": "Continued hammering with coordination from the scrub nurse.",
+          "audio_summary": "Brief confirmations and instructions exchanged during hammering.",
           "transcript": [
             {
               "start": 4769.9,
@@ -18621,13 +18543,14 @@
           "segment_ids": [
             "head_surgeon_L0_000",
             "head_surgeon_L0_001",
-            "head_surgeon_L0_002"
+            "head_surgeon_L0_002",
+            "head_surgeon_L0_003"
           ],
           "time_start": 3386,
-          "time_end": 3430,
-          "duration_s": 45,
+          "time_end": 3437,
+          "duration_s": 52,
           "summary": "The head surgeon drills the patient while holding the drill.",
-          "audio_summary": "Brief verbal comments and requests.",
+          "audio_summary": "Brief confirmations and instructions.",
           "transcript": [
             {
               "start": 3385.1,
@@ -18732,21 +18655,6 @@
           "level": 1,
           "role_human": "head surgeon",
           "segment_ids": [
-            "head_surgeon_L0_003"
-          ],
-          "time_start": 3436,
-          "time_end": 3437,
-          "duration_s": 2,
-          "summary": "The head surgeon has a brief pause with no active interactions.",
-          "audio_summary": "No verbal communication.",
-          "transcript": []
-        },
-        {
-          "segment_id": "head_surgeon_L1_002",
-          "role": "head_surgeon",
-          "level": 1,
-          "role_human": "head surgeon",
-          "segment_ids": [
             "head_surgeon_L0_004",
             "head_surgeon_L0_005"
           ],
@@ -18754,7 +18662,7 @@
           "time_end": 3501,
           "duration_s": 59,
           "summary": "The head surgeon touches the patient with a surgical instrument.",
-          "audio_summary": "Brief verbal comments.",
+          "audio_summary": "Minimal verbal communication with brief remarks.",
           "transcript": [
             {
               "start": 3479.8,
@@ -18774,7 +18682,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_003",
+          "segment_id": "head_surgeon_L1_002",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -18786,8 +18694,8 @@
           "time_start": 3502,
           "time_end": 3541,
           "duration_s": 40,
-          "summary": "The head surgeon resumes drilling the patient while holding the drill.",
-          "audio_summary": "Brief verbal affirmations and requests.",
+          "summary": "The head surgeon resumes drilling the patient with the drill.",
+          "audio_summary": "Brief affirmations and requests.",
           "transcript": [
             {
               "start": 3499.4,
@@ -18817,7 +18725,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_004",
+          "segment_id": "head_surgeon_L1_003",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -18828,7 +18736,7 @@
           "time_end": 3579,
           "duration_s": 33,
           "summary": "The head surgeon touches the patient with a surgical instrument.",
-          "audio_summary": "Request for additional equipment.",
+          "audio_summary": "Request for a bill.",
           "transcript": [
             {
               "start": 3548.6,
@@ -18838,7 +18746,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_005",
+          "segment_id": "head_surgeon_L1_004",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -18850,8 +18758,8 @@
           "time_start": 3585,
           "time_end": 3641,
           "duration_s": 57,
-          "summary": "The head surgeon calibrates the Mako robotic arm while holding a surgical instrument and touching the patient.",
-          "audio_summary": "Brief verbal affirmations.",
+          "summary": "The head surgeon calibrates the Mako robotic arm while holding a surgical instrument.",
+          "audio_summary": "Positive feedback and brief affirmations.",
           "transcript": [
             {
               "start": 3597.6,
@@ -18871,20 +18779,22 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_006",
+          "segment_id": "head_surgeon_L1_005",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
           "segment_ids": [
             "head_surgeon_L0_013",
             "head_surgeon_L0_014",
-            "head_surgeon_L0_015"
+            "head_surgeon_L0_015",
+            "head_surgeon_L0_016",
+            "head_surgeon_L0_017"
           ],
           "time_start": 3642,
-          "time_end": 3678,
-          "duration_s": 37,
-          "summary": "The head surgeon cuts the patient while holding a surgical instrument.",
-          "audio_summary": "Brief verbal comments.",
+          "time_end": 3705,
+          "duration_s": 64,
+          "summary": "The head surgeon cuts the patient with a surgical instrument.",
+          "audio_summary": "Instructions and affirmations.",
           "transcript": [
             {
               "start": 3648.6,
@@ -18900,24 +18810,7 @@
               "start": 3675.6,
               "end": 3682.6,
               "text": "I should do it, I'm not feeling it."
-            }
-          ]
-        },
-        {
-          "segment_id": "head_surgeon_L1_007",
-          "role": "head_surgeon",
-          "level": 1,
-          "role_human": "head surgeon",
-          "segment_ids": [
-            "head_surgeon_L0_016",
-            "head_surgeon_L0_017"
-          ],
-          "time_start": 3684,
-          "time_end": 3705,
-          "duration_s": 22,
-          "summary": "The head surgeon holds a surgical instrument and pauses briefly.",
-          "audio_summary": "Instructions and affirmations.",
-          "transcript": [
+            },
             {
               "start": 3682.6,
               "end": 3685.6,
@@ -18961,7 +18854,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_008",
+          "segment_id": "head_surgeon_L1_006",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -18971,8 +18864,8 @@
           "time_start": 3710,
           "time_end": 3717,
           "duration_s": 8,
-          "summary": "The head surgeon touches the patient.",
-          "audio_summary": "Positive feedback.",
+          "summary": "The head surgeon touches the patient and provides feedback.",
+          "audio_summary": "Positive affirmations.",
           "transcript": [
             {
               "start": 3707.6,
@@ -18997,7 +18890,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_009",
+          "segment_id": "head_surgeon_L1_007",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19008,8 +18901,8 @@
           "time_start": 3723,
           "time_end": 3730,
           "duration_s": 8,
-          "summary": "The head surgeon hammers the patient and holds a surgical instrument.",
-          "audio_summary": "Brief instruction.",
+          "summary": "The head surgeon hammers the patient with a surgical instrument.",
+          "audio_summary": "Brief instruction to start.",
           "transcript": [
             {
               "start": 3726.6,
@@ -19019,7 +18912,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_010",
+          "segment_id": "head_surgeon_L1_008",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19032,7 +18925,7 @@
           "time_start": 3736,
           "time_end": 4109,
           "duration_s": 374,
-          "summary": "The head surgeon calibrates the Mako robotic arm while holding a surgical instrument and touching the patient.",
+          "summary": "The head surgeon calibrates the Mako robotic arm while touching the patient.",
           "audio_summary": "Discussion about calibration tools.",
           "transcript": [
             {
@@ -19193,23 +19086,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_011",
-          "role": "head_surgeon",
-          "level": 1,
-          "role_human": "head surgeon",
-          "segment_ids": [
-            "head_surgeon_L0_025",
-            "head_surgeon_L0_026"
-          ],
-          "time_start": 4115,
-          "time_end": 4175,
-          "duration_s": 61,
-          "summary": "The head surgeon touches the patient and briefly interacts with the assistant surgeon.",
-          "audio_summary": "No verbal communication.",
-          "transcript": []
-        },
-        {
-          "segment_id": "head_surgeon_L1_012",
+          "segment_id": "head_surgeon_L1_009",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19237,7 +19114,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_013",
+          "segment_id": "head_surgeon_L1_010",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19249,8 +19126,8 @@
           "time_start": 4251,
           "time_end": 4390,
           "duration_s": 140,
-          "summary": "The head surgeon continues calibrating the robotic arm and prepares the bone saw for use.",
-          "audio_summary": "Instruction given: 'Okay, let's do the trials.'",
+          "summary": "The head surgeon continues calibrating the robotic arm and prepares for surgical trials.",
+          "audio_summary": "Includes instruction 'Okay, let's do the trials.'",
           "transcript": [
             {
               "start": 4385.8,
@@ -19260,7 +19137,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_014",
+          "segment_id": "head_surgeon_L1_011",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19270,8 +19147,8 @@
           "time_start": 4396,
           "time_end": 4734,
           "duration_s": 339,
-          "summary": "The head surgeon actively uses the bone saw on the patient while manipulating the robotic arm.",
-          "audio_summary": "Multiple verbal instructions and interactions including 'Give me a purse' and 'Just hold it like this.'",
+          "summary": "The head surgeon actively saws the patient while manipulating the robotic arm.",
+          "audio_summary": "High volume of verbal communication including instructions and coordination.",
           "transcript": [
             {
               "start": 4385.8,
@@ -19771,7 +19648,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_015",
+          "segment_id": "head_surgeon_L1_012",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19782,8 +19659,8 @@
           "time_start": 4740,
           "time_end": 4764,
           "duration_s": 25,
-          "summary": "The head surgeon briefly pauses before touching the patient and begins suturing.",
-          "audio_summary": "Instructions include 'Give me a plaster' and 'next suture please.'",
+          "summary": "The head surgeon transitions to suturing the patient.",
+          "audio_summary": "Includes instructions like 'Give me a plaster.' and 'next suture please.'",
           "transcript": [
             {
               "start": 4739.9,
@@ -19808,7 +19685,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_016",
+          "segment_id": "head_surgeon_L1_013",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19821,8 +19698,8 @@
           "time_start": 4770,
           "time_end": 4813,
           "duration_s": 44,
-          "summary": "The head surgeon hammers the patient and holds the hammer while coordinating with others.",
-          "audio_summary": "Verbal inquiries include 'am I in the suture?' and 'You go in like that, yeah?'",
+          "summary": "The head surgeon hammers the patient and confirms suture placement.",
+          "audio_summary": "Includes questions about suture status and procedural steps.",
           "transcript": [
             {
               "start": 4769.9,
@@ -19882,7 +19759,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_017",
+          "segment_id": "head_surgeon_L1_014",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -19893,8 +19770,8 @@
           "time_start": 4814,
           "time_end": 4937,
           "duration_s": 124,
-          "summary": "The head surgeon touches the patient and pauses briefly before delegating tasks.",
-          "audio_summary": "Instructions include 'Unwrap the patient here' and 'I'll just check again.'",
+          "summary": "The head surgeon touches the patient and delegates post-operative tasks.",
+          "audio_summary": "Includes casual conversation and procedural instructions.",
           "transcript": [
             {
               "start": 4817.1,
@@ -20029,7 +19906,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_018",
+          "segment_id": "head_surgeon_L1_015",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -20041,7 +19918,7 @@
           "time_end": 4985,
           "duration_s": 43,
           "summary": "The head surgeon prepares the instrument table.",
-          "audio_summary": "Brief question: 'But should I go and do some between the two of them?'",
+          "audio_summary": "Includes brief question about dividing tasks.",
           "transcript": [
             {
               "start": 4937.9,
@@ -20051,7 +19928,7 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_019",
+          "segment_id": "head_surgeon_L1_016",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -20064,8 +19941,8 @@
           "time_start": 4991,
           "time_end": 5078,
           "duration_s": 88,
-          "summary": "The head surgeon cements the patient and hammers while touching the surgical site.",
-          "audio_summary": "Instructions include 'You have two minutes to go through here' and 'I think there's a dock for it.'",
+          "summary": "The head surgeon cements and hammers the patient while monitoring robotic processes.",
+          "audio_summary": "Includes instructions about robot behavior and timing.",
           "transcript": [
             {
               "start": 5034.9,
@@ -20095,21 +19972,19 @@
           ]
         },
         {
-          "segment_id": "head_surgeon_L1_020",
+          "segment_id": "head_surgeon_L1_017",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
           "segment_ids": [
             "head_surgeon_L0_048",
-            "head_surgeon_L0_049",
-            "head_surgeon_L0_050",
-            "head_surgeon_L0_051"
+            "head_surgeon_L0_049"
           ],
           "time_start": 5084,
-          "time_end": 5252,
-          "duration_s": 169,
-          "summary": "The head surgeon sutures the patient, uses a drill, and coordinates with others for an X-ray scan.",
-          "audio_summary": "Repeated instruction: 'Everybody out.' and 'I am taking a X-ray scan.'",
+          "time_end": 5133,
+          "duration_s": 50,
+          "summary": "The head surgeon sutures the patient while coordinating imaging.",
+          "audio_summary": "Includes instructions to evacuate the room for imaging.",
           "transcript": [
             {
               "start": 5124.9,
@@ -20120,7 +19995,24 @@
               "start": 5131.9,
               "end": 5134.9,
               "text": "Everybody out."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "head_surgeon_L1_018",
+          "role": "head_surgeon",
+          "level": 1,
+          "role_human": "head surgeon",
+          "segment_ids": [
+            "head_surgeon_L0_050",
+            "head_surgeon_L0_051"
+          ],
+          "time_start": 5134,
+          "time_end": 5252,
+          "duration_s": 119,
+          "summary": "The head surgeon drills the patient and completes the procedure.",
+          "audio_summary": "Includes repeated instructions to evacuate the room and confirmation of imaging completion.",
+          "transcript": [
             {
               "start": 5131.9,
               "end": 5134.9,
@@ -20319,7 +20211,7 @@
           ]
         }
       ],
-      "num_level1_segments": 21,
+      "num_level1_segments": 19,
       "level2_segments": [
         {
           "segment_id": "head_surgeon_L2_000",
@@ -20330,14 +20222,13 @@
             "head_surgeon_L1_000",
             "head_surgeon_L1_001",
             "head_surgeon_L1_002",
-            "head_surgeon_L1_003",
-            "head_surgeon_L1_004"
+            "head_surgeon_L1_003"
           ],
           "time_start": 3386,
           "time_end": 3579,
           "duration_s": 194,
-          "summary": "Initial drilling and preparation of the surgical site.",
-          "audio_summary": "Brief verbal comments, affirmations, and requests for additional equipment.",
+          "summary": "Initial surgical preparation and drilling of the patient.",
+          "audio_summary": "Brief confirmations, instructions, and minimal verbal communication.",
           "transcript": [
             {
               "start": 3385.1,
@@ -20487,17 +20378,16 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
+            "head_surgeon_L1_004",
             "head_surgeon_L1_005",
             "head_surgeon_L1_006",
-            "head_surgeon_L1_007",
-            "head_surgeon_L1_008",
-            "head_surgeon_L1_009"
+            "head_surgeon_L1_007"
           ],
           "time_start": 3585,
           "time_end": 3730,
           "duration_s": 146,
-          "summary": "Calibration of the robotic arm and initial cutting procedures.",
-          "audio_summary": "Brief affirmations, instructions, and positive feedback.",
+          "summary": "Calibration of the robotic arm and initial surgical cutting.",
+          "audio_summary": "Positive feedback, affirmations, and brief instructions.",
           "transcript": [
             {
               "start": 3597.6,
@@ -20602,16 +20492,15 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_010",
-            "head_surgeon_L1_011",
-            "head_surgeon_L1_012",
-            "head_surgeon_L1_013"
+            "head_surgeon_L1_008",
+            "head_surgeon_L1_009",
+            "head_surgeon_L1_010"
           ],
           "time_start": 3736,
           "time_end": 4390,
           "duration_s": 655,
-          "summary": "Further calibration of the robotic arm and preparation of surgical tools.",
-          "audio_summary": "Discussion about calibration tools and brief exchanges including instructions.",
+          "summary": "Advanced robotic arm calibration and preparation for surgical trials.",
+          "audio_summary": "Discussion about calibration tools and procedural instructions.",
           "transcript": [
             {
               "start": 3734.6,
@@ -20791,13 +20680,13 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_014"
+            "head_surgeon_L1_011"
           ],
           "time_start": 4396,
           "time_end": 4734,
           "duration_s": 339,
-          "summary": "Active use of the bone saw and robotic arm during surgical intervention.",
-          "audio_summary": "Multiple verbal instructions and interactions with surgical team members.",
+          "summary": "Active robotic-assisted bone sawing and surgical trials.",
+          "audio_summary": "High volume of verbal communication including instructions and coordination.",
           "transcript": [
             {
               "start": 4385.8,
@@ -21302,16 +21191,15 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_015",
-            "head_surgeon_L1_016",
-            "head_surgeon_L1_017",
-            "head_surgeon_L1_018"
+            "head_surgeon_L1_012",
+            "head_surgeon_L1_013",
+            "head_surgeon_L1_014"
           ],
           "time_start": 4740,
-          "time_end": 4985,
-          "duration_s": 246,
-          "summary": "Transition to suturing and coordination of surgical tasks.",
-          "audio_summary": "Instructions related to suturing and brief inquiries about procedures.",
+          "time_end": 4937,
+          "duration_s": 198,
+          "summary": "Transition to wound closure and post-operative coordination.",
+          "audio_summary": "Instructions for suturing and procedural updates.",
           "transcript": [
             {
               "start": 4739.9,
@@ -21517,11 +21405,6 @@
               "start": 4934.9,
               "end": 4937.9,
               "text": "The third way of doing CR."
-            },
-            {
-              "start": 4937.9,
-              "end": 4944.9,
-              "text": "But should I go and do some between the two of them?"
             }
           ]
         },
@@ -21531,15 +21414,22 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_019",
-            "head_surgeon_L1_020"
+            "head_surgeon_L1_015",
+            "head_surgeon_L1_016",
+            "head_surgeon_L1_017",
+            "head_surgeon_L1_018"
           ],
-          "time_start": 4991,
+          "time_start": 4943,
           "time_end": 5252,
-          "duration_s": 262,
-          "summary": "Final cementing, suturing, and post-operative coordination.",
-          "audio_summary": "Instructions regarding cementing and repeated calls for X-ray scan preparation.",
+          "duration_s": 310,
+          "summary": "Final cementing, imaging coordination, and completion of the procedure.",
+          "audio_summary": "Instructions regarding robot behavior, imaging, and procedural completion.",
           "transcript": [
+            {
+              "start": 4937.9,
+              "end": 4944.9,
+              "text": "But should I go and do some between the two of them?"
+            },
             {
               "start": 5034.9,
               "end": 5039.9,
@@ -23737,24 +23627,13 @@
             "instrument_L0_000",
             "instrument_L0_001",
             "instrument_L0_002",
-            "instrument_L0_003",
-            "instrument_L0_004",
-            "instrument_L0_005",
-            "instrument_L0_006",
-            "instrument_L0_007",
-            "instrument_L0_008",
-            "instrument_L0_009",
-            "instrument_L0_010",
-            "instrument_L0_011",
-            "instrument_L0_012",
-            "instrument_L0_013",
-            "instrument_L0_014"
+            "instrument_L0_003"
           ],
           "time_start": 3443,
-          "time_end": 4913,
-          "duration_s": 1471,
-          "summary": "The surgical instrument is passed between the head surgeon, scrub nurse, and robot technician, and is actively used by the head surgeon for a prolonged period.",
-          "audio_summary": "Includes brief instructions, confirmations, and discussions about positioning, motion range, and starting procedures.",
+          "time_end": 3548,
+          "duration_s": 106,
+          "summary": "The surgical instrument is passed from the head surgeon to the scrub nurse, then to the robot technician, and briefly shared between the head surgeon and robot technician.",
+          "audio_summary": "Brief verbal communication includes casual phrases and unrelated statements.",
           "transcript": [
             {
               "start": 3479.8,
@@ -23775,7 +23654,25 @@
               "start": 3537.6,
               "end": 3539.6,
               "text": "And a bill, please."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "instrument_L1_001",
+          "role": "instrument",
+          "level": 1,
+          "role_human": "surgical instrument",
+          "segment_ids": [
+            "instrument_L0_004",
+            "instrument_L0_005",
+            "instrument_L0_006"
+          ],
+          "time_start": 3554,
+          "time_end": 3655,
+          "duration_s": 102,
+          "summary": "The head surgeon uses the instrument actively and briefly shares it with the scrub nurse.",
+          "audio_summary": "Includes brief motivational statements and instructions.",
+          "transcript": [
             {
               "start": 3597.6,
               "end": 3618.6,
@@ -23790,7 +23687,27 @@
               "start": 3648.6,
               "end": 3675.6,
               "text": "Okay, here you move the osteoporosis and close the range of motion."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "instrument_L1_002",
+          "role": "instrument",
+          "level": 1,
+          "role_human": "surgical instrument",
+          "segment_ids": [
+            "instrument_L0_007",
+            "instrument_L0_008",
+            "instrument_L0_009",
+            "instrument_L0_010",
+            "instrument_L0_011"
+          ],
+          "time_start": 3661,
+          "time_end": 4121,
+          "duration_s": 461,
+          "summary": "The scrub nurse briefly holds the instrument before it is returned to the head surgeon for extended use and shared again.",
+          "audio_summary": "Includes detailed instructions, confirmation phrases, and discussions about surgical steps.",
+          "transcript": [
             {
               "start": 3648.6,
               "end": 3675.6,
@@ -24025,7 +23942,25 @@
               "start": 4084.5,
               "end": 4088.8,
               "text": "after."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "instrument_L1_003",
+          "role": "instrument",
+          "level": 1,
+          "role_human": "surgical instrument",
+          "segment_ids": [
+            "instrument_L0_012",
+            "instrument_L0_013",
+            "instrument_L0_014"
+          ],
+          "time_start": 4133,
+          "time_end": 4913,
+          "duration_s": 781,
+          "summary": "The head surgeon continues using the instrument for a prolonged period, with brief transfers to the scrub nurse.",
+          "audio_summary": "Includes frequent verbal exchanges about surgical progress and requests.",
+          "transcript": [
             {
               "start": 4204.8,
               "end": 4205.8,
@@ -24719,18 +24654,20 @@
           ]
         },
         {
-          "segment_id": "instrument_L1_001",
+          "segment_id": "instrument_L1_004",
           "role": "instrument",
           "level": 1,
           "role_human": "surgical instrument",
           "segment_ids": [
-            "instrument_L0_015"
+            "instrument_L0_015",
+            "instrument_L0_016",
+            "instrument_L0_017"
           ],
           "time_start": 4919,
-          "time_end": 4925,
-          "duration_s": 7,
-          "summary": "The surgical instrument is briefly transferred between the circulator nurse and scrub nurse.",
-          "audio_summary": "Includes instructions about wrapping the patient and performing a CR motion.",
+          "time_end": 5271,
+          "duration_s": 353,
+          "summary": "The instrument is transferred between the circulator nurse, scrub nurse, and circulator nurse again.",
+          "audio_summary": "Includes instructions about robotic motion and procedural steps.",
           "transcript": [
             {
               "start": 4913.9,
@@ -24746,23 +24683,7 @@
               "start": 4923.9,
               "end": 4928.9,
               "text": "We do a CR motion."
-            }
-          ]
-        },
-        {
-          "segment_id": "instrument_L1_002",
-          "role": "instrument",
-          "level": 1,
-          "role_human": "surgical instrument",
-          "segment_ids": [
-            "instrument_L0_016"
-          ],
-          "time_start": 4931,
-          "time_end": 5127,
-          "duration_s": 197,
-          "summary": "The surgical instrument is held by the scrub nurse while discussions about CR motion and robot adjustments occur.",
-          "audio_summary": "Includes instructions and questions about performing a CR motion and robot positioning.",
-          "transcript": [
+            },
             {
               "start": 4930.9,
               "end": 4932.9,
@@ -24822,23 +24743,7 @@
               "start": 5124.9,
               "end": 5131.9,
               "text": "I am taking a X-ray scan."
-            }
-          ]
-        },
-        {
-          "segment_id": "instrument_L1_003",
-          "role": "instrument",
-          "level": 1,
-          "role_human": "surgical instrument",
-          "segment_ids": [
-            "instrument_L0_017"
-          ],
-          "time_start": 5133,
-          "time_end": 5271,
-          "duration_s": 139,
-          "summary": "The surgical instrument is held by the circulator nurse while repeated verbal instructions are given.",
-          "audio_summary": "Includes repeated instructions for personnel to 'Everybody out.'",
-          "transcript": [
+            },
             {
               "start": 5131.9,
               "end": 5134.9,
@@ -25067,7 +24972,7 @@
           ]
         },
         {
-          "segment_id": "instrument_L1_004",
+          "segment_id": "instrument_L1_005",
           "role": "instrument",
           "level": 1,
           "role_human": "surgical instrument",
@@ -25078,8 +24983,8 @@
           "time_start": 5277,
           "time_end": 5575,
           "duration_s": 299,
-          "summary": "The surgical instrument is transferred between the robot technician, scrub nurse, and circulator nurse, followed by a long period of the scrub nurse holding it.",
-          "audio_summary": "Includes brief exchanges about handing over the instrument and a long period of no verbal communication.",
+          "summary": "The instrument is shared between the robot technician and scrub nurse before being held solely by the scrub nurse.",
+          "audio_summary": "Includes brief exchanges about surgical coordination.",
           "transcript": [
             {
               "start": 5275.5,
@@ -25189,7 +25094,7 @@
           ]
         },
         {
-          "segment_id": "instrument_L1_005",
+          "segment_id": "instrument_L1_006",
           "role": "instrument",
           "level": 1,
           "role_human": "surgical instrument",
@@ -25202,8 +25107,8 @@
           "time_start": 5645,
           "time_end": 5690,
           "duration_s": 46,
-          "summary": "The surgical instrument is briefly transferred between the circulator nurse and scrub nurse, with intermittent holding.",
-          "audio_summary": "Includes a brief comment about losing the camera and a short exchange.",
+          "summary": "The instrument is briefly transferred between the circulator nurse and scrub nurse.",
+          "audio_summary": "Includes a brief statement about camera issues.",
           "transcript": [
             {
               "start": 5661.5,
@@ -25263,7 +25168,7 @@
           ]
         }
       ],
-      "num_level1_segments": 6,
+      "num_level1_segments": 7,
       "level2_segments": [
         {
           "segment_id": "instrument_L2_000",
@@ -25271,13 +25176,15 @@
           "level": 2,
           "role_human": "surgical instrument",
           "child_ids": [
-            "instrument_L1_000"
+            "instrument_L1_000",
+            "instrument_L1_001",
+            "instrument_L1_002"
           ],
           "time_start": 3443,
-          "time_end": 4913,
-          "duration_s": 1471,
-          "summary": "The surgical instrument is actively used by the head surgeon for an extended period.",
-          "audio_summary": "Includes brief instructions, confirmations, and discussions about positioning, motion range, and starting procedures.",
+          "time_end": 4121,
+          "duration_s": 679,
+          "summary": "Initial setup and early use of the surgical instrument by the head surgeon.",
+          "audio_summary": "Includes casual remarks, motivational statements, instructions, and discussions about surgical steps.",
           "transcript": [
             {
               "start": 3479.8,
@@ -25548,7 +25455,23 @@
               "start": 4084.5,
               "end": 4088.8,
               "text": "after."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "instrument_L2_001",
+          "role": "instrument",
+          "level": 2,
+          "role_human": "surgical instrument",
+          "child_ids": [
+            "instrument_L1_003"
+          ],
+          "time_start": 4133,
+          "time_end": 4913,
+          "duration_s": 781,
+          "summary": "Prolonged active use of the instrument by the head surgeon with occasional transfers.",
+          "audio_summary": "Frequent verbal exchanges about surgical progress and requests.",
+          "transcript": [
             {
               "start": 4204.8,
               "end": 4205.8,
@@ -26242,22 +26165,20 @@
           ]
         },
         {
-          "segment_id": "instrument_L2_001",
+          "segment_id": "instrument_L2_002",
           "role": "instrument",
           "level": 2,
           "role_human": "surgical instrument",
           "child_ids": [
-            "instrument_L1_001",
-            "instrument_L1_002",
-            "instrument_L1_003",
             "instrument_L1_004",
-            "instrument_L1_005"
+            "instrument_L1_005",
+            "instrument_L1_006"
           ],
           "time_start": 4919,
           "time_end": 5690,
           "duration_s": 772,
-          "summary": "The surgical instrument is passed among nursing and technical staff with intermittent holding and coordination.",
-          "audio_summary": "Includes instructions about wrapping the patient, CR motion, robot adjustments, repeated 'Everybody out' commands, and brief exchanges about handing over the instrument and camera issues.",
+          "summary": "Instrument coordination among nurses and technicians during procedural adjustments.",
+          "audio_summary": "Includes instructions about robotic motion, coordination exchanges, and brief remarks about technical issues.",
           "transcript": [
             {
               "start": 4913.9,
@@ -26722,7 +26643,7 @@
           ]
         }
       ],
-      "num_level2_segments": 2
+      "num_level2_segments": 3
     },
     "mps": {
       "level0_segments": [
@@ -29058,7 +28979,7 @@
           "time_start": 3386,
           "time_end": 3437,
           "duration_s": 52,
-          "summary": "Robot technician briefly interacts with the MPS workstation and then remains idle.",
+          "summary": "Robot technician briefly interacts with the MPS workstation and then pauses.",
           "audio_summary": "Casual remarks and brief confirmations.",
           "transcript": [
             {
@@ -29160,8 +29081,8 @@
           "time_start": 3443,
           "time_end": 3510,
           "duration_s": 68,
-          "summary": "Robot technician manipulates the MPS workstation and briefly pauses.",
-          "audio_summary": "Short verbalizations and affirmations.",
+          "summary": "Robot technician manipulates the MPS workstation and pauses briefly.",
+          "audio_summary": "Short verbalizations with minimal context.",
           "transcript": [
             {
               "start": 3479.8,
@@ -29193,13 +29114,14 @@
           "segment_ids": [
             "mps_L0_004",
             "mps_L0_005",
-            "mps_L0_006"
+            "mps_L0_006",
+            "mps_L0_007"
           ],
           "time_start": 3521,
-          "time_end": 3597,
-          "duration_s": 77,
-          "summary": "Robot technician holds a surgical instrument, manipulates the infrared tracker, and returns to the MPS workstation.",
-          "audio_summary": "Brief verbal requests.",
+          "time_end": 3601,
+          "duration_s": 81,
+          "summary": "Robot technician holds a surgical instrument, adjusts the infrared tracker, and returns to workstation manipulation.",
+          "audio_summary": "Brief verbalizations and no communication during some segments.",
           "transcript": [
             {
               "start": 3509.8,
@@ -29215,6 +29137,11 @@
               "start": 3548.6,
               "end": 3550.6,
               "text": "And a bill, please."
+            },
+            {
+              "start": 3597.6,
+              "end": 3618.6,
+              "text": "Here we go."
             }
           ]
         },
@@ -29224,21 +29151,15 @@
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
-            "mps_L0_007",
             "mps_L0_008",
             "mps_L0_009"
           ],
-          "time_start": 3598,
+          "time_start": 3607,
           "time_end": 3730,
-          "duration_s": 133,
-          "summary": "Robot technician manipulates the infrared tracker and MPS workstation, followed by a period of no active interactions.",
-          "audio_summary": "Instructions and descriptions of robotic arm movements.",
+          "duration_s": 124,
+          "summary": "Robot technician manipulates the MPS workstation and discusses surgical positioning.",
+          "audio_summary": "Instructions and feedback on surgical setup.",
           "transcript": [
-            {
-              "start": 3597.6,
-              "end": 3618.6,
-              "text": "Here we go."
-            },
             {
               "start": 3597.6,
               "end": 3618.6,
@@ -29348,8 +29269,8 @@
           "time_start": 3736,
           "time_end": 4175,
           "duration_s": 440,
-          "summary": "Robot technician actively manipulates the MPS workstation and then pauses.",
-          "audio_summary": "Discussion about selecting points and robotic arm movement.",
+          "summary": "Robot technician actively manipulates the MPS workstation and pauses.",
+          "audio_summary": "Discussion about selecting points and surgical tools.",
           "transcript": [
             {
               "start": 3734.6,
@@ -29516,14 +29437,13 @@
           "segment_ids": [
             "mps_L0_012",
             "mps_L0_013",
-            "mps_L0_014",
-            "mps_L0_015"
+            "mps_L0_014"
           ],
           "time_start": 4181,
-          "time_end": 4291,
-          "duration_s": 111,
-          "summary": "Robot technician briefly manipulates the Mako robotic arm and infrared tracker, followed by a long idle period.",
-          "audio_summary": "Brief verbal interruptions.",
+          "time_end": 4209,
+          "duration_s": 29,
+          "summary": "Robot technician briefly manipulates the robotic arm and infrared tracker.",
+          "audio_summary": "Brief interruptions and unclear verbalizations.",
           "transcript": [
             {
               "start": 4204.8,
@@ -29548,14 +29468,15 @@
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
+            "mps_L0_015",
             "mps_L0_016",
             "mps_L0_017"
           ],
-          "time_start": 4297,
+          "time_start": 4215,
           "time_end": 4326,
-          "duration_s": 30,
-          "summary": "Robot technician briefly manipulates the MPS workstation and then pauses.",
-          "audio_summary": "No verbal communication.",
+          "duration_s": 112,
+          "summary": "Robot technician pauses briefly before returning to workstation manipulation.",
+          "audio_summary": "No verbal communication during most segments.",
           "transcript": []
         },
         {
@@ -29570,8 +29491,8 @@
           "time_start": 4332,
           "time_end": 4474,
           "duration_s": 143,
-          "summary": "Robot technician manipulates the MPS workstation and then pauses.",
-          "audio_summary": "Instructions and affirmations.",
+          "summary": "Robot technician manipulates the MPS workstation and pauses.",
+          "audio_summary": "Instructions and brief confirmations.",
           "transcript": [
             {
               "start": 4385.8,
@@ -29742,8 +29663,8 @@
           "time_start": 4480,
           "time_end": 4626,
           "duration_s": 147,
-          "summary": "Robot technician actively manipulates the MPS workstation and then pauses.",
-          "audio_summary": "Discussion about cement readiness and robotic arm stability.",
+          "summary": "Robot technician continues manipulating the MPS workstation.",
+          "audio_summary": "Discussion about arm stability and cement readiness.",
           "transcript": [
             {
               "start": 4466.8,
@@ -29960,8 +29881,8 @@
           "time_start": 4632,
           "time_end": 4814,
           "duration_s": 183,
-          "summary": "Robot technician manipulates the MPS workstation and Mako robotic arm, followed by brief interaction with the workstation.",
-          "audio_summary": "Requests for cement and instructions on suturing.",
+          "summary": "Robot technician manipulates the workstation and robotic arm for cement and suture procedures.",
+          "audio_summary": "Requests for materials and procedural instructions.",
           "transcript": [
             {
               "start": 4627.0,
@@ -30172,7 +30093,7 @@
           "time_start": 4820,
           "time_end": 5015,
           "duration_s": 196,
-          "summary": "Robot technician briefly manipulates the MPS workstation and then remains idle.",
+          "summary": "Robot technician briefly manipulates the workstation and pauses.",
           "audio_summary": "Casual conversation and procedural updates.",
           "transcript": [
             {
@@ -30316,13 +30237,14 @@
             "mps_L0_027",
             "mps_L0_028",
             "mps_L0_029",
-            "mps_L0_030"
+            "mps_L0_030",
+            "mps_L0_031"
           ],
           "time_start": 5021,
-          "time_end": 5151,
-          "duration_s": 131,
-          "summary": "Robot technician interacts with the MPS workstation to adjust settings and initiate an X-ray scan.",
-          "audio_summary": "Verbal instructions and confirmations regarding positioning and initiating scans.",
+          "time_end": 5228,
+          "duration_s": 208,
+          "summary": "Robot technician prepares and initiates an X-ray scan using the MPS workstation.",
+          "audio_summary": "Verbal instructions and confirmations regarding the X-ray scan procedure.",
           "transcript": [
             {
               "start": 5034.9,
@@ -30398,23 +30320,7 @@
               "start": 5149.9,
               "end": 5151.9,
               "text": "Everybody out."
-            }
-          ]
-        },
-        {
-          "segment_id": "mps_L1_012",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
-            "mps_L0_031"
-          ],
-          "time_start": 5152,
-          "time_end": 5228,
-          "duration_s": 77,
-          "summary": "Robot technician waits for the X-ray scan to complete.",
-          "audio_summary": "Verbal updates about the status of the scan and instructions for others.",
-          "transcript": [
+            },
             {
               "start": 5155.9,
               "end": 5157.9,
@@ -30543,7 +30449,7 @@
           ]
         },
         {
-          "segment_id": "mps_L1_013",
+          "segment_id": "mps_L1_012",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -30560,8 +30466,8 @@
           "time_start": 5234,
           "time_end": 5594,
           "duration_s": 361,
-          "summary": "Robot technician manipulates the Mako robotic arm and briefly interacts with the patient before returning to inactivity.",
-          "audio_summary": "Casual conversation about equipment and brief instructions.",
+          "summary": "Robot technician manipulates the Mako robotic arm and briefly interacts with the patient and C-arm.",
+          "audio_summary": "Discussion about robotic arm functionality and brief camera-related issues.",
           "transcript": [
             {
               "start": 5231.9,
@@ -30741,7 +30647,7 @@
           ]
         },
         {
-          "segment_id": "mps_L1_014",
+          "segment_id": "mps_L1_013",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -30755,7 +30661,7 @@
           "time_end": 5723,
           "duration_s": 129,
           "summary": "Robot technician prepares instruments and resumes interaction with the Mako robotic arm.",
-          "audio_summary": "Brief acknowledgments and apologies during robotic arm manipulation.",
+          "audio_summary": "Brief apologies and handoffs to Ludwig, with mention of camera issues.",
           "transcript": [
             {
               "start": 5661.5,
@@ -30815,7 +30721,7 @@
           ]
         }
       ],
-      "num_level1_segments": 15,
+      "num_level1_segments": 14,
       "level2_segments": [
         {
           "segment_id": "mps_L2_000",
@@ -30825,14 +30731,13 @@
           "child_ids": [
             "mps_L1_000",
             "mps_L1_001",
-            "mps_L1_002",
-            "mps_L1_003"
+            "mps_L1_002"
           ],
           "time_start": 3386,
-          "time_end": 3730,
-          "duration_s": 345,
-          "summary": "Initial setup and calibration involving the MPS workstation and infrared tracker.",
-          "audio_summary": "Includes casual remarks, short verbalizations, instructions, and descriptions of robotic arm movements.",
+          "time_end": 3601,
+          "duration_s": 216,
+          "summary": "Initial setup and calibration of the robotic system.",
+          "audio_summary": "Casual remarks, brief confirmations, and minimal verbalizations during setup.",
           "transcript": [
             {
               "start": 3385.1,
@@ -30958,7 +30863,24 @@
               "start": 3597.6,
               "end": 3618.6,
               "text": "Here we go."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "mps_L2_001",
+          "role": "mps",
+          "level": 2,
+          "role_human": "robot technician (MPS)",
+          "child_ids": [
+            "mps_L1_003",
+            "mps_L1_004"
+          ],
+          "time_start": 3607,
+          "time_end": 4175,
+          "duration_s": 569,
+          "summary": "Surgical planning and tool selection using the MPS workstation.",
+          "audio_summary": "Instructions, feedback, and discussions about selecting points and surgical tools.",
+          "transcript": [
             {
               "start": 3597.6,
               "end": 3618.6,
@@ -31053,28 +30975,7 @@
               "start": 3726.6,
               "end": 3728.6,
               "text": "Okay, I think we should start."
-            }
-          ]
-        },
-        {
-          "segment_id": "mps_L2_001",
-          "role": "mps",
-          "level": 2,
-          "role_human": "robot technician (MPS)",
-          "child_ids": [
-            "mps_L1_004",
-            "mps_L1_005",
-            "mps_L1_006",
-            "mps_L1_007",
-            "mps_L1_008",
-            "mps_L1_009"
-          ],
-          "time_start": 3736,
-          "time_end": 4814,
-          "duration_s": 1079,
-          "summary": "Active robotic arm manipulation and workstation adjustments during the surgical procedure.",
-          "audio_summary": "Involves discussions about robotic arm movement, cement readiness, requests for cement, and instructions on suturing.",
-          "transcript": [
+            },
             {
               "start": 3734.6,
               "end": 3736.6,
@@ -31229,7 +31130,26 @@
               "start": 4084.5,
               "end": 4088.8,
               "text": "after."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "mps_L2_002",
+          "role": "mps",
+          "level": 2,
+          "role_human": "robot technician (MPS)",
+          "child_ids": [
+            "mps_L1_005",
+            "mps_L1_006",
+            "mps_L1_007",
+            "mps_L1_008"
+          ],
+          "time_start": 4181,
+          "time_end": 4626,
+          "duration_s": 446,
+          "summary": "Adjustment and stabilization of the robotic arm and workstation.",
+          "audio_summary": "Brief interruptions, instructions, and discussions about arm stability.",
+          "transcript": [
             {
               "start": 4204.8,
               "end": 4205.8,
@@ -31599,7 +31519,24 @@
               "start": 4597.0,
               "end": 4604.0,
               "text": "8 and a half please."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "mps_L2_003",
+          "role": "mps",
+          "level": 2,
+          "role_human": "robot technician (MPS)",
+          "child_ids": [
+            "mps_L1_009",
+            "mps_L1_010"
+          ],
+          "time_start": 4632,
+          "time_end": 5015,
+          "duration_s": 384,
+          "summary": "Preparation and execution of cement and suture procedures.",
+          "audio_summary": "Requests for materials, procedural instructions, and casual updates.",
+          "transcript": [
             {
               "start": 4627.0,
               "end": 4638.2,
@@ -31794,25 +31731,7 @@
               "start": 4808.9,
               "end": 4813.1,
               "text": "until you push the upper button."
-            }
-          ]
-        },
-        {
-          "segment_id": "mps_L2_002",
-          "role": "mps",
-          "level": 2,
-          "role_human": "robot technician (MPS)",
-          "child_ids": [
-            "mps_L1_010",
-            "mps_L1_011",
-            "mps_L1_012"
-          ],
-          "time_start": 4820,
-          "time_end": 5228,
-          "duration_s": 409,
-          "summary": "Adjustments and imaging procedures involving workstation settings and X-ray scans.",
-          "audio_summary": "Includes casual conversation, procedural updates, verbal instructions, and confirmations regarding positioning and initiating scans.",
-          "transcript": [
+            },
             {
               "start": 4817.1,
               "end": 4822.8,
@@ -31942,7 +31861,23 @@
               "start": 4937.9,
               "end": 4944.9,
               "text": "But should I go and do some between the two of them?"
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "mps_L2_004",
+          "role": "mps",
+          "level": 2,
+          "role_human": "robot technician (MPS)",
+          "child_ids": [
+            "mps_L1_011"
+          ],
+          "time_start": 5021,
+          "time_end": 5228,
+          "duration_s": 208,
+          "summary": "X-ray scan setup and execution.",
+          "audio_summary": "Verbal instructions and confirmations related to the X-ray scan.",
+          "transcript": [
             {
               "start": 5034.9,
               "end": 5039.9,
@@ -32146,19 +32081,19 @@
           ]
         },
         {
-          "segment_id": "mps_L2_003",
+          "segment_id": "mps_L2_005",
           "role": "mps",
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
-            "mps_L1_013",
-            "mps_L1_014"
+            "mps_L1_012",
+            "mps_L1_013"
           ],
           "time_start": 5234,
           "time_end": 5723,
           "duration_s": 490,
-          "summary": "Final robotic arm adjustments and instrument preparation before concluding the procedure.",
-          "audio_summary": "Includes casual conversation about equipment and brief acknowledgments during robotic arm manipulation.",
+          "summary": "Final robotic arm adjustments and instrument preparation.",
+          "audio_summary": "Discussion about robotic arm functionality, camera issues, and brief handoffs.",
           "transcript": [
             {
               "start": 5231.9,
@@ -32393,7 +32328,7 @@
           ]
         }
       ],
-      "num_level2_segments": 4
+      "num_level2_segments": 6
     },
     "nurse": {
       "level0_segments": [
@@ -35318,8 +35253,8 @@
           "time_start": 3386,
           "time_end": 3402,
           "duration_s": 17,
-          "summary": "The scrub nurse prepares the instrument table and briefly assists the head surgeon by holding a drill.",
-          "audio_summary": "The scrub nurse mentions being tired and discusses positioning with the surgeon.",
+          "summary": "The scrub nurse prepares the instrument table and assists the head surgeon by holding the drill.",
+          "audio_summary": "Brief instructions and confirmations about positioning.",
           "transcript": [
             {
               "start": 3385.1,
@@ -35366,7 +35301,7 @@
           "time_end": 3455,
           "duration_s": 48,
           "summary": "The scrub nurse resumes preparing the instrument table.",
-          "audio_summary": "Brief confirmations and requests for surgical tools.",
+          "audio_summary": "Requests for specific instruments and brief confirmations.",
           "transcript": [
             {
               "start": 3398.9,
@@ -35424,7 +35359,7 @@
           "time_end": 3505,
           "duration_s": 45,
           "summary": "The scrub nurse holds a surgical instrument and briefly resumes preparing the instrument table.",
-          "audio_summary": "The scrub nurse acknowledges instructions.",
+          "audio_summary": "Minimal verbal communication with brief affirmations.",
           "transcript": [
             {
               "start": 3479.8,
@@ -35464,7 +35399,7 @@
           "time_end": 3627,
           "duration_s": 122,
           "summary": "The scrub nurse continues preparing the instrument table.",
-          "audio_summary": "The scrub nurse requests additional instruments and acknowledges procedural cues.",
+          "audio_summary": "Requests for additional instruments and brief affirmations.",
           "transcript": [
             {
               "start": 3509.8,
@@ -35517,14 +35452,13 @@
             "nurse_L0_013",
             "nurse_L0_014",
             "nurse_L0_015",
-            "nurse_L0_016",
-            "nurse_L0_017"
+            "nurse_L0_016"
           ],
           "time_start": 3633,
-          "time_end": 3705,
-          "duration_s": 73,
-          "summary": "The scrub nurse holds a surgical instrument and resumes preparing the instrument table.",
-          "audio_summary": "The scrub nurse provides feedback on surgical positioning and flexibility.",
+          "time_end": 3671,
+          "duration_s": 39,
+          "summary": "The scrub nurse holds a surgical instrument and prepares the instrument table.",
+          "audio_summary": "Instructions about osteoporosis and range of motion.",
           "transcript": [
             {
               "start": 3648.6,
@@ -35535,7 +35469,26 @@
               "start": 3648.6,
               "end": 3675.6,
               "text": "Okay, here you move the osteoporosis and close the range of motion."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "nurse_L1_005",
+          "role": "nurse",
+          "level": 1,
+          "role_human": "scrub nurse",
+          "segment_ids": [
+            "nurse_L0_017",
+            "nurse_L0_018",
+            "nurse_L0_019",
+            "nurse_L0_020"
+          ],
+          "time_start": 3676,
+          "time_end": 3730,
+          "duration_s": 55,
+          "summary": "The scrub nurse prepares the instrument table and holds surgical instruments.",
+          "audio_summary": "Discussion about surgical techniques and readiness.",
+          "transcript": [
             {
               "start": 3675.6,
               "end": 3682.6,
@@ -35575,27 +35528,7 @@
               "start": 3704.6,
               "end": 3707.6,
               "text": "Yeah, it's looking good."
-            }
-          ]
-        },
-        {
-          "segment_id": "nurse_L1_005",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_018",
-            "nurse_L0_019",
-            "nurse_L0_020",
-            "nurse_L0_021",
-            "nurse_L0_022"
-          ],
-          "time_start": 3710,
-          "time_end": 3779,
-          "duration_s": 70,
-          "summary": "The scrub nurse prepares the instrument table and holds surgical instruments.",
-          "audio_summary": "The scrub nurse confirms readiness and discusses instrument selection.",
-          "transcript": [
+            },
             {
               "start": 3707.6,
               "end": 3710.6,
@@ -35630,7 +35563,25 @@
               "start": 3726.6,
               "end": 3728.6,
               "text": "Okay, I think we should start."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "nurse_L1_006",
+          "role": "nurse",
+          "level": 1,
+          "role_human": "scrub nurse",
+          "segment_ids": [
+            "nurse_L0_021",
+            "nurse_L0_022",
+            "nurse_L0_023"
+          ],
+          "time_start": 3736,
+          "time_end": 3977,
+          "duration_s": 242,
+          "summary": "The scrub nurse holds surgical instruments and prepares the instrument table.",
+          "audio_summary": "Discussion about starting the procedure and instrument selection.",
+          "transcript": [
             {
               "start": 3734.6,
               "end": 3736.6,
@@ -35695,23 +35646,43 @@
               "start": 3778.6,
               "end": 3780.6,
               "text": "Okay. Good."
+            },
+            {
+              "start": 3796.6,
+              "end": 3798.6,
+              "text": "Let's see."
+            },
+            {
+              "start": 3798.6,
+              "end": 3800.6,
+              "text": "That's good."
+            },
+            {
+              "start": 3800.6,
+              "end": 3817.9,
+              "text": "Of."
+            },
+            {
+              "start": 3830.6,
+              "end": 3849.8,
+              "text": "Ich kenne ich hier im Schnitt sind gleich \u00e4h wann?"
+            },
+            {
+              "start": 3849.8,
+              "end": 3853.5,
+              "text": "Ja, drei muster?"
+            },
+            {
+              "start": 3853.5,
+              "end": 3855.5,
+              "text": "No, it's not."
+            },
+            {
+              "start": 3913.5,
+              "end": 3922.7,
+              "text": "Sigh"
             }
           ]
-        },
-        {
-          "segment_id": "nurse_L1_006",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_027"
-          ],
-          "time_start": 4127,
-          "time_end": 4157,
-          "duration_s": 31,
-          "summary": "Scrub nurse is idle.",
-          "audio_summary": "No verbal communication.",
-          "transcript": []
         },
         {
           "segment_id": "nurse_L1_007",
@@ -35719,14 +35690,15 @@
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
+            "nurse_L0_027",
             "nurse_L0_028",
             "nurse_L0_029"
           ],
-          "time_start": 4163,
+          "time_start": 4127,
           "time_end": 4245,
-          "duration_s": 83,
-          "summary": "Scrub nurse briefly holds a surgical instrument, then remains idle.",
-          "audio_summary": "Brief verbal exchanges ('What?' / 'excuse me').",
+          "duration_s": 119,
+          "summary": "The scrub nurse briefly holds an instrument and then pauses.",
+          "audio_summary": "Brief verbal exchanges indicating confusion or clarification.",
           "transcript": [
             {
               "start": 4204.8,
@@ -35747,13 +35719,14 @@
           "role_human": "scrub nurse",
           "segment_ids": [
             "nurse_L0_030",
-            "nurse_L0_031"
+            "nurse_L0_031",
+            "nurse_L0_032"
           ],
           "time_start": 4251,
-          "time_end": 4336,
-          "duration_s": 86,
-          "summary": "Scrub nurse briefly assists the head surgeon and manipulates the robotic arm, then remains idle.",
-          "audio_summary": "No verbal communication.",
+          "time_end": 4348,
+          "duration_s": 98,
+          "summary": "The scrub nurse briefly assists the head surgeon and manipulates equipment.",
+          "audio_summary": "No verbal communication during active assistance.",
           "transcript": []
         },
         {
@@ -35762,14 +35735,16 @@
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
-            "nurse_L0_032",
-            "nurse_L0_033"
+            "nurse_L0_033",
+            "nurse_L0_034",
+            "nurse_L0_035",
+            "nurse_L0_036"
           ],
-          "time_start": 4342,
-          "time_end": 4456,
-          "duration_s": 115,
-          "summary": "Scrub nurse briefly assists the head surgeon, then remains idle.",
-          "audio_summary": "Verbal communication includes instructions and brief interactions ('Okay, let's do the trials.' / 'Give me a purse, yes.' / etc.).",
+          "time_start": 4354,
+          "time_end": 4620,
+          "duration_s": 267,
+          "summary": "The scrub nurse prepares the instrument table and engages in multiple verbal exchanges.",
+          "audio_summary": "Frequent instructions and confirmations regarding surgical steps.",
           "transcript": [
             {
               "start": 4385.8,
@@ -35895,24 +35870,7 @@
               "start": 4455.8,
               "end": 4456.8,
               "text": "Okay."
-            }
-          ]
-        },
-        {
-          "segment_id": "nurse_L1_010",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_034",
-            "nurse_L0_035"
-          ],
-          "time_start": 4462,
-          "time_end": 4584,
-          "duration_s": 123,
-          "summary": "Scrub nurse prepares the instrument table, then remains idle.",
-          "audio_summary": "Repetitive verbal affirmations ('Okay.') and procedural instructions ('Finals.' / 'Can we get the cement please?' / etc.).",
-          "transcript": [
+            },
             {
               "start": 4461.8,
               "end": 4462.8,
@@ -36117,24 +36075,7 @@
               "start": 4570.0,
               "end": 4572.0,
               "text": "I'll give you a few sprigs of salt to do something."
-            }
-          ]
-        },
-        {
-          "segment_id": "nurse_L1_011",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_036",
-            "nurse_L0_037"
-          ],
-          "time_start": 4590,
-          "time_end": 4778,
-          "duration_s": 189,
-          "summary": "Scrub nurse prepares the instrument table, then remains idle.",
-          "audio_summary": "Requests for supplies ('Can I have a new pair of gloves?' / '8 and a half please.') and procedural updates ('I think the cement is almost ready now.' / etc.).",
-          "transcript": [
+            },
             {
               "start": 4595.0,
               "end": 4597.0,
@@ -36144,7 +36085,26 @@
               "start": 4597.0,
               "end": 4604.0,
               "text": "8 and a half please."
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "nurse_L1_010",
+          "role": "nurse",
+          "level": 1,
+          "role_human": "scrub nurse",
+          "segment_ids": [
+            "nurse_L0_037",
+            "nurse_L0_038",
+            "nurse_L0_039",
+            "nurse_L0_040"
+          ],
+          "time_start": 4626,
+          "time_end": 4813,
+          "duration_s": 188,
+          "summary": "The scrub nurse assists the head surgeon with a hammer and confirms procedural steps.",
+          "audio_summary": "Brief confirmations and procedural instructions.",
+          "transcript": [
             {
               "start": 4627.0,
               "end": 4638.2,
@@ -36319,25 +36279,7 @@
               "start": 4776.9,
               "end": 4778.9,
               "text": "ok, checkpoints are out."
-            }
-          ]
-        },
-        {
-          "segment_id": "nurse_L1_012",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_038",
-            "nurse_L0_039",
-            "nurse_L0_040"
-          ],
-          "time_start": 4779,
-          "time_end": 4813,
-          "duration_s": 35,
-          "summary": "Scrub nurse assists the head surgeon with a hammer, then briefly remains idle.",
-          "audio_summary": "Confirmations and procedural instructions ('So then we remove the jack cam pins?' / 'Yes.' / 'Drill?' / etc.).",
-          "transcript": [
+            },
             {
               "start": 4778.9,
               "end": 4779.9,
@@ -36376,20 +36318,21 @@
           ]
         },
         {
-          "segment_id": "nurse_L1_013",
+          "segment_id": "nurse_L1_011",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
             "nurse_L0_041",
             "nurse_L0_042",
-            "nurse_L0_043"
+            "nurse_L0_043",
+            "nurse_L0_044"
           ],
           "time_start": 4814,
-          "time_end": 4901,
-          "duration_s": 88,
-          "summary": "Scrub nurse prepares the instrument table, then remains idle.",
-          "audio_summary": "Instructions and casual conversation ('In until it snaps in, not snap.' / 'What type of doctor?' / etc.).",
+          "time_end": 4997,
+          "duration_s": 184,
+          "summary": "The scrub nurse prepares the instrument table and engages in casual conversation.",
+          "audio_summary": "Casual conversation mixed with procedural instructions.",
           "transcript": [
             {
               "start": 4817.1,
@@ -36475,24 +36418,7 @@
               "start": 4871.9,
               "end": 4874.9,
               "text": "This is why doctors should go to medical school, huh?"
-            }
-          ]
-        },
-        {
-          "segment_id": "nurse_L1_014",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_044",
-            "nurse_L0_045"
-          ],
-          "time_start": 4907,
-          "time_end": 5039,
-          "duration_s": 133,
-          "summary": "Scrub nurse holds surgical instruments and prepares the instrument table.",
-          "audio_summary": "Instructions and procedural updates ('Unwrap the patient here.' / 'I think I have to remove the robot a little bit').",
-          "transcript": [
+            },
             {
               "start": 4904.9,
               "end": 4911.9,
@@ -36547,31 +36473,32 @@
               "start": 4937.9,
               "end": 4944.9,
               "text": "But should I go and do some between the two of them?"
-            },
-            {
-              "start": 5034.9,
-              "end": 5039.9,
-              "text": "So I think I have to remove the robot a little bit"
             }
           ]
         },
         {
-          "segment_id": "nurse_L1_015",
+          "segment_id": "nurse_L1_012",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
+            "nurse_L0_045",
             "nurse_L0_046",
             "nurse_L0_047",
             "nurse_L0_048",
             "nurse_L0_049"
           ],
-          "time_start": 5045,
+          "time_start": 5003,
           "time_end": 5090,
-          "duration_s": 46,
-          "summary": "Scrub nurse remains idle briefly, then holds surgical instruments.",
-          "audio_summary": "Technical instructions ('It brings it better.' / 'You have two minutes to go through here.' / etc.).",
+          "duration_s": 88,
+          "summary": "The scrub nurse prepares instruments and briefly holds surgical tools.",
+          "audio_summary": "Brief instructions about the robot and procedural timing.",
           "transcript": [
+            {
+              "start": 5034.9,
+              "end": 5039.9,
+              "text": "So I think I have to remove the robot a little bit"
+            },
             {
               "start": 5044.4,
               "end": 5045.4,
@@ -36595,144 +36522,7 @@
           ]
         },
         {
-          "segment_id": "nurse_L1_016",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_050",
-            "nurse_L0_051"
-          ],
-          "time_start": 5096,
-          "time_end": 5204,
-          "duration_s": 109,
-          "summary": "Scrub nurse prepares the instrument table, then remains idle.",
-          "audio_summary": "Instructions for safety ('Everybody out.') repeated multiple times.",
-          "transcript": [
-            {
-              "start": 5124.9,
-              "end": 5131.9,
-              "text": "I am taking a X-ray scan."
-            },
-            {
-              "start": 5131.9,
-              "end": 5134.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5134.9,
-              "end": 5137.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5134.9,
-              "end": 5137.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5137.9,
-              "end": 5140.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5140.9,
-              "end": 5143.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5143.9,
-              "end": 5146.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5146.9,
-              "end": 5149.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5149.9,
-              "end": 5151.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5155.9,
-              "end": 5157.9,
-              "text": "Now I'm taking an X-ray scan."
-            },
-            {
-              "start": 5163.9,
-              "end": 5165.9,
-              "text": "It's done. You can come in again."
-            },
-            {
-              "start": 5179.9,
-              "end": 5181.9,
-              "text": "I've already done it."
-            },
-            {
-              "start": 5181.9,
-              "end": 5183.9,
-              "text": "It would be here, that it fits."
-            },
-            {
-              "start": 5183.9,
-              "end": 5185.9,
-              "text": "We have to get it again."
-            },
-            {
-              "start": 5185.9,
-              "end": 5187.9,
-              "text": "I've already done it."
-            },
-            {
-              "start": 5187.9,
-              "end": 5189.9,
-              "text": "Or the attitude of the first picture."
-            },
-            {
-              "start": 5189.9,
-              "end": 5191.9,
-              "text": "Okay."
-            },
-            {
-              "start": 5191.9,
-              "end": 5193.9,
-              "text": "I would like to see it."
-            },
-            {
-              "start": 5193.9,
-              "end": 5195.9,
-              "text": "And where is it shown?"
-            },
-            {
-              "start": 5195.9,
-              "end": 5197.9,
-              "text": "At the second unit."
-            },
-            {
-              "start": 5197.9,
-              "end": 5199.9,
-              "text": "Somewhere in the room."
-            },
-            {
-              "start": 5199.9,
-              "end": 5201.9,
-              "text": "Okay, I think it's done."
-            },
-            {
-              "start": 5201.9,
-              "end": 5203.9,
-              "text": "Now we also have a person without a mouthpiece."
-            },
-            {
-              "start": 5203.9,
-              "end": 5205.9,
-              "text": "Who wants to see?"
-            }
-          ]
-        },
-        {
-          "segment_id": "nurse_L1_017",
+          "segment_id": "nurse_L1_013",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -36745,8 +36535,8 @@
           "time_start": 5258,
           "time_end": 5357,
           "duration_s": 100,
-          "summary": "The scrub nurse assists the assistant surgeon and prepares the patient.",
-          "audio_summary": "Verbal communication includes discussions about equipment issues and coordination with the surgical team.",
+          "summary": "The scrub nurse assists with patient preparation and communicates with the surgical team.",
+          "audio_summary": "Verbal exchanges about technical issues and coordination with the surgical team.",
           "transcript": [
             {
               "start": 5257.5,
@@ -36871,7 +36661,7 @@
           ]
         },
         {
-          "segment_id": "nurse_L1_018",
+          "segment_id": "nurse_L1_014",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -36885,12 +36675,12 @@
           "time_start": 5363,
           "time_end": 5475,
           "duration_s": 113,
-          "summary": "The scrub nurse prepares the instrument table and handles surgical instruments.",
-          "audio_summary": "No verbal communication.",
+          "summary": "The scrub nurse organizes and prepares surgical instruments on the instrument table.",
+          "audio_summary": "No verbal communication during this step.",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_019",
+          "segment_id": "nurse_L1_015",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -36901,12 +36691,12 @@
           "time_start": 5481,
           "time_end": 5515,
           "duration_s": 35,
-          "summary": "The scrub nurse briefly pauses and resumes preparing the instrument table.",
-          "audio_summary": "No verbal communication.",
+          "summary": "The scrub nurse briefly pauses before continuing to prepare the instrument table.",
+          "audio_summary": "No verbal communication during this step.",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_020",
+          "segment_id": "nurse_L1_016",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -36917,12 +36707,12 @@
           "time_start": 5521,
           "time_end": 5581,
           "duration_s": 61,
-          "summary": "The scrub nurse holds surgical instruments and continues preparing the instrument table.",
-          "audio_summary": "No verbal communication.",
+          "summary": "The scrub nurse handles surgical instruments while continuing to organize the instrument table.",
+          "audio_summary": "No verbal communication during this step.",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_021",
+          "segment_id": "nurse_L1_017",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -36936,8 +36726,8 @@
           "time_start": 5587,
           "time_end": 5666,
           "duration_s": 80,
-          "summary": "The scrub nurse briefly pauses, holds surgical instruments, and resumes preparing the instrument table.",
-          "audio_summary": "Brief verbal communication about losing the camera.",
+          "summary": "The scrub nurse resumes handling instruments and preparing the table while briefly commenting on the camera.",
+          "audio_summary": "Brief verbal comment about losing the camera.",
           "transcript": [
             {
               "start": 5661.5,
@@ -36947,7 +36737,7 @@
           ]
         },
         {
-          "segment_id": "nurse_L1_022",
+          "segment_id": "nurse_L1_018",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -36960,7 +36750,7 @@
           "time_end": 5723,
           "duration_s": 57,
           "summary": "The scrub nurse continues preparing the instrument table.",
-          "audio_summary": "Verbal communication includes apologies and instructions to Ludwig.",
+          "audio_summary": "Verbal exchanges with Ludwig and brief apologies.",
           "transcript": [
             {
               "start": 5667.5,
@@ -37015,7 +36805,7 @@
           ]
         }
       ],
-      "num_level1_segments": 23,
+      "num_level1_segments": 19,
       "level2_segments": [
         {
           "segment_id": "nurse_L2_000",
@@ -37028,13 +36818,14 @@
             "nurse_L1_002",
             "nurse_L1_003",
             "nurse_L1_004",
-            "nurse_L1_005"
+            "nurse_L1_005",
+            "nurse_L1_006"
           ],
           "time_start": 3386,
-          "time_end": 3779,
-          "duration_s": 394,
-          "summary": "The scrub nurse prepares the instrument table and provides initial assistance during setup.",
-          "audio_summary": "Includes brief discussions about positioning, requests for tools, and acknowledgments.",
+          "time_end": 3977,
+          "duration_s": 592,
+          "summary": "Preparation of surgical instruments and coordination with the surgical team before the procedure begins.",
+          "audio_summary": "Includes requests for instruments, brief instructions, and discussions about surgical techniques and readiness.",
           "transcript": [
             {
               "start": 3385.1,
@@ -37315,6 +37106,41 @@
               "start": 3778.6,
               "end": 3780.6,
               "text": "Okay. Good."
+            },
+            {
+              "start": 3796.6,
+              "end": 3798.6,
+              "text": "Let's see."
+            },
+            {
+              "start": 3798.6,
+              "end": 3800.6,
+              "text": "That's good."
+            },
+            {
+              "start": 3800.6,
+              "end": 3817.9,
+              "text": "Of."
+            },
+            {
+              "start": 3830.6,
+              "end": 3849.8,
+              "text": "Ich kenne ich hier im Schnitt sind gleich \u00e4h wann?"
+            },
+            {
+              "start": 3849.8,
+              "end": 3853.5,
+              "text": "Ja, drei muster?"
+            },
+            {
+              "start": 3853.5,
+              "end": 3855.5,
+              "text": "No, it's not."
+            },
+            {
+              "start": 3913.5,
+              "end": 3922.7,
+              "text": "Sigh"
             }
           ]
         },
@@ -37324,16 +37150,18 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
-            "nurse_L1_006",
             "nurse_L1_007",
             "nurse_L1_008",
-            "nurse_L1_009"
+            "nurse_L1_009",
+            "nurse_L1_010",
+            "nurse_L1_011",
+            "nurse_L1_012"
           ],
           "time_start": 4127,
-          "time_end": 4456,
-          "duration_s": 330,
-          "summary": "The scrub nurse is briefly involved in robotic arm manipulation and procedural coordination.",
-          "audio_summary": "Includes minimal communication, occasional questions, and procedural instructions.",
+          "time_end": 5090,
+          "duration_s": 964,
+          "summary": "Active assistance during the surgical procedure, including handling instruments and procedural coordination.",
+          "audio_summary": "Involves frequent instructions, confirmations, casual conversation, and brief technical discussions.",
           "transcript": [
             {
               "start": 4204.8,
@@ -37469,29 +37297,7 @@
               "start": 4455.8,
               "end": 4456.8,
               "text": "Okay."
-            }
-          ]
-        },
-        {
-          "segment_id": "nurse_L2_002",
-          "role": "nurse",
-          "level": 2,
-          "role_human": "scrub nurse",
-          "child_ids": [
-            "nurse_L1_010",
-            "nurse_L1_011",
-            "nurse_L1_012",
-            "nurse_L1_013",
-            "nurse_L1_014",
-            "nurse_L1_015",
-            "nurse_L1_016"
-          ],
-          "time_start": 4462,
-          "time_end": 5204,
-          "duration_s": 743,
-          "summary": "The scrub nurse supports the surgical team during implant trials and cement preparation.",
-          "audio_summary": "Includes requests for supplies, procedural updates, and repeated safety instructions.",
-          "transcript": [
+            },
             {
               "start": 4461.8,
               "end": 4462.8,
@@ -38081,147 +37887,27 @@
               "start": 5058.9,
               "end": 5060.9,
               "text": "I think there's a dock for it."
-            },
-            {
-              "start": 5124.9,
-              "end": 5131.9,
-              "text": "I am taking a X-ray scan."
-            },
-            {
-              "start": 5131.9,
-              "end": 5134.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5134.9,
-              "end": 5137.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5134.9,
-              "end": 5137.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5137.9,
-              "end": 5140.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5140.9,
-              "end": 5143.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5143.9,
-              "end": 5146.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5146.9,
-              "end": 5149.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5149.9,
-              "end": 5151.9,
-              "text": "Everybody out."
-            },
-            {
-              "start": 5155.9,
-              "end": 5157.9,
-              "text": "Now I'm taking an X-ray scan."
-            },
-            {
-              "start": 5163.9,
-              "end": 5165.9,
-              "text": "It's done. You can come in again."
-            },
-            {
-              "start": 5179.9,
-              "end": 5181.9,
-              "text": "I've already done it."
-            },
-            {
-              "start": 5181.9,
-              "end": 5183.9,
-              "text": "It would be here, that it fits."
-            },
-            {
-              "start": 5183.9,
-              "end": 5185.9,
-              "text": "We have to get it again."
-            },
-            {
-              "start": 5185.9,
-              "end": 5187.9,
-              "text": "I've already done it."
-            },
-            {
-              "start": 5187.9,
-              "end": 5189.9,
-              "text": "Or the attitude of the first picture."
-            },
-            {
-              "start": 5189.9,
-              "end": 5191.9,
-              "text": "Okay."
-            },
-            {
-              "start": 5191.9,
-              "end": 5193.9,
-              "text": "I would like to see it."
-            },
-            {
-              "start": 5193.9,
-              "end": 5195.9,
-              "text": "And where is it shown?"
-            },
-            {
-              "start": 5195.9,
-              "end": 5197.9,
-              "text": "At the second unit."
-            },
-            {
-              "start": 5197.9,
-              "end": 5199.9,
-              "text": "Somewhere in the room."
-            },
-            {
-              "start": 5199.9,
-              "end": 5201.9,
-              "text": "Okay, I think it's done."
-            },
-            {
-              "start": 5201.9,
-              "end": 5203.9,
-              "text": "Now we also have a person without a mouthpiece."
-            },
-            {
-              "start": 5203.9,
-              "end": 5205.9,
-              "text": "Who wants to see?"
             }
           ]
         },
         {
-          "segment_id": "nurse_L2_003",
+          "segment_id": "nurse_L2_002",
           "role": "nurse",
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
+            "nurse_L1_013",
+            "nurse_L1_014",
+            "nurse_L1_015",
+            "nurse_L1_016",
             "nurse_L1_017",
-            "nurse_L1_018",
-            "nurse_L1_019",
-            "nurse_L1_020",
-            "nurse_L1_021",
-            "nurse_L1_022"
+            "nurse_L1_018"
           ],
           "time_start": 5258,
           "time_end": 5723,
           "duration_s": 466,
-          "summary": "The scrub nurse assists with final preparations and handles surgical instruments during the closing stages.",
-          "audio_summary": "Includes brief pauses, equipment-related communication, and apologies.",
+          "summary": "Post-operative instrument organization and minor procedural adjustments.",
+          "audio_summary": "Includes brief verbal comments about technical issues and minimal communication during instrument preparation.",
           "transcript": [
             {
               "start": 5257.5,
@@ -38401,7 +38087,7 @@
           ]
         }
       ],
-      "num_level2_segments": 4
+      "num_level2_segments": 3
     },
     "robot_monitor": {
       "level0_segments": [
@@ -40261,7 +39947,7 @@
           "time_end": 3995,
           "duration_s": 610,
           "summary": "The robot monitor is used for bone registration.",
-          "audio_summary": "Various short comments and confirmations.",
+          "audio_summary": "Casual remarks and brief confirmations.",
           "transcript": [
             {
               "start": 3385.1,
@@ -40597,7 +40283,7 @@
           "time_end": 4109,
           "duration_s": 109,
           "summary": "The robot monitor is used for intraoperative planning.",
-          "audio_summary": "Brief verbal feedback and adjustments.",
+          "audio_summary": "Brief instructions and affirmations.",
           "transcript": [
             {
               "start": 4003.5,
@@ -40658,7 +40344,7 @@
           "time_end": 4297,
           "duration_s": 177,
           "summary": "The robot monitor is used for bone preparation.",
-          "audio_summary": "Short verbal exchanges about technical issues.",
+          "audio_summary": "Short troubleshooting-related comments.",
           "transcript": [
             {
               "start": 4178.8,
@@ -40690,7 +40376,7 @@
           "time_end": 4402,
           "duration_s": 100,
           "summary": "The robot monitor is used for pre-surgery RIO checks and bone preparation.",
-          "audio_summary": "Instructions to proceed with trials.",
+          "audio_summary": "Brief instructions and affirmations.",
           "transcript": [
             {
               "start": 4385.8,
@@ -40712,14 +40398,13 @@
             "robot_monitor_L0_009",
             "robot_monitor_L0_010",
             "robot_monitor_L0_011",
-            "robot_monitor_L0_012",
-            "robot_monitor_L0_013"
+            "robot_monitor_L0_012"
           ],
           "time_start": 4408,
-          "time_end": 4814,
-          "duration_s": 407,
-          "summary": "The robot monitor is used for multiple pre-surgery RIO checks and bone preparation across different anatomical surfaces.",
-          "audio_summary": "Instructions related to cement preparation and procedural steps.",
+          "time_end": 4716,
+          "duration_s": 309,
+          "summary": "The robot monitor is used for multiple pre-surgery RIO checks and bone preparation across different anatomical regions.",
+          "audio_summary": "Instructions, requests for assistance, and brief confirmations.",
           "transcript": [
             {
               "start": 4385.8,
@@ -41125,7 +40810,23 @@
               "start": 4699.9,
               "end": 4701.9,
               "text": "See more?"
-            },
+            }
+          ]
+        },
+        {
+          "segment_id": "robot_monitor_L1_005",
+          "role": "robot_monitor",
+          "level": 1,
+          "role_human": "robot monitor (Mako screen)",
+          "segment_ids": [
+            "robot_monitor_L0_013"
+          ],
+          "time_start": 4722,
+          "time_end": 4814,
+          "duration_s": 93,
+          "summary": "The robot monitor is used for posterior bone preparation.",
+          "audio_summary": "Brief planning-related comments.",
+          "transcript": [
             {
               "start": 4721.9,
               "end": 4723.9,
@@ -41249,7 +40950,7 @@
           ]
         },
         {
-          "segment_id": "robot_monitor_L1_005",
+          "segment_id": "robot_monitor_L1_006",
           "role": "robot_monitor",
           "level": 1,
           "role_human": "robot monitor (Mako screen)",
@@ -41260,7 +40961,7 @@
           "time_end": 5109,
           "duration_s": 284,
           "summary": "The robot monitor is used for intraoperative planning.",
-          "audio_summary": "Casual conversation and brief procedural comments.",
+          "audio_summary": "Casual conversation and planning-related remarks.",
           "transcript": [
             {
               "start": 4827.7,
@@ -41430,7 +41131,7 @@
           ]
         },
         {
-          "segment_id": "robot_monitor_L1_006",
+          "segment_id": "robot_monitor_L1_007",
           "role": "robot_monitor",
           "level": 1,
           "role_human": "robot monitor (Mako screen)",
@@ -41440,8 +41141,8 @@
           "time_start": 5115,
           "time_end": 5723,
           "duration_s": 609,
-          "summary": "The robot monitor is used to finish the procedure.",
-          "audio_summary": "Repeated instructions for clearing the area.",
+          "summary": "The robot monitor is used to complete the procedure.",
+          "audio_summary": "Repeated instructions for clearing the operating room.",
           "transcript": [
             {
               "start": 5124.9,
@@ -41846,7 +41547,7 @@
           ]
         }
       ],
-      "num_level1_segments": 7,
+      "num_level1_segments": 8,
       "level2_segments": [
         {
           "segment_id": "robot_monitor_L2_000",
@@ -41854,13 +41555,18 @@
           "level": 2,
           "role_human": "robot monitor (Mako screen)",
           "child_ids": [
-            "robot_monitor_L1_000"
+            "robot_monitor_L1_000",
+            "robot_monitor_L1_001",
+            "robot_monitor_L1_002",
+            "robot_monitor_L1_003",
+            "robot_monitor_L1_004",
+            "robot_monitor_L1_005"
           ],
           "time_start": 3386,
-          "time_end": 3995,
-          "duration_s": 610,
-          "summary": "The robot monitor is used for bone registration.",
-          "audio_summary": "Various short comments and confirmations.",
+          "time_end": 4814,
+          "duration_s": 1429,
+          "summary": "Preparation and planning phase involving bone registration, intraoperative planning, and bone preparation.",
+          "audio_summary": "Includes brief instructions, affirmations, troubleshooting comments, and planning-related remarks.",
           "transcript": [
             {
               "start": 3385.1,
@@ -42181,23 +41887,7 @@
               "start": 3913.5,
               "end": 3922.7,
               "text": "Sigh"
-            }
-          ]
-        },
-        {
-          "segment_id": "robot_monitor_L2_001",
-          "role": "robot_monitor",
-          "level": 2,
-          "role_human": "robot monitor (Mako screen)",
-          "child_ids": [
-            "robot_monitor_L1_001"
-          ],
-          "time_start": 4001,
-          "time_end": 4109,
-          "duration_s": 109,
-          "summary": "The robot monitor is used for intraoperative planning.",
-          "audio_summary": "Brief verbal feedback and adjustments.",
-          "transcript": [
+            },
             {
               "start": 4003.5,
               "end": 4005.5,
@@ -42242,25 +41932,7 @@
               "start": 4084.5,
               "end": 4088.8,
               "text": "after."
-            }
-          ]
-        },
-        {
-          "segment_id": "robot_monitor_L2_002",
-          "role": "robot_monitor",
-          "level": 2,
-          "role_human": "robot monitor (Mako screen)",
-          "child_ids": [
-            "robot_monitor_L1_002",
-            "robot_monitor_L1_003",
-            "robot_monitor_L1_004"
-          ],
-          "time_start": 4121,
-          "time_end": 4814,
-          "duration_s": 694,
-          "summary": "The robot monitor is used for bone preparation and multiple pre-surgery RIO checks.",
-          "audio_summary": "Instructions to proceed with trials and related to cement preparation and procedural steps.",
-          "transcript": [
+            },
             {
               "start": 4178.8,
               "end": 4180.8,
@@ -42809,19 +42481,19 @@
           ]
         },
         {
-          "segment_id": "robot_monitor_L2_003",
+          "segment_id": "robot_monitor_L2_001",
           "role": "robot_monitor",
           "level": 2,
           "role_human": "robot monitor (Mako screen)",
           "child_ids": [
-            "robot_monitor_L1_005",
-            "robot_monitor_L1_006"
+            "robot_monitor_L1_006",
+            "robot_monitor_L1_007"
           ],
           "time_start": 4826,
           "time_end": 5723,
           "duration_s": 898,
-          "summary": "The robot monitor is used for final intraoperative planning and procedure completion.",
-          "audio_summary": "Casual conversation and repeated instructions for clearing the area.",
+          "summary": "Final intraoperative planning and procedure completion phase.",
+          "audio_summary": "Features casual conversation, planning-related remarks, and repeated instructions for clearing the operating room.",
           "transcript": [
             {
               "start": 4827.7,
@@ -43391,7 +43063,7 @@
           ]
         }
       ],
-      "num_level2_segments": 4
+      "num_level2_segments": 2
     },
     "robot_setup": {
       "level0_segments": [
@@ -48672,7 +48344,7 @@
           "time_end": 4384,
           "duration_s": 198,
           "summary": "Head surgeon picks up and prepares the bone saw.",
-          "audio_summary": "Brief verbal exchanges including 'What?' and 'excuse me'.",
+          "audio_summary": "Brief verbal exchanges about the bone saw.",
           "transcript": [
             {
               "start": 4204.8,
@@ -48697,8 +48369,8 @@
           "time_start": 4396,
           "time_end": 4734,
           "duration_s": 339,
-          "summary": "Head surgeon actively uses the bone saw to cut bone.",
-          "audio_summary": "Multiple verbal instructions and comments including 'Okay, let's do the trials.' and 'Just hold it like this.'",
+          "summary": "Head surgeon uses the bone saw to cut bone.",
+          "audio_summary": "Frequent verbal instructions and coordination with surgical team.",
           "transcript": [
             {
               "start": 4385.8,
@@ -49211,8 +48883,8 @@
           "time_start": 4187,
           "time_end": 4384,
           "duration_s": 198,
-          "summary": "The bone saw is picked up and prepared for use.",
-          "audio_summary": "Brief verbal exchanges including clarification requests like 'What?' and 'excuse me'.",
+          "summary": "Preparation of the bone saw by the head surgeon.",
+          "audio_summary": "Brief verbal exchanges about the bone saw.",
           "transcript": [
             {
               "start": 4204.8,
@@ -49237,8 +48909,8 @@
           "time_start": 4396,
           "time_end": 4734,
           "duration_s": 339,
-          "summary": "The bone saw is actively used to perform a bone-cutting task.",
-          "audio_summary": "Includes multiple verbal instructions and comments such as 'Okay, let's do the trials.' and 'Just hold it like this.'",
+          "summary": "Active use of the bone saw to cut bone.",
+          "audio_summary": "Frequent verbal instructions and coordination with the surgical team.",
           "transcript": [
             {
               "start": 4385.8,
@@ -50656,32 +50328,18 @@
           "level": 1,
           "role_human": "unrelated person",
           "segment_ids": [
-            "unrelated_person_L0_000"
-          ],
-          "time_start": 5506,
-          "time_end": 5506,
-          "duration_s": 1,
-          "summary": "Unrelated person briefly manipulates the C-arm.",
-          "audio_summary": "No verbal communication.",
-          "transcript": []
-        },
-        {
-          "segment_id": "unrelated_person_L1_001",
-          "role": "unrelated_person",
-          "level": 1,
-          "role_human": "unrelated person",
-          "segment_ids": [
+            "unrelated_person_L0_000",
             "unrelated_person_L0_001"
           ],
-          "time_start": 5507,
+          "time_start": 5506,
           "time_end": 5515,
-          "duration_s": 9,
-          "summary": "Unrelated person is idle with no active interactions.",
+          "duration_s": 10,
+          "summary": "Unrelated person briefly manipulates the C-arm and then remains idle.",
           "audio_summary": "No verbal communication.",
           "transcript": []
         }
       ],
-      "num_level1_segments": 2,
+      "num_level1_segments": 1,
       "level2_segments": [
         {
           "segment_id": "unrelated_person_L2_000",
@@ -50692,29 +50350,12 @@
             "unrelated_person_L1_000"
           ],
           "time_start": 5506,
-          "time_end": 5506,
-          "duration_s": 1,
-          "summary": "Unrelated person briefly interacts with the C-arm.",
-          "audio_summary": "No verbal communication.",
-          "transcript": []
-        },
-        {
-          "segment_id": "unrelated_person_L2_001",
-          "role": "unrelated_person",
-          "level": 2,
-          "role_human": "unrelated person",
-          "child_ids": [
-            "unrelated_person_L1_001"
-          ],
-          "time_start": 5507,
           "time_end": 5515,
-          "duration_s": 9,
-          "summary": "Unrelated person remains idle with no active involvement.",
-          "audio_summary": "No verbal communication.",
+          "summary": "Unrelated person briefly manipulates the C-arm and then remains idle.",
           "transcript": []
         }
       ],
-      "num_level2_segments": 2
+      "num_level2_segments": 1
     }
   },
   "metadata": {
@@ -50731,8 +50372,8 @@
       3386,
       5723
     ],
-    "total_level1_segments": 106,
-    "total_level2_segments": 40
+    "total_level1_segments": 96,
+    "total_level2_segments": 38
   },
   "debounce_analysis": {
     "debounce": 2,

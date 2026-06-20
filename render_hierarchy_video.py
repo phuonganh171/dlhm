@@ -45,13 +45,13 @@ PREDICATE_COLORS = {
     "Suturing": "#ec4899", "Cutting": "#f97316", "Cementing": "#84cc16",
     "Cleaning": "#22d3ee", "Scanning": "#a78bfa",
     "CloseTo": "#475569", "LyingOn": "#374151",
-    # Robot-monitor / robot-setup pseudo-predicates (phase + current step)
+    # Robot-monitor pseudo-predicates (phase + current step)
     "Phase": "#a855f7", "Step": "#f59e0b",
 }
 
 # Synthetic roles whose timeline comes from the robot monitor logs, not the
 # scene-graph triplets (so they never appear as a triplet subject).
-ROBOT_ROLES = {"robot_setup", "robot_monitor"}
+ROBOT_ROLES = {"robot_monitor"}
 
 # Tool/instrument roles appear as the *object* of triplets, not the subject.
 TOOL_ROLES = set(TOOL_ENTITIES)
@@ -233,8 +233,9 @@ def _filter_unmapped_segments(hierarchy: dict) -> dict:
     return hierarchy
 
 
+
 def _robot_label(seg: dict) -> str:
-    """Compact 'Phase · Step' label for a robot-role L0 segment."""
+    """Compact 'Phase \u00b7 Step' label for a robot-role L0 segment."""
     state = {k: v for k, v in seg.get("active_predicates", [])}
     phase = state.get("Phase")
     step = state.get("Step")
@@ -287,6 +288,8 @@ def build_hierarchy_data(hierarchy: dict) -> dict:
     roles_data = {}
 
     for role, role_data in hierarchy["roles"].items():
+        if role == "robot_setup":
+            continue
         l0_segs = role_data.get("level0_segments", [])
         l1_segs = role_data.get("level1_segments", [])
         l2_segs = role_data.get("level2_segments", [])
@@ -305,7 +308,6 @@ def build_hierarchy_data(hierarchy: dict) -> dict:
         "role_order": _order_roles(roles_data.keys()),
         "time_range": time_range,
         "metadata": meta,
-        # Always-on monitor overlay, synced to the colorimage timeline.
         "monitor_timeline": _build_robot_timeline(hierarchy, "robot_monitor"),
     }
 
@@ -409,7 +411,6 @@ def build_html(
       letter-spacing: 0.05em; color: var(--muted);
     }}
     .monitor-status .mon-val {{ font-size: 11px; font-weight: 600; color: var(--l2); }}
-    .monitor-status .mon-chip.setup .mon-val {{ color: var(--warn); }}
 
     .controls-bar {{
       display: flex; align-items: center; gap: 6px; padding: 6px 14px;
@@ -463,7 +464,19 @@ def build_html(
     .window-summary {{
       font-size: 13px; line-height: 1.4; padding: 8px 10px;
       border-left: 3px solid var(--l2); background: rgba(139,92,246,0.06);
-      border-radius: 4px; margin-bottom: 8px;
+      border-radius: 4px; margin-bottom: 4px;
+    }}
+    .window-audio {{
+      font-size: 11px; line-height: 1.3; padding: 5px 10px;
+      border-left: 3px solid var(--accent); background: rgba(83,168,255,0.06);
+      border-radius: 4px; margin-bottom: 8px; color: var(--muted);
+      font-style: italic;
+    }}
+    .window-audio:empty {{ display: none; }}
+    .l1-audio {{
+      font-size: 9px; color: var(--muted); font-style: italic;
+      padding: 2px 8px 4px 8px; border-top: 1px solid var(--border);
+      background: rgba(83,168,255,0.03);
     }}
     .window-meta {{
       font-size: 10px; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap;
@@ -510,17 +523,18 @@ def build_html(
 
     /* Transcript status in right panel header */
     .transcript-status {{
-      margin-top: 6px; padding: 4px 8px;
+      margin-top: 6px; padding: 2px 8px;
       background: rgba(83,168,255,0.08);
       border: 1px solid rgba(83,168,255,0.2);
       border-radius: 5px;
       max-height: 48px; overflow-y: auto;
+      font-size: 11px; line-height: 1.4;
     }}
     .transcript-status .transcript-line {{
-      font-size: 11px; line-height: 1.3; color: #e8ecff;
+      color: #e8ecff;
     }}
     .transcript-status .transcript-empty {{
-      font-size: 10px; color: var(--muted); font-style: italic;
+      color: var(--muted); font-style: italic;
     }}
 
     /* Hierarchy content (L1 steps + L0 segments for current window) */
@@ -633,7 +647,8 @@ def build_html(
           <span class="badge">L2</span>
           <span class="win-num" id="winNum">Phase 1 / ?</span>
         </div>
-        <div class="window-summary" id="winSummary">—</div>
+        <div class="window-summary" id="winSummary">\u2014</div>
+        <div class="window-audio" id="winAudio"></div>
         <div class="window-meta">
           <span id="winTime">?</span>
           <span id="winDur">?</span>
@@ -667,7 +682,7 @@ def build_html(
         <div class="subtitle" id="frameInfo">\u2014</div>
         <div class="monitor-status" id="monitorStatus"></div>
         <div class="transcript-status" id="transcriptStatus">
-          <span class="transcript-empty">\u2014 silence \u2014</span>
+          <div class="transcript-empty">\u2014 silence \u2014</div>
         </div>
       </div>
       <div id="cameraGrid" class="camera-grid">
@@ -743,6 +758,7 @@ def build_html(
       }}
       el.innerHTML = html;
     }}
+
 
     let validTimes = allValidTimes;
 
@@ -892,7 +908,7 @@ def build_html(
       const t = currentTime;
       const active = transcriptEntries.filter(e => t >= e.start && t <= e.end);
       if (!active.length) {{
-        container.innerHTML = '<span class="transcript-empty">\u2014 silence \u2014</span>';
+        container.innerHTML = '<div class="transcript-empty">\u2014 silence \u2014</div>';
       }} else {{
         container.innerHTML = active.map(e =>
           `<div class="transcript-line">"${{escapeHtml(e.text)}}"</div>`
@@ -913,9 +929,11 @@ def build_html(
       const win = windows[currentWindowIdx];
       document.getElementById('winNum').textContent =
         `Phase ${{currentWindowIdx + 1}} / ${{windows.length}}`;
-      document.getElementById('winSummary').textContent = win.summary || '—';
+      document.getElementById('winSummary').textContent = win.summary || '\u2014';
+      const audioEl = document.getElementById('winAudio');
+      audioEl.textContent = win.audio_summary ? `\u266b ${{win.audio_summary}}` : '';
       document.getElementById('winTime').textContent =
-        `${{win.time_start}}s – ${{win.time_end}}s`;
+        `${{win.time_start}}s \u2013 ${{win.time_end}}s`;
       document.getElementById('winDur').textContent =
         `Duration: ${{win.duration_s || '?'}}s`;
 
@@ -945,12 +963,16 @@ def build_html(
             `<span class="l0-dur">${{dur}}</span></div>`;
         }});
         const dur = step.duration_s != null ? step.duration_s + 's' : '?';
+        const l1Audio = step.audio_summary
+          ? `<div class="l1-audio">\u266b ${{escapeHtml(step.audio_summary)}}</div>`
+          : '';
         html += `<div class="step-block expanded" data-ts="${{step.time_start}}" data-te="${{step.time_end}}">` +
           `<div class="step-header" onclick="this.parentElement.classList.toggle('expanded')">` +
           `<span class="phase-badge l1">L1</span>` +
           `<span class="phase-time">${{step.time_start}}\u2013${{step.time_end}}</span>` +
           `<span class="step-summary">${{escapeHtml(step.summary || '')}}</span>` +
           `<span class="phase-dur">${{dur}}</span></div>` +
+          l1Audio +
           `<div class="step-body">${{atomicHtml}}</div></div>`;
       }});
 
@@ -994,7 +1016,7 @@ def build_html(
       // Transcript subtitle
       renderTranscript();
 
-      // Robot monitor / setup status (always synced to the frame)
+      // Robot monitor status (always synced to the frame)
       renderMonitorStatus();
 
       // Highlight active L1 and L0
