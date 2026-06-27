@@ -568,67 +568,22 @@ def _auto_describe_tool(role: str, active_predicates: list) -> str:
 
 # Without audio
 
-# LEVEL1_SYSTEM_PROMPT = """\
-# You are a surgical workflow analyst. Always respond in English. \
-# You will receive a chronological list of \
-# level-0 activity segments for one person during a surgical procedure. Each \
-# segment represents a period where that person's active interactions stayed \
-# constant.
-
-# Your task: group consecutive segments into coherent "action steps". An action \
-# step is a sequence of related atomic activities that together accomplish a \
-# sub-task (e.g., "drilling the femur", "calibrating the robot", "preparing \
-# instruments").
-
-# Rules:
-# - Groups MUST be consecutive -- no skipping or reordering segments.
-# - Every segment must belong to exactly one group.
-# - Each group gets a 1-sentence natural language summary.
-# - Short idle gaps between related active segments should be included in the \
-# same group (the person briefly paused but continued the same task).
-# - Long idle periods (>60s with no active interactions) should generally be \
-# their own group or a boundary between groups.
-# - Output ONLY valid JSON, no other text.
-
-# Output format (JSON array):
-# [
-#   {
-#     "segment_ids": ["<first_seg_id>", ..., "<last_seg_id>"],
-#     "summary": "One sentence describing the action step."
-#   },
-#   ...
-# ]"""
-
 LEVEL1_SYSTEM_PROMPT = """\
-You are a surgical workflow analyst. You MUST write ALL output in English only. \
-Do NOT use Chinese, German, or any other language. \
+You are a surgical workflow analyst. Always respond in English. \
 You will receive a chronological list of \
 level-0 activity segments for one person during a surgical procedure. Each \
 segment represents a period where that person's active interactions stayed \
-constant. Each segment also includes a "Speech" field showing what was said \
-in the operating room during that time.
+constant.
 
 Your task: group consecutive segments into coherent "action steps". An action \
 step is a sequence of related atomic activities that together accomplish a \
 sub-task (e.g., "drilling the femur", "calibrating the robot", "preparing \
 instruments").
 
-IMPORTANT: Base your grouping decisions and "summary" ONLY on the physical \
-actions (the segment descriptions). Do NOT use the Speech field to decide \
-how to group segments or what to write in the summary.
-
-The "audio_summary" is a separate, independent field — just describe what \
-was said during the group's time window, without letting it influence the \
-grouping or the action summary.
-
 Rules:
 - Groups MUST be consecutive -- no skipping or reordering segments.
 - Every segment must belong to exactly one group.
-- Each group gets a 1-sentence "summary" IN ENGLISH describing the physical \
-action step (based ONLY on the segment descriptions, NOT on speech).
-- Each group gets a brief "audio_summary" independently describing the verbal \
-communication during this step (e.g., "surgeon instructs assistant on \
-positioning", "brief confirmations", "no verbal communication").
+- Each group gets a 1-sentence natural language summary.
 - Short idle gaps between related active segments should be included in the \
 same group (the person briefly paused but continued the same task).
 - Long idle periods (>60s with no active interactions) should generally be \
@@ -639,11 +594,56 @@ Output format (JSON array):
 [
   {
     "segment_ids": ["<first_seg_id>", ..., "<last_seg_id>"],
-    "summary": "One sentence describing the physical action step.",
-    "audio_summary": "Brief description of verbal communication during this step."
+    "summary": "One sentence describing the action step."
   },
   ...
 ]"""
+
+# LEVEL1_SYSTEM_PROMPT = """\
+# You are a surgical workflow analyst. You MUST write ALL output in English only. \
+# Do NOT use Chinese, German, or any other language. \
+# You will receive a chronological list of \
+# level-0 activity segments for one person during a surgical procedure. Each \
+# segment represents a period where that person's active interactions stayed \
+# constant. Each segment also includes a "Speech" field showing what was said \
+# in the operating room during that time.
+
+# Your task: group consecutive segments into coherent "action steps". An action \
+# step is a sequence of related atomic activities that together accomplish a \
+# sub-task (e.g., "drilling the femur", "calibrating the robot", "preparing \
+# instruments").
+
+# IMPORTANT: Base your grouping decisions and "summary" ONLY on the physical \
+# actions (the segment descriptions). Do NOT use the Speech field to decide \
+# how to group segments or what to write in the summary.
+
+# The "audio_summary" is a separate, independent field — just describe what \
+# was said during the group's time window, without letting it influence the \
+# grouping or the action summary.
+
+# Rules:
+# - Groups MUST be consecutive -- no skipping or reordering segments.
+# - Every segment must belong to exactly one group.
+# - Each group gets a 1-sentence "summary" IN ENGLISH describing the physical \
+# action step (based ONLY on the segment descriptions, NOT on speech).
+# - Each group gets a brief "audio_summary" independently describing the verbal \
+# communication during this step (e.g., "surgeon instructs assistant on \
+# positioning", "brief confirmations", "no verbal communication").
+# - Short idle gaps between related active segments should be included in the \
+# same group (the person briefly paused but continued the same task).
+# - Long idle periods (>60s with no active interactions) should generally be \
+# their own group or a boundary between groups.
+# - Output ONLY valid JSON, no other text.
+
+# Output format (JSON array):
+# [
+#   {
+#     "segment_ids": ["<first_seg_id>", ..., "<last_seg_id>"],
+#     "summary": "One sentence describing the physical action step.",
+#     "audio_summary": "Brief description of verbal communication during this step."
+#   },
+#   ...
+# ]"""
 
 
 def _lazy_import_llm():
@@ -687,7 +687,7 @@ def _format_l0_for_prompt(role: str, segments: List[Dict[str, Any]]) -> str:
 
 
 def _clean_segment_ids(groups: List[Dict]) -> List[Dict]:
-    """Strip brackets and whitespace from segment IDs (7B models copy them from the prompt)."""
+    """Strip brackets and whitespace from segment IDs."""
     for g in groups:
         if "segment_ids" in g:
             g["segment_ids"] = [
@@ -793,6 +793,11 @@ def _group_chunks(
         if all_groups and _CHUNK_OVERLAP > 0:
             overlap_ids = {s["segment_id"] for s in l0_segs[start:start + _CHUNK_OVERLAP]}
             while all_groups and overlap_ids & set(all_groups[-1].get("segment_ids", [])):
+                last = all_groups[-1]
+                kept = [sid for sid in last.get("segment_ids", []) if sid not in overlap_ids]
+                if kept:
+                    last["segment_ids"] = kept
+                    break
                 all_groups.pop()
 
         all_groups.extend(groups)
@@ -896,63 +901,21 @@ def build_level1(
 
 # Without audio
 
-# LEVEL2_SYSTEM_PROMPT_TEMPLATE = """\
-#     You are a surgical workflow analyst. Always respond in English. \
-# You will receive a chronological list of \
-# level-1 "action step" segments for one person during a surgical procedure. Each \
-# action step groups several atomic activities that accomplish a sub-task.
-
-# Your task: group consecutive action steps into high-level "surgical phases". \
-# A phase represents a major stage of the procedure from this person's perspective \
-# (e.g., "patient preparation", "femoral bone work", "robot-assisted implant \
-# placement", "wound closure").
-
-# Rules:
-# - Groups MUST be consecutive -- no skipping or reordering segments.
-# - Every segment must belong to exactly one group.
-# - Each group gets a 1-sentence natural language summary describing the phase.
-# - A role with few action steps may have only 1-2 phases -- that is fine.
-# - Output ONLY valid JSON, no other text.
-
-# Output format (JSON array):
-# [
-#   {
-#     "segment_ids": ["<first_L1_id>", ..., "<last_L1_id>"],
-#     "summary": "One sentence describing the surgical phase."
-#   },
-#   ...
-# ]
-# """
-
 LEVEL2_SYSTEM_PROMPT = """\
-You are a surgical workflow analyst. You MUST write ALL output in English only. \
-Do NOT use Chinese, German, or any other language. \
+You are a surgical workflow analyst. Always respond in English. \
 You will receive a chronological list of \
 level-1 "action step" segments for one person during a surgical procedure. Each \
-action step groups several atomic activities that accomplish a sub-task. Each \
-action step includes an "Audio" field summarizing the verbal communication \
-during that step.
+action step groups several atomic activities that accomplish a sub-task.
 
 Your task: group consecutive action steps into high-level "surgical phases". \
 A phase represents a major stage of the procedure from this person's perspective \
 (e.g., "patient preparation", "femoral bone work", "robot-assisted implant \
 placement", "wound closure").
 
-IMPORTANT: Base your grouping decisions and "summary" ONLY on the action step \
-descriptions. Do NOT use the Audio field to decide how to group steps or what \
-to write in the summary.
-
-The "audio_summary" is a separate, independent field — just synthesize the \
-communication patterns from the included steps without letting it influence \
-the grouping or the phase summary.
-
 Rules:
 - Groups MUST be consecutive -- no skipping or reordering segments.
 - Every segment must belong to exactly one group.
-- Each group gets a 1-sentence "summary" IN ENGLISH describing the surgical \
-phase (based ONLY on the action descriptions, NOT on audio).
-- Each group gets a brief "audio_summary" independently synthesizing the \
-communication pattern across the included steps.
+- Each group gets a 1-sentence natural language summary describing the phase.
 - A role with few action steps may have only 1-2 phases -- that is fine.
 - Output ONLY valid JSON, no other text.
 
@@ -960,11 +923,53 @@ Output format (JSON array):
 [
   {
     "segment_ids": ["<first_L1_id>", ..., "<last_L1_id>"],
-    "summary": "One sentence describing the surgical phase.",
-    "audio_summary": "Brief description of communication pattern during this phase."
+    "summary": "One sentence describing the surgical phase."
   },
   ...
-]"""
+]
+"""
+
+# LEVEL2_SYSTEM_PROMPT = """\
+# You are a surgical workflow analyst. You MUST write ALL output in English only. \
+# Do NOT use Chinese, German, or any other language. \
+# You will receive a chronological list of \
+# level-1 "action step" segments for one person during a surgical procedure. Each \
+# action step groups several atomic activities that accomplish a sub-task. Each \
+# action step includes an "Audio" field summarizing the verbal communication \
+# during that step.
+
+# Your task: group consecutive action steps into high-level "surgical phases". \
+# A phase represents a major stage of the procedure from this person's perspective \
+# (e.g., "patient preparation", "femoral bone work", "robot-assisted implant \
+# placement", "wound closure").
+
+# IMPORTANT: Base your grouping decisions and "summary" ONLY on the action step \
+# descriptions. Do NOT use the Audio field to decide how to group steps or what \
+# to write in the summary.
+
+# The "audio_summary" is a separate, independent field — just synthesize the \
+# communication patterns from the included steps without letting it influence \
+# the grouping or the phase summary.
+
+# Rules:
+# - Groups MUST be consecutive -- no skipping or reordering segments.
+# - Every segment must belong to exactly one group.
+# - Each group gets a 1-sentence "summary" IN ENGLISH describing the surgical \
+# phase (based ONLY on the action descriptions, NOT on audio).
+# - Each group gets a brief "audio_summary" independently synthesizing the \
+# communication pattern across the included steps.
+# - A role with few action steps may have only 1-2 phases -- that is fine.
+# - Output ONLY valid JSON, no other text.
+
+# Output format (JSON array):
+# [
+#   {
+#     "segment_ids": ["<first_L1_id>", ..., "<last_L1_id>"],
+#     "summary": "One sentence describing the surgical phase.",
+#     "audio_summary": "Brief description of communication pattern during this phase."
+#   },
+#   ...
+# ]"""
 
 
 def _format_l1_for_prompt(role: str, segments: List[Dict[str, Any]]) -> str:
