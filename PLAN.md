@@ -1,3 +1,13 @@
+###
+- rclone lsf nas:ge42faj/
+
+### Copy from NAS to /tmp
+- rclone copy nas:ge42faj/MM-OR_data /tmp/MM-OR_data --progress
+### Mount directly
+- mkdir -p /tmp/nas
+- rclone mount nas:ge42faj/ /tmp/nas --vfs-cache-mode full &
+
+
 # Role-Aware Hierarchical Scene Summarization
 
 ## Overview
@@ -102,21 +112,3 @@ Create `query_hierarchy.py` -- a retrieval + Qwen3-32B QA system.
 - "What were the interactions between the MPS technician and the surgeon?"
 - "Give me a high-level summary of the procedure"
 
-## File structure (target)
-
-```
-dlhm/
-  scene_graph_utils.py        # shared utilities
-  annotation_model.py         # flat 5s window annotations (baseline)
-  build_hierarchy.py          # phase 1 (level-0) + phase 2 (level-1, level-2)
-  query_hierarchy.py          # phase 3 (retrieval + QA)
-  evaluate_annotations.py     # quality checks
-  visualize_annotations.py    # HTML report
-  render_summary_video.py     # sync video viewer
-  hierarchy_output/
-    001_PKA_hierarchy.json    # full hierarchy for procedure 001_PKA
-  annotation_output/          # flat annotation outputs
-  script/
-    run.sh                    # interactive run
-    annotate_slurm.sh         # Slurm batch script
-```

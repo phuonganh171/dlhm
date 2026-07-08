@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hierarchy + Frame Player</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --card: #1a1f35;
+      --surface: #232a45;
+      --text: #ecf0ff;
+      --muted: #a8b1d9;
+      --accent: #53a8ff;
+      --l2: #8b5cf6;
+      --l1: #3b82f6;
+      --l0: #64748b;
+      --ok: #58d68d;
+      --warn: #f5b041;
+      --danger: #ff6b6b;
+      --border: #2b3356;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0; font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg); color: var(--text);
+      height: 100vh; overflow: hidden;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 500px 1fr;
+      height: 100vh;
+    }
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      flex-shrink: 0;
+    }
+    .panel-header h2 { font-size: 14px; font-weight: 700; margin: 0; }
+    .panel-header .subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .monitor-status {
+      margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .monitor-status .mon-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 2px 8px; border-radius: 5px;
+      background: var(--surface); border: 1px solid var(--border);
+    }
+    .monitor-status .mon-key {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted);
+    }
+    .monitor-status .mon-val { font-size: 11px; font-weight: 600; color: var(--l2); }
+
+    .controls-bar {
+      display: flex; align-items: center; gap: 6px; padding: 6px 14px;
+      background: var(--card); border-bottom: 1px solid var(--border);
+      flex-shrink: 0; flex-wrap: wrap;
+    }
+    button {
+      border: 1px solid #44518b; background: #1e2645; color: var(--text);
+      padding: 5px 9px; border-radius: 5px; cursor: pointer; font-size: 11px;
+      white-space: nowrap;
+    }
+    button:hover { background: #2a3562; }
+    button.active { border-color: var(--accent); color: var(--accent); }
+    input[type="range"] { flex: 1; min-width: 80px; }
+    .time-display {
+      font-family: monospace; font-size: 12px; color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .role-tabs {
+      display: flex; gap: 3px; padding: 6px 14px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+      overflow-x: auto; background: var(--card);
+    }
+    .role-tab {
+      padding: 3px 8px; border-radius: 4px; font-size: 10px;
+      font-weight: 600; cursor: pointer; white-space: nowrap;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted); transition: all 0.15s;
+    }
+    .role-tab:hover { color: var(--text); border-color: var(--accent); }
+    .role-tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+    /* Window (L2 phase) info box */
+    .window-info {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      flex-shrink: 0;
+    }
+    .window-title {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    }
+    .window-title .badge {
+      font-size: 9px; font-weight: 700; padding: 2px 6px;
+      border-radius: 3px; color: white; background: var(--l2);
+    }
+    .window-title .win-num {
+      font-size: 12px; color: var(--muted);
+    }
+    .window-summary {
+      font-size: 13px; line-height: 1.4; padding: 8px 10px;
+      border-left: 3px solid var(--l2); background: rgba(139,92,246,0.06);
+      border-radius: 4px; margin-bottom: 4px;
+    }
+    .window-audio {
+      font-size: 11px; line-height: 1.3; padding: 5px 10px;
+      border-left: 3px solid var(--accent); background: rgba(83,168,255,0.06);
+      border-radius: 4px; margin-bottom: 8px; color: var(--muted);
+      font-style: italic;
+    }
+    .window-audio:empty { display: none; }
+    .l1-audio {
+      font-size: 9px; color: var(--muted); font-style: italic;
+      padding: 2px 8px 4px 8px; border-top: 1px solid var(--border);
+      background: rgba(83,168,255,0.03);
+    }
+    .window-meta {
+      font-size: 10px; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .window-progress {
+      margin-top: 6px;
+    }
+    .window-progress-label { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+    .window-progress-bar {
+      width: 100%; height: 8px; border-radius: 4px;
+      background: var(--surface); overflow: hidden; border: 1px solid var(--border);
+    }
+    .window-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--l2), #b794f6);
+      transition: width 100ms linear;
+    }
+
+    /* Scene graph panel */
+    .sg-panel {
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      max-height: 160px;
+      overflow-y: auto;
+      padding: 8px 14px;
+      background: rgba(26,31,53,0.7);
+    }
+    .sg-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 5px;
+    }
+    .sg-triplets {
+      display: flex; flex-wrap: wrap; gap: 3px;
+    }
+    .sg-triplet {
+      font-size: 10px; padding: 2px 5px; border-radius: 3px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: inline-flex; align-items: center; gap: 2px;
+    }
+    .sg-subj { font-weight: 600; color: var(--ok); }
+    .sg-pred { font-weight: 600; padding: 0 3px; border-radius: 2px; }
+    .sg-obj { color: var(--warn); }
+    .sg-empty { color: var(--muted); font-style: italic; font-size: 11px; }
+
+    /* Transcript status in right panel header */
+    .transcript-status {
+      margin-top: 6px; padding: 2px 8px;
+      background: rgba(83,168,255,0.08);
+      border: 1px solid rgba(83,168,255,0.2);
+      border-radius: 5px;
+      max-height: 48px; overflow-y: auto;
+      font-size: 11px; line-height: 1.4;
+    }
+    .transcript-status .transcript-line {
+      color: #e8ecff;
+    }
+    .transcript-status .transcript-empty {
+      color: var(--muted); font-style: italic;
+    }
+
+    /* Hierarchy content (L1 steps + L0 segments for current window) */
+    .hierarchy-content {
+      flex: 1; overflow-y: auto; padding: 8px 14px;
+    }
+    .section-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 6px;
+    }
+
+    .step-block {
+      margin-bottom: 4px; border: 1px solid var(--border);
+      border-radius: 5px; overflow: hidden; transition: border-color 0.2s;
+    }
+    .step-block.active { border-color: var(--l1); background: rgba(59,130,246,0.06); }
+    .step-header {
+      padding: 5px 8px; background: var(--surface);
+      display: flex; align-items: center; gap: 5px;
+      cursor: pointer;
+    }
+    .step-header:hover { background: #2a3358; }
+    .step-summary { font-size: 10px; flex: 1; }
+    .phase-badge {
+      font-size: 9px; font-weight: 700; padding: 2px 5px;
+      border-radius: 3px; color: white; flex-shrink: 0;
+    }
+    .phase-badge.l2 { background: var(--l2); }
+    .phase-badge.l1 { background: var(--l1); }
+    .phase-badge.l0 { background: var(--l0); }
+    .phase-time {
+      font-size: 9px; color: var(--muted); font-family: monospace; flex-shrink: 0;
+    }
+    .phase-dur { font-size: 9px; color: var(--muted); flex-shrink: 0; }
+    .step-body { display: none; padding: 3px 6px 4px 18px; }
+    .step-block.expanded .step-body { display: block; }
+
+    .l0-item {
+      padding: 3px 6px; font-size: 10px; border-radius: 3px;
+      margin: 2px 0; display: flex; align-items: center; gap: 4px;
+      transition: background 0.15s; border-left: 2px solid transparent;
+    }
+    .l0-item.active { background: rgba(100,116,139,0.2); border-left-color: var(--l0); }
+    .l0-time { font-size: 9px; color: var(--muted); font-family: monospace; flex-shrink: 0; }
+    .l0-desc { flex: 1; color: var(--text); }
+    .l0-dur { font-size: 9px; color: var(--muted); flex-shrink: 0; }
+    .pred-badge {
+      font-size: 9px; font-weight: 500; padding: 1px 5px;
+      border-radius: 3px; border: 1px solid; white-space: nowrap;
+    }
+    .idle { color: var(--muted); font-style: italic; font-size: 10px; }
+
+    /* Camera grid */
+    .camera-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 5px;
+      padding: 6px;
+      background: #0a0e1d;
+      min-height: 0;
+    }
+    .camera-cell {
+      display: flex; flex-direction: column;
+      min-height: 0; border: 1px solid #3a4574;
+      border-radius: 5px; overflow: hidden; background: #12182c;
+    }
+    .camera-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--muted);
+      padding: 2px 6px; background: #1a2240;
+      border-bottom: 1px solid #3a4574; flex-shrink: 0;
+    }
+    .camera-frame {
+      flex: 1; width: 100%; min-height: 0;
+      object-fit: contain; background: #000;
+    }
+    .camera-cell.span-full { grid-column: 1 / -1; }
+    .camera-cell.monitor-cell { border-color: var(--l2); }
+    .camera-cell.monitor-cell .camera-label { background: #1e1040; color: var(--l2); }
+
+    .foot {
+      font-size: 10px; color: var(--muted); padding: 6px 14px;
+      border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class="panel-header">
+        <h2>Hierarchy Video Player</h2>
+        <div class="subtitle">Window = L2 Phase | L1 Steps | L0 Atomic | Scene Graph</div>
+      </div>
+      <div class="controls-bar">
+        <button id="playBtn">Play</button>
+        <button id="prevBtn">-1s</button>
+        <button id="nextBtn">+1s</button>
+        <button id="prevWinBtn">◀ Prev Phase</button>
+        <button id="nextWinBtn">Next Phase ▶</button>
+        <button id="speedBtn">1x</button>
+        <input id="timeline" type="range" min="0" max="0" value="0" step="1" />
+        <span class="time-display" id="timeDisplay">0s</span>
+      </div>
+      <div class="role-tabs" id="roleTabs"></div>
+      <div class="window-info" id="windowInfo">
+        <div class="window-title">
+          <span class="badge">L2</span>
+          <span class="win-num" id="winNum">Phase 1 / ?</span>
+        </div>
+        <div class="window-summary" id="winSummary">—</div>
+        <div class="window-audio" id="winAudio"></div>
+        <div class="window-meta">
+          <span id="winTime">?</span>
+          <span id="winDur">?</span>
+        </div>
+        <div class="window-progress">
+          <div class="window-progress-label" id="winProgressLabel">0 / 0s</div>
+          <div class="window-progress-bar">
+            <div class="window-progress-fill" id="winProgressFill"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sg-panel">
+        <div class="sg-title">Scene Graph at <span id="sgTime">t=?</span></div>
+        <div class="sg-triplets" id="sgTriplets">
+          <span class="sg-empty">No data</span>
+        </div>
+      </div>
+      <div class="hierarchy-content" id="hierarchyContent">
+        <div class="section-label">L1 Steps & L0 Segments in this Phase</div>
+      </div>
+      <div class="foot">
+        Serve: <code>python3 -m http.server 8080 --directory /mnt/home/nhatvu/dlhm</code> |
+        Open: <code>http://localhost:8080/014_PKA_hierarchy_video_sync_qwen27b.html</code>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="panel-header">
+        <h2>Multi-Camera View</h2>
+        <div class="subtitle" id="frameInfo">—</div>
+        <div class="monitor-status" id="monitorStatus"></div>
+        <div class="transcript-status" id="transcriptStatus">
+          <div class="transcript-empty">— silence —</div>
+        </div>
+      </div>
+      <div id="cameraGrid" class="camera-grid">
+        <div class="camera-cell" data-camera="camera01">
+          <div class="camera-label">camera01</div>
+          <img class="camera-frame" alt="camera01" />
+        </div>
+        <div class="camera-cell" data-camera="camera02">
+          <div class="camera-label">camera02</div>
+          <img class="camera-frame" alt="camera02" />
+        </div>
+        <div class="camera-cell" data-camera="camera03">
+          <div class="camera-label">camera03</div>
+          <img class="camera-frame" alt="camera03" />
+        </div>
+        <div class="camera-cell" data-camera="camera04">
+          <div class="camera-label">camera04</div>
+          <img class="camera-frame" alt="camera04" />
+        </div>
+        <div class="camera-cell" data-camera="camera05">
+          <div class="camera-label">camera05</div>
+          <img class="camera-frame" alt="camera05" />
+        </div>
+        <div class="camera-cell monitor-cell" data-camera="simstation">
+          <div class="camera-label">Robot Monitor Screen</div>
+          <img class="camera-frame" alt="simstation" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const hierarchyData = {"roles": {"instrument": {"role_human": "surgical instrument", "level0": [{"tp_start": "000004", "tp_end": "000043", "duration_frames": 23, "active_predicates": [["Holding", "nurse"]], "segment_id": "instrument_L0_000", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 299, "time_end": 338, "duration_s": 40, "description": "surgical instrument: scrub nurse is holding", "transcript": []}], "level1": [{"segment_id": "instrument_L1_000", "role": "instrument", "level": 1, "role_human": "surgical instrument", "segment_ids": ["instrument_L0_000"], "time_start": 299, "time_end": 338, "summary": "surgical instrument: scrub nurse is holding", "transcript": []}], "level2": [{"segment_id": "instrument_L2_000", "role": "instrument", "level": 2, "role_human": "surgical instrument", "child_ids": ["instrument_L1_000"], "time_start": 299, "time_end": 338, "summary": "surgical instrument: scrub nurse is holding", "transcript": []}], "is_robot": false, "is_tool": true}, "mps": {"role_human": "robot technician (MPS)", "level0": [{"tp_start": "000000", "tp_end": "000043", "duration_frames": 43, "active_predicates": [], "segment_id": "mps_L0_000", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 295, "time_end": 338, "duration_s": 44, "description": "robot technician (MPS): no active interactions", "transcript": []}], "level1": [{"segment_id": "mps_L1_000", "role": "mps", "level": 1, "role_human": "robot technician (MPS)", "segment_ids": ["mps_L0_000"], "time_start": 295, "time_end": 338, "summary": "robot technician (MPS): no active interactions", "transcript": []}], "level2": [{"segment_id": "mps_L2_000", "role": "mps", "level": 2, "role_human": "robot technician (MPS)", "child_ids": ["mps_L1_000"], "time_start": 295, "time_end": 338, "summary": "robot technician (MPS): no active interactions", "transcript": []}], "is_robot": false, "is_tool": false}, "nurse": {"role_human": "scrub nurse", "level0": [{"tp_start": "000000", "tp_end": "000000", "duration_frames": 1, "active_predicates": [], "segment_id": "nurse_L0_000", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 295, "time_end": 295, "duration_s": 1, "description": "scrub nurse: no active interactions", "transcript": []}, {"tp_start": "000001", "tp_end": "000005", "duration_frames": 5, "active_predicates": [["Preparing", "instrument_table"]], "segment_id": "nurse_L0_001", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 296, "time_end": 300, "duration_s": 5, "description": "scrub nurse: is preparing instrument table", "transcript": []}, {"tp_start": "000006", "tp_end": "000008", "duration_frames": 3, "active_predicates": [["Holding", "instrument"], ["Preparing", "instrument_table"]], "segment_id": "nurse_L0_002", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 301, "time_end": 303, "duration_s": 3, "description": "scrub nurse: is holding surgical instrument; is preparing instrument table", "transcript": []}, {"tp_start": "000009", "tp_end": "000010", "duration_frames": 2, "active_predicates": [["Holding", "instrument"], ["Preparing", "patient"], ["Touching", "ot"]], "segment_id": "nurse_L0_003", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 304, "time_end": 305, "duration_s": 2, "description": "scrub nurse: is holding surgical instrument; is preparing patient; is touching operating table", "transcript": []}, {"tp_start": "000011", "tp_end": "000014", "duration_frames": 4, "active_predicates": [["Holding", "instrument"], ["Preparing", "patient"]], "segment_id": "nurse_L0_004", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 306, "time_end": 309, "duration_s": 4, "description": "scrub nurse: is holding surgical instrument; is preparing patient", "transcript": []}, {"tp_start": "000015", "tp_end": "000025", "duration_frames": 11, "active_predicates": [], "segment_id": "nurse_L0_005", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 310, "time_end": 320, "duration_s": 11, "description": "scrub nurse: no active interactions", "transcript": []}, {"tp_start": "000026", "tp_end": "000031", "duration_frames": 6, "active_predicates": [["Preparing", "patient"]], "segment_id": "nurse_L0_006", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 321, "time_end": 326, "duration_s": 6, "description": "scrub nurse: is preparing patient", "transcript": []}, {"tp_start": "000032", "tp_end": "000037", "duration_frames": 6, "active_predicates": [["Holding", "instrument"], ["Preparing", "instrument_table"]], "segment_id": "nurse_L0_007", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 327, "time_end": 332, "duration_s": 6, "description": "scrub nurse: is holding surgical instrument; is preparing instrument table", "transcript": []}, {"tp_start": "000038", "tp_end": "000043", "duration_frames": 6, "active_predicates": [["Holding", "instrument"], ["Preparing", "patient"]], "segment_id": "nurse_L0_008", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 333, "time_end": 338, "duration_s": 6, "description": "scrub nurse: is holding surgical instrument; is preparing patient", "transcript": []}], "level1": [{"segment_id": "nurse_L1_000", "role": "nurse", "level": 1, "role_human": "scrub nurse", "segment_ids": ["nurse_L0_000", "nurse_L0_001", "nurse_L0_002", "nurse_L0_003", "nurse_L0_004", "nurse_L0_005", "nurse_L0_006", "nurse_L0_007", "nurse_L0_008"], "time_start": 295, "time_end": 338, "duration_s": 44, "summary": "The scrub nurse prepares the instrument table and begins initial patient preparation while handling surgical instruments.", "audio_summary": "", "transcript": []}], "level2": [{"segment_id": "nurse_L2_000", "role": "nurse", "level": 2, "role_human": "scrub nurse", "child_ids": ["nurse_L1_000"], "time_start": 295, "time_end": 338, "summary": "The scrub nurse prepares the instrument table and begins initial patient preparation while handling surgical instruments.", "transcript": []}], "is_robot": false, "is_tool": false}}, "role_order": ["mps", "nurse", "instrument"], "time_range": [295, 338], "metadata": {"total_roles": 4, "total_level0_segments": 12, "debounce_frames": 2, "take_dir": "/tmp/nhatvu/nas_mount_13509/MM-OR_data/MM-OR_processed/014_PKA", "tp_range": ["000000", "000043"], "num_timepoints": 44, "time_range": [295, 338], "total_level1_segments": 4, "total_level2_segments": 4}, "monitor_timeline": []};
+    const sceneGraphs = {"295": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "instrument_table"], ["mps", "CloseTo", "instrument_table"]], "296": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"]], "297": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"]], "298": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"]], "299": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "300": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"]], "301": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "302": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "303": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "304": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"], ["nurse", "Touching", "ot"]], "305": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"], ["nurse", "Touching", "ot"]], "306": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "307": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "308": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"]], "309": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Touching", "patient"], ["mps", "CloseTo", "instrument_table"]], "310": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "311": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "312": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "313": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "314": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "315": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "316": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "317": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "318": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "319": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "instrument_table"], ["mps", "CloseTo", "instrument_table"]], "320": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"]], "321": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"]], "322": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"]], "323": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "324": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "CloseTo", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "325": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "326": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"]], "327": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "328": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "329": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "330": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "331": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "332": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "instrument_table"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "333": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "334": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "335": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "336": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "337": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "338": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["nurse", "Preparing", "patient"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]]};
+    const colorDir = "viewer_links/014_PKA/colorimage";
+    const cameras = ["camera01", "camera02", "camera03", "camera04", "camera05"];
+    const predColors = {"Manipulating": "#3b82f6", "Calibrating": "#8b5cf6", "Preparing": "#f59e0b", "Assisting": "#10b981", "Holding": "#06b6d4", "Touching": "#64748b", "Drilling": "#ef4444", "Sawing": "#dc2626", "Hammering": "#b91c1c", "Suturing": "#ec4899", "Cutting": "#f97316", "Cementing": "#84cc16", "Cleaning": "#22d3ee", "Scanning": "#a78bfa", "CloseTo": "#475569", "LyingOn": "#374151", "Phase": "#a855f7", "Step": "#f59e0b"};
+    const entityNames = {"patient": "patient", "nurse": "scrub nurse", "mps": "robot technician (MPS)", "instrument_table": "instrument table", "anest": "anaesthetist", "ot": "operating table", "drape": "surgical drape", "circulator": "circulator nurse", "head_surgeon": "head surgeon", "ae": "anaesthesia equipment", "assistant_surgeon": "assistant surgeon", "instrument": "surgical instrument", "mps_station": "MPS workstation", "mako_robot": "Mako robotic arm", "monitor": "monitor", "tracker": "infrared tracker", "saw": "bone saw", "drill": "drill", "c_arm": "C-arm", "hammer": "hammer", "unrelated_person": "unrelated person", "robot_setup": "robot setup (physical)", "robot_monitor": "robot monitor (Mako screen)"};
+    const predicateNames = {"CloseTo": "is close to", "LyingOn": "is lying on", "Holding": "is holding", "Manipulating": "is manipulating", "Preparing": "is preparing", "Assisting": "is assisting", "Touching": "is touching", "Calibrating": "is calibrating", "Drilling": "is drilling", "Sawing": "is sawing", "Hammering": "is hammering", "Suturing": "is suturing", "Cutting": "is cutting", "Cementing": "is cementing", "Cleaning": "is cleaning", "Scanning": "is scanning"};
+    const timeStart = 295;
+    const timeEnd = 338;
+    const monitorTimeline = hierarchyData.monitor_timeline || [];
+    const simstationDir = "viewer_links/014_PKA/simstation";
+    const simstationMap = {"295": "000250", "296": "000251", "297": "000252", "298": "000253", "299": "000254", "300": "000255", "301": "000256", "302": "000257", "303": "000258", "304": "000259", "305": "000260", "306": "000261", "307": "000262", "308": "000263", "309": "000264", "310": "000265", "311": "000266", "312": "000267", "313": "000268", "314": "000269", "315": "000270", "316": "000271", "317": "000272", "318": "000273", "319": "000274", "320": "000275", "321": "000276", "322": "000277", "323": "000278", "324": "000279", "325": "000280", "326": "000281", "327": "000282", "328": "000283", "329": "000284", "330": "000285", "331": "000286", "332": "000287", "333": "000288", "334": "000289", "335": "000290", "336": "000291", "337": "000292", "338": "000293"};
+    const transcriptEntries = [];
+
+    const allValidTimes = Object.keys(sceneGraphs).map(Number).sort((a,b) => a - b);
+
+    // Per-role valid timestamps: only frames where the role appears as a subject
+    const roleTimesCache = {};
+    function buildRoleValidTimes(role) {
+      if (roleTimesCache[role]) return roleTimesCache[role];
+      const rd = hierarchyData.roles[role];
+      let times;
+      if (rd && rd.is_robot) {
+        // Robot roles (monitor logs) never appear as a scene-graph subject;
+        // they are valid across the whole colorimage timeline.
+        times = allValidTimes.slice();
+      } else if (rd && rd.is_tool) {
+        // Tool roles appear as the object (or implied by an action verb), not
+        // the subject -- include any frame where the tool is referenced.
+        times = allValidTimes.filter(t => {
+          const triplets = sceneGraphs[String(t)] || [];
+          return triplets.some(([s, p, o]) => o === role || s === role);
+        });
+        if (!times.length) times = allValidTimes.slice();
+      } else {
+        times = allValidTimes.filter(t => {
+          const triplets = sceneGraphs[String(t)] || [];
+          return triplets.some(([s, p, o]) => s === role);
+        });
+      }
+      roleTimesCache[role] = times;
+      return times;
+    }
+
+    function labelAtTime(timeline, t) {
+      for (let i = 0; i < timeline.length; i++) {
+        if (t >= timeline[i][0] && t <= timeline[i][1]) return timeline[i][2];
+      }
+      return null;
+    }
+
+    function renderMonitorStatus() {
+      const el = document.getElementById('monitorStatus');
+      if (!el) return;
+      const mon = labelAtTime(monitorTimeline, currentTime);
+      let html = '';
+      if (monitorTimeline.length) {
+        html += `<span class="mon-chip"><span class="mon-key">Robot Monitor</span>` +
+          `<span class="mon-val">${mon ? escapeHtml(mon) : '\u2014'}</span></span>`;
+      }
+      el.innerHTML = html;
+    }
+    let validTimes = allValidTimes;
+
+    function nextValidTime(t) {
+      for (let i = 0; i < validTimes.length; i++) { if (validTimes[i] > t) return validTimes[i]; }
+      return t;
+    }
+    function prevValidTime(t) {
+      for (let i = validTimes.length - 1; i >= 0; i--) { if (validTimes[i] < t) return validTimes[i]; }
+      return t;
+    }
+    function nearestValidTime(t) {
+      if (!validTimes.length) return t;
+      let best = validTimes[0];
+      for (const v of validTimes) { if (Math.abs(v - t) < Math.abs(best - t)) best = v; }
+      return best;
+    }
+    function nextValidTimeInRange(t, lo, hi) {
+      const nxt = nextValidTime(t);
+      return nxt <= hi ? nxt : null;
+    }
+    function prevValidTimeInRange(t, lo, hi) {
+      const prv = prevValidTime(t);
+      return prv >= lo ? prv : null;
+    }
+    function firstValidTimeInRange(lo, hi) {
+      for (const v of validTimes) { if (v >= lo && v <= hi) return v; }
+      return null;
+    }
+
+    let currentTime = allValidTimes.length ? allValidTimes[0] : timeStart;
+    let currentWindowIdx = 0;
+    let timer = null;
+    let playing = false;
+    let speed = 1;
+    let activeRole = null;
+
+    // Per-role L2 windows (the main navigation unit)
+    let windows = [];  // array of L2 segments for active role
+    let l1Lookup = {};
+    let l0Lookup = {};
+
+    // Init camera grid (5th spans)
+    (function() {
+      const cells = document.querySelectorAll('.camera-cell');
+      if (cells.length === 5) cells[4].classList.add('span-full');
+    })();
+
+    // Build role tabs
+    (function() {
+      const container = document.getElementById('roleTabs');
+      const roles = hierarchyData.role_order || Object.keys(hierarchyData.roles).sort();
+      roles.forEach((role, i) => {
+        const rd = hierarchyData.roles[role];
+        const tab = document.createElement('div');
+        tab.className = 'role-tab' + (i === 0 ? ' active' : '');
+        tab.dataset.role = role;
+        tab.textContent = rd.role_human;
+        tab.addEventListener('click', () => selectRole(role));
+        container.appendChild(tab);
+      });
+      if (roles.length) selectRole(roles[0]);
+    })();
+
+    function selectRole(role) {
+      activeRole = role;
+      validTimes = buildRoleValidTimes(role);
+      document.querySelectorAll('.role-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.role === role)
+      );
+      const rd = hierarchyData.roles[role];
+      windows = rd.level2 || [];
+      const l1segs = rd.level1 || [];
+      const l0segs = rd.level0 || [];
+      l1Lookup = {};
+      l1segs.forEach(s => l1Lookup[s.segment_id] = s);
+      l0Lookup = {};
+      l0segs.forEach(s => l0Lookup[s.segment_id] = s);
+
+      // Reset to first window
+      currentWindowIdx = 0;
+      if (windows.length) {
+        const ws = windows[0].time_start || timeStart;
+        const we = windows[0].time_end || timeEnd;
+        currentTime = firstValidTimeInRange(ws, we) ?? ws;
+      }
+      updateTimeline();
+      renderWindow();
+      syncUI();
+    }
+
+    function updateTimeline() {
+      const slider = document.getElementById('timeline');
+      if (!windows.length) { slider.min = timeStart; slider.max = timeEnd; return; }
+      const win = windows[currentWindowIdx];
+      slider.min = String(win.time_start || timeStart);
+      slider.max = String(win.time_end || timeEnd);
+      slider.value = String(currentTime);
+    }
+
+    function findWindowForTime(t) {
+      for (let i = 0; i < windows.length; i++) {
+        if (t >= windows[i].time_start && t <= windows[i].time_end) return i;
+      }
+      return currentWindowIdx;
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function humanizeEntity(id) {
+      return entityNames[id] || id.replace(/_/g, ' ');
+    }
+
+    function humanizePred(id) {
+      return predicateNames[id] || id;
+    }
+
+    function predBadgeHtml(pred, obj, toolRole) {
+      const color = predColors[pred] || '#94a3b8';
+      const label = toolRole
+        ? `${humanizeEntity(obj)} ${humanizePred(pred)}`
+        : `${humanizePred(pred)} ${humanizeEntity(obj)}`;
+      return `<span class="pred-badge" style="background:${color}20;color:${color};border-color:${color}50">${escapeHtml(label)}</span>`;
+    }
+
+    function renderSceneGraph() {
+      const triplets = sceneGraphs[String(currentTime)] || [];
+      document.getElementById('sgTime').textContent = `t=${currentTime}s`;
+      const container = document.getElementById('sgTriplets');
+      if (!triplets.length) {
+        container.innerHTML = '<span class="sg-empty">No relations at this frame</span>';
+        return;
+      }
+      container.innerHTML = triplets.map(([s, p, o]) => {
+        const color = predColors[p] || '#94a3b8';
+        return `<span class="sg-triplet">` +
+          `<span class="sg-subj">${escapeHtml(s)}</span>` +
+          `<span class="sg-pred" style="background:${color}25;color:${color}">${escapeHtml(p)}</span>` +
+          `<span class="sg-obj">${escapeHtml(o)}</span></span>`;
+      }).join('');
+    }
+
+    function renderTranscript() {
+      const container = document.getElementById('transcriptStatus');
+      const t = currentTime;
+      const active = transcriptEntries.filter(e => t >= e.start && t <= e.end);
+      if (!active.length) {
+        container.innerHTML = '<div class="transcript-empty">— silence —</div>';
+      } else {
+        container.innerHTML = active.map(e =>
+          `<div class="transcript-line">"${escapeHtml(e.text)}"</div>`
+        ).join('');
+      }
+    }
+
+    function renderWindow() {
+      if (!windows.length) {
+        document.getElementById('winNum').textContent = 'No phases';
+        document.getElementById('winSummary').textContent = '—';
+        document.getElementById('winTime').textContent = '';
+        document.getElementById('winDur').textContent = '';
+        document.getElementById('hierarchyContent').innerHTML = '';
+        return;
+      }
+
+      const win = windows[currentWindowIdx];
+      document.getElementById('winNum').textContent =
+        `Phase ${currentWindowIdx + 1} / ${windows.length}`;
+      document.getElementById('winSummary').textContent = win.summary || '—';
+      const audioEl = document.getElementById('winAudio');
+      audioEl.textContent = win.audio_summary ? `♫ ${win.audio_summary}` : '';
+      document.getElementById('winTime').textContent =
+        `${win.time_start}s – ${win.time_end}s`;
+      document.getElementById('winDur').textContent =
+        `Duration: ${win.duration_s || '?'}s`;
+
+      // Render L1 steps and L0 segments for this window
+      const childIds = win.child_ids || win.segment_ids || [];
+      let html = '<div class="section-label">L1 Steps & L0 Segments in this Phase</div>';
+
+      const isToolRole = !!(activeRole && hierarchyData.roles[activeRole]?.is_tool);
+
+      childIds.forEach(cid => {
+        const step = l1Lookup[cid];
+        if (!step) return;
+        const stepChildIds = step.segment_ids || [];
+        let atomicHtml = '';
+        stepChildIds.forEach(sid => {
+          const seg = l0Lookup[sid];
+          if (!seg) return;
+          const preds = (seg.active_predicates || []);
+          const predsHtml = preds.length
+            ? preds.map(([p,o]) => predBadgeHtml(p, o, isToolRole)).join(' ')
+            : '<span class="idle">idle</span>';
+          const dur = seg.duration_s != null ? seg.duration_s + 's' : '?';
+          atomicHtml += `<div class="l0-item" data-ts="${seg.time_start}" data-te="${seg.time_end}">` +
+            `<span class="phase-badge l0">L0</span>` +
+            `<span class="l0-time">${seg.time_start}–${seg.time_end}</span>` +
+            `<span class="l0-desc">${predsHtml}</span>` +
+            `<span class="l0-dur">${dur}</span></div>`;
+        });
+        const dur = step.duration_s != null ? step.duration_s + 's' : '?';
+        const l1Audio = step.audio_summary
+          ? `<div class="l1-audio">♫ ${escapeHtml(step.audio_summary)}</div>`
+          : '';
+        html += `<div class="step-block expanded" data-ts="${step.time_start}" data-te="${step.time_end}">` +
+          `<div class="step-header" onclick="this.parentElement.classList.toggle('expanded')">` +
+          `<span class="phase-badge l1">L1</span>` +
+          `<span class="phase-time">${step.time_start}–${step.time_end}</span>` +
+          `<span class="step-summary">${escapeHtml(step.summary || '')}</span>` +
+          `<span class="phase-dur">${dur}</span></div>` +
+          l1Audio +
+          `<div class="step-body">${atomicHtml}</div></div>`;
+      });
+
+      document.getElementById('hierarchyContent').innerHTML = html;
+    }
+
+    function padded(num, width = 6) {
+      return String(num).padStart(width, '0');
+    }
+
+    function buildFramePath(camera, timestamp) {
+      return `${colorDir}/${camera}_colorimage-${padded(timestamp)}.jpg`;
+    }
+
+    function syncUI() {
+      if (!windows.length) return;
+      const win = windows[currentWindowIdx];
+      const wStart = win.time_start || timeStart;
+      const wEnd = win.time_end || timeEnd;
+
+      if (currentTime < wStart) currentTime = wStart;
+      if (currentTime > wEnd) currentTime = wEnd;
+
+      document.getElementById('timeDisplay').textContent = `${currentTime}s`;
+      document.getElementById('timeline').value = String(currentTime);
+
+      // Window progress
+      const wDur = Math.max(wEnd - wStart, 1);
+      const elapsed = currentTime - wStart;
+      const pct = (elapsed / wDur) * 100;
+      document.getElementById('winProgressFill').style.width = pct + '%';
+      document.getElementById('winProgressLabel').textContent =
+        `${elapsed}s / ${wDur}s into phase`;
+
+      document.getElementById('frameInfo').textContent =
+        `t=${currentTime}s | frame ${padded(currentTime)} | Phase ${currentWindowIdx + 1}/${windows.length}`;
+
+      // Scene graph
+      renderSceneGraph();
+
+      // Transcript subtitle
+      renderTranscript();
+
+      // Robot monitor status (always synced to the frame)
+      renderMonitorStatus();
+
+      // Highlight active L1 and L0
+      document.querySelectorAll('.step-block').forEach(el => {
+        const ts = Number(el.dataset.ts), te = Number(el.dataset.te);
+        const active = currentTime >= ts && currentTime <= te;
+        el.classList.toggle('active', active);
+      });
+      document.querySelectorAll('.l0-item').forEach(el => {
+        const ts = Number(el.dataset.ts), te = Number(el.dataset.te);
+        el.classList.toggle('active', currentTime >= ts && currentTime <= te);
+      });
+
+      // Scroll active L0 into view
+      const activeL0 = document.querySelector('.l0-item.active');
+      if (activeL0) activeL0.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+      // Camera frames
+      document.querySelectorAll('.camera-cell').forEach(cell => {
+        const cam = cell.dataset.camera;
+        const img = cell.querySelector('.camera-frame');
+        let path;
+        if (cam === 'simstation') {
+          const simFrame = simstationMap[String(currentTime)];
+          path = simFrame
+            ? `${simstationDir}/camera01_${simFrame}.jpg`
+            : '';
+        } else {
+          path = buildFramePath(cam, currentTime);
+        }
+        if (path && img.getAttribute('data-path') !== path) {
+          img.setAttribute('data-path', path);
+          img.src = path;
+        }
+      });
+    }
+
+    function tick() {
+      if (!windows.length) return;
+      const win = windows[currentWindowIdx];
+      const wEnd = win.time_end || timeEnd;
+      const nxt = nextValidTimeInRange(currentTime, win.time_start || timeStart, wEnd);
+      if (nxt == null) {
+        // No more valid frames in this window -- advance to next
+        if (currentWindowIdx < windows.length - 1) {
+          currentWindowIdx++;
+          const nw = windows[currentWindowIdx];
+          const first = firstValidTimeInRange(nw.time_start || timeStart, nw.time_end || timeEnd);
+          currentTime = first ?? (nw.time_start || timeStart);
+          updateTimeline();
+          renderWindow();
+          syncUI();
+        } else {
+          stopPlayback();
+        }
+        return;
+      }
+      currentTime = nxt;
+      syncUI();
+    }
+
+    function startPlayback() {
+      if (timer) return;
+      timer = setInterval(tick, 1000 / speed);
+      playing = true;
+      document.getElementById('playBtn').textContent = 'Pause';
+    }
+
+    function stopPlayback() {
+      if (timer) { clearInterval(timer); timer = null; }
+      playing = false;
+      document.getElementById('playBtn').textContent = 'Play';
+    }
+
+    function togglePlayback() {
+      if (playing) stopPlayback(); else startPlayback();
+    }
+
+    function cycleSpeed() {
+      const speeds = [1, 2, 4, 8, 16];
+      const idx = (speeds.indexOf(speed) + 1) % speeds.length;
+      speed = speeds[idx];
+      document.getElementById('speedBtn').textContent = speed + 'x';
+      if (playing) { clearInterval(timer); timer = setInterval(tick, 1000 / speed); }
+    }
+
+    function goToPrevWindow() {
+      if (currentWindowIdx > 0) {
+        currentWindowIdx--;
+        const nw = windows[currentWindowIdx];
+        const first = firstValidTimeInRange(nw.time_start || timeStart, nw.time_end || timeEnd);
+        currentTime = first ?? (nw.time_start || timeStart);
+        updateTimeline();
+        renderWindow();
+        syncUI();
+      }
+    }
+
+    function goToNextWindow() {
+      if (currentWindowIdx < windows.length - 1) {
+        currentWindowIdx++;
+        const nw = windows[currentWindowIdx];
+        const first = firstValidTimeInRange(nw.time_start || timeStart, nw.time_end || timeEnd);
+        currentTime = first ?? (nw.time_start || timeStart);
+        updateTimeline();
+        renderWindow();
+        syncUI();
+      }
+    }
+
+    document.getElementById('playBtn').addEventListener('click', togglePlayback);
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      if (!windows.length) return;
+      const wStart = windows[currentWindowIdx].time_start || timeStart;
+      const prv = prevValidTimeInRange(currentTime, wStart, windows[currentWindowIdx].time_end || timeEnd);
+      if (prv != null) {
+        currentTime = prv;
+        syncUI();
+      } else if (currentWindowIdx > 0) {
+        goToPrevWindow();
+      }
+    });
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (!windows.length) return;
+      const wEnd = windows[currentWindowIdx].time_end || timeEnd;
+      const nxt = nextValidTimeInRange(currentTime, windows[currentWindowIdx].time_start || timeStart, wEnd);
+      if (nxt != null) {
+        currentTime = nxt;
+        syncUI();
+      } else if (currentWindowIdx < windows.length - 1) {
+        goToNextWindow();
+      }
+    });
+    document.getElementById('prevWinBtn').addEventListener('click', goToPrevWindow);
+    document.getElementById('nextWinBtn').addEventListener('click', goToNextWindow);
+    document.getElementById('speedBtn').addEventListener('click', cycleSpeed);
+    document.getElementById('timeline').addEventListener('input', (e) => {
+      currentTime = nearestValidTime(Number(e.target.value)); syncUI();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.key === ' ' || e.key === 'k') { e.preventDefault(); togglePlayback(); }
+      else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const wS = windows[currentWindowIdx]?.time_start || timeStart;
+        const wE = windows[currentWindowIdx]?.time_end || timeEnd;
+        const prv = prevValidTimeInRange(currentTime, wS, wE);
+        if (prv != null) { currentTime = prv; syncUI(); }
+        else if (currentWindowIdx > 0) goToPrevWindow();
+      }
+      else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        const wS = windows[currentWindowIdx]?.time_start || timeStart;
+        const wE = windows[currentWindowIdx]?.time_end || timeEnd;
+        const nxt = nextValidTimeInRange(currentTime, wS, wE);
+        if (nxt != null) { currentTime = nxt; syncUI(); }
+        else if (currentWindowIdx < windows.length - 1) goToNextWindow();
+      }
+      else if (e.key === 'ArrowUp' || e.key === 'p') { e.preventDefault(); goToPrevWindow(); }
+      else if (e.key === 'ArrowDown' || e.key === 'n') { e.preventDefault(); goToNextWindow(); }
+    });
+
+    syncUI();
+    if (playing) startPlayback();
+  </script>
+</body>
+</html>

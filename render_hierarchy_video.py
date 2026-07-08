@@ -36,8 +36,6 @@ from scene_graph_utils import (
     load_relation_labels,
     original_timestamp,
 )
-
-
 PREDICATE_COLORS = {
     "Manipulating": "#3b82f6", "Calibrating": "#8b5cf6", "Preparing": "#f59e0b",
     "Assisting": "#10b981", "Holding": "#06b6d4", "Touching": "#64748b",
@@ -55,8 +53,6 @@ ROBOT_ROLES = {"robot_monitor"}
 
 # Tool/instrument roles appear as the *object* of triplets, not the subject.
 TOOL_ROLES = set(TOOL_ENTITIES)
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Create HTML player for hierarchy + camera frames."
@@ -99,8 +95,6 @@ def parse_args() -> argparse.Namespace:
         help="HTTP server root for frame paths.",
     )
     return parser.parse_args()
-
-
 def parse_srt(srt_path: Path) -> list[dict]:
     """Parse an SRT file into a sorted list of {start, end, text} entries (seconds)."""
     content = srt_path.read_text(encoding="utf-8")
@@ -122,8 +116,6 @@ def parse_srt(srt_path: Path) -> list[dict]:
         text = " ".join(lines[2:]).strip()
         entries.append({"start": round(start_s, 1), "end": round(end_s, 1), "text": text})
     return entries
-
-
 def infer_web_root(output: Path, colorimage_dir: Path) -> Path:
     output = output.resolve()
     colorimage_dir = colorimage_dir.resolve()
@@ -135,13 +127,40 @@ def infer_web_root(output: Path, colorimage_dir: Path) -> Path:
         except ValueError:
             continue
     return output.parent.resolve()
-
-
 def color_dir_for_web(colorimage_dir: Path, web_root: Path) -> str:
-    rel = os.path.relpath(colorimage_dir.resolve(), web_root.resolve())
+    # Keep relative paths as-is (e.g. viewer_links/TAKE/colorimage symlinks).
+    # Do not .resolve() — that follows symlinks outside the repo.
+    if not colorimage_dir.is_absolute():
+        rel = Path(os.path.normpath(colorimage_dir)).as_posix()
+        if rel.startswith(".."):
+            raise ValueError(f"colorimage_dir {colorimage_dir} escapes web_root {web_root}")
+        return rel
+    web_root_abs = web_root.resolve()
+    # Use os.path.abspath (no symlink resolution) so viewer_links/ stays inside repo.
+    rel = os.path.relpath(os.path.abspath(colorimage_dir), web_root_abs)
+    if rel.startswith(".."):
+        raise ValueError(
+            f"colorimage_dir {colorimage_dir} is outside web_root {web_root_abs}. "
+            "Use viewer_links/ symlinks under the repo instead."
+        )
     return Path(rel).as_posix()
-
-
+def resolve_simstation_dir(hierarchy: dict, colorimage_dir: Path, explicit: Path) -> Path:
+    """Prefer viewer_links sibling, then explicit arg, then take_dir/simstation on NAS."""
+    take_dir = Path(hierarchy.get("metadata", {}).get("take_dir", ""))
+    candidates = [
+        colorimage_dir.parent / "simstation",
+        explicit,
+        take_dir / "simstation",
+    ]
+    seen = set()
+    for candidate in candidates:
+        key = str(candidate)
+        if key in seen:
+            continue
+        seen.add(key)
+        if candidate.is_dir():
+            return candidate
+    return explicit
 def build_camera_grid_html(cameras: list[str]) -> str:
     cells = []
     for cam in cameras:
@@ -152,8 +171,6 @@ def build_camera_grid_html(cameras: list[str]) -> str:
         </div>"""
         )
     return "\n".join(cells)
-
-
 def build_simstation_map(hierarchy: dict) -> dict[int, str]:
     """
     Build a mapping from original_timestamp (colorimage second) to the
@@ -171,8 +188,6 @@ def build_simstation_map(hierarchy: dict) -> dict[int, str]:
         if ts is not None and sim is not None:
             ts_to_sim[ts] = sim
     return ts_to_sim
-
-
 def load_scene_graphs(hierarchy: dict) -> dict[int, list]:
     """
     Load per-frame scene graphs from relation_labels, keyed by original_timestamp.
@@ -197,8 +212,6 @@ def load_scene_graphs(hierarchy: dict) -> dict[int, list]:
             sg_by_time[ts] = triplets
 
     return sg_by_time
-
-
 def _filter_unmapped_segments(hierarchy: dict) -> dict:
     """Remove L0 segments whose timepoints have no frame-map entry (time_start/time_end is None).
 
@@ -232,8 +245,6 @@ def _filter_unmapped_segments(hierarchy: dict) -> dict:
 
     return hierarchy
 
-
-
 def _robot_label(seg: dict) -> str:
     """Compact 'Phase \u00b7 Step' label for a robot-role L0 segment."""
     state = {k: v for k, v in seg.get("active_predicates", [])}
@@ -242,8 +253,6 @@ def _robot_label(seg: dict) -> str:
     if phase and step:
         return f"{phase} \u00b7 {step}"
     return phase or "idle"
-
-
 def _build_robot_timeline(hierarchy: dict, role: str) -> list:
     """
     Flatten a robot role's L0 segments into [t_start, t_end, label] triples on
@@ -261,8 +270,6 @@ def _build_robot_timeline(hierarchy: dict, role: str) -> list:
             continue
         out.append([t0, t1, _robot_label(seg)])
     return out
-
-
 def _order_roles(roles) -> list:
     """
     Order role ids by category -- people first, then robot, then tools, then
@@ -278,8 +285,6 @@ def _order_roles(roles) -> list:
         return 3
 
     return sorted(roles, key=lambda r: (rank(r), r))
-
-
 def build_hierarchy_data(hierarchy: dict) -> dict:
     """Extract the compact data needed by the frontend JS."""
     hierarchy = _filter_unmapped_segments(hierarchy)
@@ -310,8 +315,6 @@ def build_hierarchy_data(hierarchy: dict) -> dict:
         "metadata": meta,
         "monitor_timeline": _build_robot_timeline(hierarchy, "robot_monitor"),
     }
-
-
 def build_html(
     hierarchy: dict,
     scene_graphs: dict[int, list],
@@ -758,8 +761,6 @@ def build_html(
       }}
       el.innerHTML = html;
     }}
-
-
     let validTimes = allValidTimes;
 
     function nextValidTime(t) {{
@@ -1186,8 +1187,6 @@ def build_html(
 </body>
 </html>
 """
-
-
 def main() -> None:
     args = parse_args()
     hierarchy = json.loads(args.hierarchy.read_text(encoding="utf-8"))
@@ -1195,7 +1194,8 @@ def main() -> None:
 
     web_root = args.web_root.resolve() if args.web_root else infer_web_root(args.output, args.colorimage_dir)
     color_dir = color_dir_for_web(args.colorimage_dir, web_root)
-    simstation_dir = color_dir_for_web(args.simstation_dir, web_root) if args.simstation_dir.exists() else ""
+    simstation_path = resolve_simstation_dir(hierarchy, args.colorimage_dir, args.simstation_dir)
+    simstation_dir = color_dir_for_web(simstation_path, web_root) if simstation_path.is_dir() else ""
     cameras = [c.strip() for c in args.cameras.split(",") if c.strip()]
 
     print("Loading per-frame scene graphs...")
@@ -1231,7 +1231,5 @@ def main() -> None:
     print("Start HTTP server:")
     print(f"  python3 -m http.server 8080 --directory {web_root}")
     print(f"  http://localhost:8080/{html_url}")
-
-
 if __name__ == "__main__":
     main()

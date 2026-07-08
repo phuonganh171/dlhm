@@ -169,13 +169,28 @@ def load_robot_phase(take_dir: Path) -> Dict[str, str]:
     The file (take_timestamp_to_robot_phase/<take>.json) is a sibling of
     take_dir's parent and is keyed by the *same* timepoint ids used by the
     relation labels / frame map, so no frame remapping is needed.
-    Returns {} if the file is absent.
+
+    On NAS, split sessions may use files like 012_1_PKA.json instead of
+    012_PKA.json; all matching files are merged.
+    Returns {} if no file is found.
     """
-    fpath = take_dir.parent / "take_timestamp_to_robot_phase" / f"{take_dir.name}.json"
-    if not fpath.exists():
-        logger.info("No robot-phase file at %s", fpath)
-        return {}
-    return json.loads(fpath.read_bytes().decode("utf-8"))
+    from mm_or_dataset import iter_robot_phase_files
+
+    processed_root = take_dir.parent
+    merged: Dict[str, str] = {}
+    found = False
+    for fpath in iter_robot_phase_files(processed_root, take_dir.name):
+        found = True
+        try:
+            merged.update(json.loads(fpath.read_bytes().decode("utf-8")))
+        except Exception as exc:
+            logger.warning("Failed to read robot phase %s: %s", fpath, exc)
+    if not found:
+        logger.info(
+            "No robot-phase file for %s under %s/take_timestamp_to_robot_phase/",
+            take_dir.name, processed_root,
+        )
+    return merged
 
 
 def load_screen_summaries(
@@ -189,39 +204,49 @@ def load_screen_summaries(
     frame_map[tp]['simstation'].  When a frame shows a transition flicker with
     multiple phases / steps, the highest-certainty entry of each type is kept.
     Timepoints with no mapping or no file are simply omitted.
+
+    On NAS, split sessions may live under screen_summaries/012_1_PKA/ etc.;
+    all matching directories are searched.
     """
-    ss_dir = take_dir.parent / "screen_summaries" / take_dir.name
+    from mm_or_dataset import iter_screen_summary_dirs
+
+    processed_root = take_dir.parent
+    ss_dirs = list(iter_screen_summary_dirs(processed_root, take_dir.name))
     result: Dict[str, Tuple[Optional[str], Optional[str]]] = {}
-    if not ss_dir.exists():
-        logger.info("No screen-summaries dir at %s", ss_dir)
+    if not ss_dirs:
+        logger.info("No screen-summaries dir for %s under %s/screen_summaries/",
+                     take_dir.name, processed_root)
         return result
 
     for tp_id, raw in frame_map.items():
         sim = raw.get("simstation")
         if sim is None:
             continue
-        fpath = ss_dir / f"{sim}.json"
-        if not fpath.exists():
-            continue
-        try:
-            data = json.loads(fpath.read_bytes().decode("utf-8"))
-        except Exception:
-            continue
 
         phase: Optional[str] = None
         step: Optional[str] = None
         best_phase_cert = -1.0
         best_step_cert = -1.0
-        for name, info in data.items():
-            kind = info.get("type")
+
+        for ss_dir in ss_dirs:
+            fpath = ss_dir / f"{sim}.json"
+            if not fpath.exists():
+                continue
             try:
-                cert = float(info.get("certainty", 0))
-            except (TypeError, ValueError):
-                cert = 0.0
-            if kind == "phase" and cert > best_phase_cert:
-                phase, best_phase_cert = name, cert
-            elif kind == "current_step" and cert > best_step_cert:
-                step, best_step_cert = name, cert
+                data = json.loads(fpath.read_bytes().decode("utf-8"))
+            except Exception:
+                continue
+
+            for name, info in data.items():
+                kind = info.get("type")
+                try:
+                    cert = float(info.get("certainty", 0))
+                except (TypeError, ValueError):
+                    cert = 0.0
+                if kind == "phase" and cert > best_phase_cert:
+                    phase, best_phase_cert = name, cert
+                elif kind == "current_step" and cert > best_step_cert:
+                    step, best_step_cert = name, cert
 
         if phase is not None or step is not None:
             result[tp_id] = (phase, step)

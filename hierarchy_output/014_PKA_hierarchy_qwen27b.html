@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hierarchy — 014_PKA_hierarchy_qwen27b</title>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --surface2: #273549;
+    --border: #334155; --text: #e2e8f0; --muted: #94a3b8;
+    --accent: #38bdf8; --l0: #64748b; --l1: #3b82f6; --l2: #8b5cf6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI',sans-serif; font-size: 14px; line-height: 1.6; }
+  header { padding: 20px 28px; border-bottom: 1px solid var(--border); }
+  header h1 { font-size: 18px; font-weight: 700; color: var(--accent); }
+  header p { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  .controls { padding: 12px 28px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 10; flex-wrap: wrap; }
+  .controls input { flex: 1; min-width: 200px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; color: var(--text); font-size: 13px; outline: none; }
+  .controls input:focus { border-color: var(--accent); }
+  .controls button { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; color: var(--text); cursor: pointer; font-size: 12px; white-space: nowrap; }
+  .controls button:hover { background: var(--border); }
+  .controls button.active { border-color: var(--accent); color: var(--accent); }
+
+  .role-tabs { padding: 10px 28px; display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+  .role-tab { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 4px 14px; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.15s; }
+  .role-tab:hover { color: var(--text); border-color: var(--accent); }
+  .role-tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  .container { padding: 16px 28px; }
+
+  .role-panel { display: none; }
+  .role-panel.visible { display: block; }
+
+  .role-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .role-header h2 { font-size: 16px; font-weight: 600; color: var(--accent); text-transform: capitalize; }
+  .role-stats { display: flex; gap: 8px; }
+  .stat { font-size: 11px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; }
+
+  .timeline-track { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 8px 0; }
+  .timeline-label { font-size: 10px; color: var(--muted); font-family: monospace; white-space: nowrap; }
+  .timeline-container { flex: 1; height: 18px; background: var(--surface); border-radius: 4px; position: relative; overflow: hidden; border: 1px solid var(--border); }
+  .timeline-bar { position: absolute; top: 2px; height: 14px; border-radius: 2px; opacity: 0.8; min-width: 1px; }
+
+  .tree-content { display: flex; flex-direction: column; gap: 4px; }
+
+  details { border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
+  details > summary { padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::before { content: '▸'; color: var(--muted); font-size: 12px; transition: transform 0.15s; }
+  details[open] > summary::before { transform: rotate(90deg); }
+  details > .children { padding: 4px 4px 4px 24px; display: flex; flex-direction: column; gap: 3px; }
+
+  .l2-group { margin-bottom: 6px; }
+  .l2-group > .children { padding: 6px 6px 6px 24px; }
+  .l1-group { background: var(--surface2); }
+
+  .seg-id { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; color: white; }
+  .seg-id { background: var(--l0); }
+  .l1-group > summary .seg-id { background: var(--l1); }
+  .l2-group > summary .seg-id.l2 { background: var(--l2); }
+  .seg-time { font-size: 11px; color: var(--muted); font-family: monospace; }
+  .seg-summary { font-size: 13px; flex: 1; }
+  .child-count { font-size: 10px; color: var(--muted); background: var(--bg); padding: 1px 6px; border-radius: 3px; }
+  .seg-preds { display: flex; gap: 4px; flex-wrap: wrap; }
+
+  .l0-seg { padding: 5px 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-radius: 4px; background: var(--bg); border: 1px solid transparent; }
+  .l0-seg:hover { border-color: var(--border); }
+
+  .pred-badge { font-size: 11px; font-weight: 500; padding: 1px 7px; border-radius: 4px; border: 1px solid; white-space: nowrap; }
+  .idle { color: var(--muted); font-size: 12px; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Hierarchy — 014_PKA_hierarchy_qwen27b</h1>
+  <p>4 roles · L0=12 · L1=4 · L2=4 · time 4m55s–5m38s</p>
+</header>
+<div class="controls">
+  <input type="text" id="search" placeholder="Search summaries, predicates…" oninput="filterTree()"/>
+  <button onclick="expandAll()">Expand All</button>
+  <button onclick="collapseAll()">Collapse All</button>
+</div>
+<div class="role-tabs" id="role-tabs"><div class="role-tab" data-role="instrument">surgical instrument</div><div class="role-tab" data-role="mps">robot technician (MPS)</div><div class="role-tab" data-role="nurse">scrub nurse</div><div class="role-tab" data-role="robot_setup">robot setup (physical)</div></div>
+<div class="container" id="container"><div class="role-panel" id="role-instrument" data-role="instrument"><div class="role-header"><h2>surgical instrument</h2><div class="role-stats"><span class="stat">L0: 1</span><span class="stat">L1: 1</span><span class="stat">L2: 1</span></div></div><div class="timeline-track"><div class="timeline-label">4m55s</div><div class="timeline-container"><div class="timeline-bar" style="left:9.30%;width:90.70%;background:#06b6d4" title="surgical instrument: scrub nurse is holding"></div></div><div class="timeline-label">5m38s</div></div><div class="tree-content"><details class="l2-group" data-text="surgical instrument: scrub nurse is holding"><summary><span class="seg-id l2">L2</span><span class="seg-time">299s–338s (?s)</span><span class="seg-summary">surgical instrument: scrub nurse is holding</span><span class="child-count">1 steps</span></summary><div class="children"><details class="l1-group" data-text="surgical instrument: scrub nurse is holding"><summary><span class="seg-id">L1</span><span class="seg-time">299s–338s (?s)</span><span class="seg-summary">surgical instrument: scrub nurse is holding</span><span class="child-count">1 segments</span></summary><div class="children"><div class="l0-seg" data-text="surgical instrument: scrub nurse is holding"><span class="seg-id">L0</span><span class="seg-time">299s–338s (40s)</span><span class="seg-preds"><span class="pred-badge" style="background:#06b6d415;color:#06b6d4;border-color:#06b6d440">scrub nurse is holding</span></span></div></div></details></div></details></div></div><div class="role-panel" id="role-mps" data-role="mps"><div class="role-header"><h2>robot technician (MPS)</h2><div class="role-stats"><span class="stat">L0: 1</span><span class="stat">L1: 1</span><span class="stat">L2: 1</span></div></div><div class="timeline-track"><div class="timeline-label">4m55s</div><div class="timeline-container"><div class="timeline-bar" style="left:0.00%;width:100.00%;background:#475569" title="robot technician (MPS): no active interactions"></div></div><div class="timeline-label">5m38s</div></div><div class="tree-content"><details class="l2-group" data-text="robot technician (mps): no active interactions"><summary><span class="seg-id l2">L2</span><span class="seg-time">295s–338s (?s)</span><span class="seg-summary">robot technician (MPS): no active interactions</span><span class="child-count">1 steps</span></summary><div class="children"><details class="l1-group" data-text="robot technician (mps): no active interactions"><summary><span class="seg-id">L1</span><span class="seg-time">295s–338s (?s)</span><span class="seg-summary">robot technician (MPS): no active interactions</span><span class="child-count">1 segments</span></summary><div class="children"><div class="l0-seg" data-text="robot technician (MPS): no active interactions"><span class="seg-id">L0</span><span class="seg-time">295s–338s (44s)</span><span class="seg-preds"><em class="idle">idle</em></span></div></div></details></div></details></div></div><div class="role-panel" id="role-nurse" data-role="nurse"><div class="role-header"><h2>scrub nurse</h2><div class="role-stats"><span class="stat">L0: 9</span><span class="stat">L1: 1</span><span class="stat">L2: 1</span></div></div><div class="timeline-track"><div class="timeline-label">4m55s</div><div class="timeline-container"><div class="timeline-bar" style="left:0.00%;width:0.20%;background:#475569" title="scrub nurse: no active interactions"></div><div class="timeline-bar" style="left:2.33%;width:9.30%;background:#f59e0b" title="scrub nurse: is preparing instrument table"></div><div class="timeline-bar" style="left:13.95%;width:4.65%;background:#06b6d4" title="scrub nurse: is holding surgical instrument; is preparing instrument table"></div><div class="timeline-bar" style="left:20.93%;width:2.33%;background:#06b6d4" title="scrub nurse: is holding surgical instrument; is preparing patient; is touching operating table"></div><div class="timeline-bar" style="left:25.58%;width:6.98%;background:#06b6d4" title="scrub nurse: is holding surgical instrument; is preparing patient"></div><div class="timeline-bar" style="left:34.88%;width:23.26%;background:#475569" title="scrub nurse: no active interactions"></div><div class="timeline-bar" style="left:60.47%;width:11.63%;background:#f59e0b" title="scrub nurse: is preparing patient"></div><div class="timeline-bar" style="left:74.42%;width:11.63%;background:#06b6d4" title="scrub nurse: is holding surgical instrument; is preparing instrument table"></div><div class="timeline-bar" style="left:88.37%;width:11.63%;background:#06b6d4" title="scrub nurse: is holding surgical instrument; is preparing patient"></div></div><div class="timeline-label">5m38s</div></div><div class="tree-content"><details class="l2-group" data-text="the scrub nurse prepares the instrument table and begins initial patient preparation while handling surgical instruments."><summary><span class="seg-id l2">L2</span><span class="seg-time">295s–338s (?s)</span><span class="seg-summary">The scrub nurse prepares the instrument table and begins initial patient preparation while handling surgical instruments.</span><span class="child-count">1 steps</span></summary><div class="children"><details class="l1-group" data-text="the scrub nurse prepares the instrument table and begins initial patient preparation while handling surgical instruments."><summary><span class="seg-id">L1</span><span class="seg-time">295s–338s (44s)</span><span class="seg-summary">The scrub nurse prepares the instrument table and begins initial patient preparation while handling surgical instruments.</span><span class="child-count">9 segments</span></summary><div class="children"><div class="l0-seg" data-text="scrub nurse: no active interactions"><span class="seg-id">L0</span><span class="seg-time">295s–295s (1s)</span><span class="seg-preds"><em class="idle">idle</em></span></div><div class="l0-seg" data-text="scrub nurse: is preparing instrument table"><span class="seg-id">L0</span><span class="seg-time">296s–300s (5s)</span><span class="seg-preds"><span class="pred-badge" style="background:#f59e0b15;color:#f59e0b;border-color:#f59e0b40">is preparing instrument table</span></span></div><div class="l0-seg" data-text="scrub nurse: is holding surgical instrument; is preparing instrument table"><span class="seg-id">L0</span><span class="seg-time">301s–303s (3s)</span><span class="seg-preds"><span class="pred-badge" style="background:#06b6d415;color:#06b6d4;border-color:#06b6d440">is holding surgical instrument</span> <span class="pred-badge" style="background:#f59e0b15;color:#f59e0b;border-color:#f59e0b40">is preparing instrument table</span></span></div><div class="l0-seg" data-text="scrub nurse: is holding surgical instrument; is preparing patient; is touching operating table"><span class="seg-id">L0</span><span class="seg-time">304s–305s (2s)</span><span class="seg-preds"><span class="pred-badge" style="background:#06b6d415;color:#06b6d4;border-color:#06b6d440">is holding surgical instrument</span> <span class="pred-badge" style="background:#f59e0b15;color:#f59e0b;border-color:#f59e0b40">is preparing patient</span> <span class="pred-badge" style="background:#64748b15;color:#64748b;border-color:#64748b40">is touching operating table</span></span></div><div class="l0-seg" data-text="scrub nurse: is holding surgical instrument; is preparing patient"><span class="seg-id">L0</span><span class="seg-time">306s–309s (4s)</span><span class="seg-preds"><span class="pred-badge" style="background:#06b6d415;color:#06b6d4;border-color:#06b6d440">is holding surgical instrument</span> <span class="pred-badge" style="background:#f59e0b15;color:#f59e0b;border-color:#f59e0b40">is preparing patient</span></span></div><div class="l0-seg" data-text="scrub nurse: no active interactions"><span class="seg-id">L0</span><span class="seg-time">310s–320s (11s)</span><span class="seg-preds"><em class="idle">idle</em></span></div><div class="l0-seg" data-text="scrub nurse: is preparing patient"><span class="seg-id">L0</span><span class="seg-time">321s–326s (6s)</span><span class="seg-preds"><span class="pred-badge" style="background:#f59e0b15;color:#f59e0b;border-color:#f59e0b40">is preparing patient</span></span></div><div class="l0-seg" data-text="scrub nurse: is holding surgical instrument; is preparing instrument table"><span class="seg-id">L0</span><span class="seg-time">327s–332s (6s)</span><span class="seg-preds"><span class="pred-badge" style="background:#06b6d415;color:#06b6d4;border-color:#06b6d440">is holding surgical instrument</span> <span class="pred-badge" style="background:#f59e0b15;color:#f59e0b;border-color:#f59e0b40">is preparing instrument table</span></span></div><div class="l0-seg" data-text="scrub nurse: is holding surgical instrument; is preparing patient"><span class="seg-id">L0</span><span class="seg-time">333s–338s (6s)</span><span class="seg-preds"><span class="pred-badge" style="background:#06b6d415;color:#06b6d4;border-color:#06b6d440">is holding surgical instrument</span> <span class="pred-badge" style="background:#f59e0b15;color:#f59e0b;border-color:#f59e0b40">is preparing patient</span></span></div></div></details></div></details></div></div><div class="role-panel" id="role-robot_setup" data-role="robot_setup"><div class="role-header"><h2>robot setup (physical)</h2><div class="role-stats"><span class="stat">L0: 1</span><span class="stat">L1: 1</span><span class="stat">L2: 1</span></div></div><div class="timeline-track"><div class="timeline-label">4m55s</div><div class="timeline-container"><div class="timeline-bar" style="left:0.00%;width:100.00%;background:#a855f7" title="robot setup (physical): Turn On"></div></div><div class="timeline-label">5m38s</div></div><div class="tree-content"><details class="l2-group" data-text="robot setup (physical): turn on"><summary><span class="seg-id l2">L2</span><span class="seg-time">295s–338s (?s)</span><span class="seg-summary">robot setup (physical): Turn On</span><span class="child-count">1 steps</span></summary><div class="children"><details class="l1-group" data-text="robot setup (physical): turn on"><summary><span class="seg-id">L1</span><span class="seg-time">295s–338s (?s)</span><span class="seg-summary">robot setup (physical): Turn On</span><span class="child-count">1 segments</span></summary><div class="children"><div class="l0-seg" data-text="robot setup (physical): Turn On"><span class="seg-id">L0</span><span class="seg-time">295s–338s (44s)</span><span class="seg-preds"><span class="pred-badge" style="background:#a855f715;color:#a855f7;border-color:#a855f740">Turn On</span></span></div></div></details></div></details></div></div></div>
+<script>
+const tabs = document.querySelectorAll('.role-tab');
+const panels = document.querySelectorAll('.role-panel');
+function showRole(role) {
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.role === role));
+  panels.forEach(p => p.classList.toggle('visible', p.dataset.role === role));
+}
+tabs.forEach(t => t.addEventListener('click', () => showRole(t.dataset.role)));
+if (tabs.length) showRole(tabs[0].dataset.role);
+
+function expandAll() {
+  document.querySelectorAll('.role-panel.visible details').forEach(d => d.open = true);
+}
+function collapseAll() {
+  document.querySelectorAll('.role-panel.visible details').forEach(d => d.open = false);
+}
+function filterTree() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.role-panel.visible details, .role-panel.visible .l0-seg').forEach(el => {
+    const text = (el.dataset.text || el.textContent || '').toLowerCase();
+    const match = !q || text.includes(q);
+    el.classList.toggle('hidden', !match);
+    if (match && q) {
+      let parent = el.closest('details');
+      while (parent) { parent.open = true; parent.classList.remove('hidden'); parent = parent.parentElement.closest('details'); }
+    }
+  });
+}
+</script>
+</body>
+</html>

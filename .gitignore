@@ -27,8 +27,10 @@ hf_cache/
 # MM-OR dataset (download via mm-or/download_mm-or.sh)
 mm-or/
 
-# Generated HTML viewers and reports
+# Symlinks to NAS mount (tiny; no dataset copy in repo)
+viewer_links/
 
+# Generated HTML viewers and reports
 # Logs and temp files
 *.log
 *.tmp
@@ -50,4 +52,5 @@ Thumbs.db
 #
 /first_annotation_output
 mm_or.zip
+logs/
 

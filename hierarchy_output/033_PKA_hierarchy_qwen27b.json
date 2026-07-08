@@ -1,0 +1,1177 @@
+{
+  "roles": {
+    "circulator": {
+      "level0_segments": [
+        {
+          "tp_start": "000000",
+          "tp_end": "000034",
+          "duration_frames": 2,
+          "active_predicates": [],
+          "segment_id": "circulator_L0_000",
+          "role": "circulator",
+          "level": 0,
+          "role_human": "circulator nurse",
+          "time_start": 165,
+          "time_end": 199,
+          "duration_s": 35,
+          "description": "circulator nurse: no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000035",
+          "tp_end": "000038",
+          "duration_frames": 4,
+          "active_predicates": [
+            [
+              "Assisting",
+              "nurse"
+            ],
+            [
+              "Holding",
+              "instrument"
+            ]
+          ],
+          "segment_id": "circulator_L0_001",
+          "role": "circulator",
+          "level": 0,
+          "role_human": "circulator nurse",
+          "time_start": 200,
+          "time_end": 203,
+          "duration_s": 4,
+          "description": "circulator nurse: is assisting scrub nurse; is holding surgical instrument",
+          "transcript": []
+        },
+        {
+          "tp_start": "000039",
+          "tp_end": "000050",
+          "duration_frames": 6,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ]
+          ],
+          "segment_id": "circulator_L0_002",
+          "role": "circulator",
+          "level": 0,
+          "role_human": "circulator nurse",
+          "time_start": 204,
+          "time_end": 215,
+          "duration_s": 12,
+          "description": "circulator nurse: is holding surgical instrument",
+          "transcript": []
+        },
+        {
+          "tp_start": "000051",
+          "tp_end": "000061",
+          "duration_frames": 4,
+          "active_predicates": [],
+          "segment_id": "circulator_L0_003",
+          "role": "circulator",
+          "level": 0,
+          "role_human": "circulator nurse",
+          "time_start": 216,
+          "time_end": 226,
+          "duration_s": 11,
+          "description": "circulator nurse: no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000062",
+          "tp_end": "000065",
+          "duration_frames": 4,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ]
+          ],
+          "segment_id": "circulator_L0_004",
+          "role": "circulator",
+          "level": 0,
+          "role_human": "circulator nurse",
+          "time_start": 227,
+          "time_end": 230,
+          "duration_s": 4,
+          "description": "circulator nurse: is holding surgical instrument",
+          "transcript": []
+        }
+      ],
+      "num_segments": 5,
+      "level1_segments": [
+        {
+          "segment_id": "circulator_L1_000",
+          "role": "circulator",
+          "level": 1,
+          "role_human": "circulator nurse",
+          "segment_ids": [
+            "circulator_L0_000",
+            "circulator_L0_001",
+            "circulator_L0_002",
+            "circulator_L0_003",
+            "circulator_L0_004"
+          ],
+          "time_start": 165,
+          "time_end": 230,
+          "duration_s": 66,
+          "summary": "The circulator nurse assists the scrub nurse and holds a surgical instrument with brief pauses in between.",
+          "audio_summary": "",
+          "transcript": []
+        }
+      ],
+      "num_level1_segments": 1,
+      "level2_segments": [
+        {
+          "segment_id": "circulator_L2_000",
+          "role": "circulator",
+          "level": 2,
+          "role_human": "circulator nurse",
+          "child_ids": [
+            "circulator_L1_000"
+          ],
+          "time_start": 165,
+          "time_end": 230,
+          "summary": "The circulator nurse assists the scrub nurse and holds a surgical instrument with brief pauses in between.",
+          "transcript": []
+        }
+      ],
+      "num_level2_segments": 1
+    },
+    "instrument": {
+      "level0_segments": [
+        {
+          "tp_start": "000027",
+          "tp_end": "000034",
+          "duration_frames": 5,
+          "active_predicates": [
+            [
+              "Holding",
+              "nurse"
+            ]
+          ],
+          "segment_id": "instrument_L0_000",
+          "role": "instrument",
+          "level": 0,
+          "role_human": "surgical instrument",
+          "time_start": 192,
+          "time_end": 199,
+          "duration_s": 8,
+          "description": "surgical instrument: scrub nurse is holding",
+          "transcript": []
+        },
+        {
+          "tp_start": "000035",
+          "tp_end": "000040",
+          "duration_frames": 6,
+          "active_predicates": [
+            [
+              "Holding",
+              "circulator"
+            ],
+            [
+              "Holding",
+              "nurse"
+            ]
+          ],
+          "segment_id": "instrument_L0_001",
+          "role": "instrument",
+          "level": 0,
+          "role_human": "surgical instrument",
+          "time_start": 200,
+          "time_end": 205,
+          "duration_s": 6,
+          "description": "surgical instrument: circulator nurse is holding; scrub nurse is holding",
+          "transcript": []
+        },
+        {
+          "tp_start": "000047",
+          "tp_end": "000050",
+          "duration_frames": 4,
+          "active_predicates": [
+            [
+              "Holding",
+              "circulator"
+            ]
+          ],
+          "segment_id": "instrument_L0_002",
+          "role": "instrument",
+          "level": 0,
+          "role_human": "surgical instrument",
+          "time_start": 212,
+          "time_end": 215,
+          "duration_s": 4,
+          "description": "surgical instrument: circulator nurse is holding",
+          "transcript": []
+        },
+        {
+          "tp_start": "000052",
+          "tp_end": "000060",
+          "duration_frames": 9,
+          "active_predicates": [
+            [
+              "Holding",
+              "nurse"
+            ]
+          ],
+          "segment_id": "instrument_L0_003",
+          "role": "instrument",
+          "level": 0,
+          "role_human": "surgical instrument",
+          "time_start": 217,
+          "time_end": 225,
+          "duration_s": 9,
+          "description": "surgical instrument: scrub nurse is holding",
+          "transcript": []
+        },
+        {
+          "tp_start": "000062",
+          "tp_end": "000063",
+          "duration_frames": 2,
+          "active_predicates": [
+            [
+              "Holding",
+              "circulator"
+            ]
+          ],
+          "segment_id": "instrument_L0_004",
+          "role": "instrument",
+          "level": 0,
+          "role_human": "surgical instrument",
+          "time_start": 227,
+          "time_end": 228,
+          "duration_s": 2,
+          "description": "surgical instrument: circulator nurse is holding",
+          "transcript": []
+        },
+        {
+          "tp_start": "000064",
+          "tp_end": "000065",
+          "duration_frames": 2,
+          "active_predicates": [
+            [
+              "Holding",
+              "circulator"
+            ],
+            [
+              "Holding",
+              "nurse"
+            ]
+          ],
+          "segment_id": "instrument_L0_005",
+          "role": "instrument",
+          "level": 0,
+          "role_human": "surgical instrument",
+          "time_start": 229,
+          "time_end": 230,
+          "duration_s": 2,
+          "description": "surgical instrument: circulator nurse is holding; scrub nurse is holding",
+          "transcript": []
+        },
+        {
+          "tp_start": "000067",
+          "tp_end": "000139",
+          "duration_frames": 55,
+          "active_predicates": [
+            [
+              "Holding",
+              "nurse"
+            ]
+          ],
+          "segment_id": "instrument_L0_006",
+          "role": "instrument",
+          "level": 0,
+          "role_human": "surgical instrument",
+          "time_start": 232,
+          "time_end": 304,
+          "duration_s": 73,
+          "description": "surgical instrument: scrub nurse is holding",
+          "transcript": []
+        }
+      ],
+      "num_segments": 7,
+      "level1_segments": [
+        {
+          "segment_id": "instrument_L1_000",
+          "role": "instrument",
+          "level": 1,
+          "role_human": "surgical instrument",
+          "segment_ids": [
+            "instrument_L0_000",
+            "instrument_L0_001",
+            "instrument_L0_002",
+            "instrument_L0_003",
+            "instrument_L0_004",
+            "instrument_L0_005",
+            "instrument_L0_006"
+          ],
+          "time_start": 192,
+          "time_end": 304,
+          "duration_s": 113,
+          "summary": "The surgical instrument is repeatedly transferred between the scrub nurse and the circulator nurse before being held continuously by the scrub nurse.",
+          "audio_summary": "",
+          "transcript": []
+        }
+      ],
+      "num_level1_segments": 1,
+      "level2_segments": [
+        {
+          "segment_id": "instrument_L2_000",
+          "role": "instrument",
+          "level": 2,
+          "role_human": "surgical instrument",
+          "child_ids": [
+            "instrument_L1_000"
+          ],
+          "time_start": 192,
+          "time_end": 304,
+          "summary": "The surgical instrument is repeatedly transferred between the scrub nurse and the circulator nurse before being held continuously by the scrub nurse.",
+          "transcript": []
+        }
+      ],
+      "num_level2_segments": 1
+    },
+    "mps": {
+      "level0_segments": [
+        {
+          "tp_start": "000000",
+          "tp_end": "000003",
+          "duration_frames": 4,
+          "active_predicates": [
+            [
+              "Manipulating",
+              "mps_station"
+            ]
+          ],
+          "segment_id": "mps_L0_000",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 165,
+          "time_end": 168,
+          "duration_s": 4,
+          "description": "robot technician (MPS): is manipulating MPS workstation",
+          "transcript": []
+        },
+        {
+          "tp_start": "000004",
+          "tp_end": "000005",
+          "duration_frames": 2,
+          "active_predicates": [],
+          "segment_id": "mps_L0_001",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 169,
+          "time_end": 170,
+          "duration_s": 2,
+          "description": "robot technician (MPS): no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000006",
+          "tp_end": "000018",
+          "duration_frames": 13,
+          "active_predicates": [
+            [
+              "Manipulating",
+              "mps_station"
+            ]
+          ],
+          "segment_id": "mps_L0_002",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 171,
+          "time_end": 183,
+          "duration_s": 13,
+          "description": "robot technician (MPS): is manipulating MPS workstation",
+          "transcript": []
+        },
+        {
+          "tp_start": "000019",
+          "tp_end": "000037",
+          "duration_frames": 19,
+          "active_predicates": [],
+          "segment_id": "mps_L0_003",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 184,
+          "time_end": 202,
+          "duration_s": 19,
+          "description": "robot technician (MPS): no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000038",
+          "tp_end": "000049",
+          "duration_frames": 12,
+          "active_predicates": [
+            [
+              "Manipulating",
+              "mps_station"
+            ]
+          ],
+          "segment_id": "mps_L0_004",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 203,
+          "time_end": 214,
+          "duration_s": 12,
+          "description": "robot technician (MPS): is manipulating MPS workstation",
+          "transcript": []
+        },
+        {
+          "tp_start": "000050",
+          "tp_end": "000114",
+          "duration_frames": 65,
+          "active_predicates": [],
+          "segment_id": "mps_L0_005",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 215,
+          "time_end": 279,
+          "duration_s": 65,
+          "description": "robot technician (MPS): no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000115",
+          "tp_end": "000138",
+          "duration_frames": 24,
+          "active_predicates": [
+            [
+              "Manipulating",
+              "mps_station"
+            ]
+          ],
+          "segment_id": "mps_L0_006",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 280,
+          "time_end": 303,
+          "duration_s": 24,
+          "description": "robot technician (MPS): is manipulating MPS workstation",
+          "transcript": []
+        },
+        {
+          "tp_start": "000139",
+          "tp_end": "000141",
+          "duration_frames": 3,
+          "active_predicates": [],
+          "segment_id": "mps_L0_007",
+          "role": "mps",
+          "level": 0,
+          "role_human": "robot technician (MPS)",
+          "time_start": 304,
+          "time_end": 306,
+          "duration_s": 3,
+          "description": "robot technician (MPS): no active interactions",
+          "transcript": []
+        }
+      ],
+      "num_segments": 8,
+      "level1_segments": [
+        {
+          "segment_id": "mps_L1_000",
+          "role": "mps",
+          "level": 1,
+          "role_human": "robot technician (MPS)",
+          "segment_ids": [
+            "mps_L0_000",
+            "mps_L0_001",
+            "mps_L0_002"
+          ],
+          "time_start": 165,
+          "time_end": 183,
+          "duration_s": 19,
+          "summary": "The robot technician manipulates the MPS workstation with a brief pause in between.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "mps_L1_001",
+          "role": "mps",
+          "level": 1,
+          "role_human": "robot technician (MPS)",
+          "segment_ids": [
+            "mps_L0_003",
+            "mps_L0_004",
+            "mps_L0_005",
+            "mps_L0_006",
+            "mps_L0_007"
+          ],
+          "time_start": 184,
+          "time_end": 306,
+          "duration_s": 123,
+          "summary": "The robot technician resumes manipulating the MPS workstation after a short idle period.",
+          "audio_summary": "",
+          "transcript": []
+        }
+      ],
+      "num_level1_segments": 2,
+      "level2_segments": [
+        {
+          "segment_id": "mps_L2_000",
+          "role": "mps",
+          "level": 2,
+          "role_human": "robot technician (MPS)",
+          "child_ids": [
+            "mps_L1_000",
+            "mps_L1_001"
+          ],
+          "time_start": 165,
+          "time_end": 306,
+          "duration_s": 142,
+          "summary": "The robot technician operates the MPS workstation to prepare and configure the robotic system for the procedure.",
+          "audio_summary": "",
+          "transcript": []
+        }
+      ],
+      "num_level2_segments": 1
+    },
+    "nurse": {
+      "level0_segments": [
+        {
+          "tp_start": "000000",
+          "tp_end": "000021",
+          "duration_frames": 22,
+          "active_predicates": [],
+          "segment_id": "nurse_L0_000",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 165,
+          "time_end": 186,
+          "duration_s": 22,
+          "description": "scrub nurse: no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000022",
+          "tp_end": "000027",
+          "duration_frames": 6,
+          "active_predicates": [
+            [
+              "Holding",
+              "saw"
+            ],
+            [
+              "Manipulating",
+              "mako_robot"
+            ]
+          ],
+          "segment_id": "nurse_L0_001",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 187,
+          "time_end": 192,
+          "duration_s": 6,
+          "description": "scrub nurse: is holding bone saw; is manipulating Mako robotic arm",
+          "transcript": []
+        },
+        {
+          "tp_start": "000028",
+          "tp_end": "000030",
+          "duration_frames": 3,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ],
+            [
+              "Preparing",
+              "instrument_table"
+            ]
+          ],
+          "segment_id": "nurse_L0_002",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 193,
+          "time_end": 195,
+          "duration_s": 3,
+          "description": "scrub nurse: is holding surgical instrument; is preparing instrument table",
+          "transcript": []
+        },
+        {
+          "tp_start": "000031",
+          "tp_end": "000034",
+          "duration_frames": 4,
+          "active_predicates": [
+            [
+              "Preparing",
+              "instrument_table"
+            ]
+          ],
+          "segment_id": "nurse_L0_003",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 196,
+          "time_end": 199,
+          "duration_s": 4,
+          "description": "scrub nurse: is preparing instrument table",
+          "transcript": []
+        },
+        {
+          "tp_start": "000035",
+          "tp_end": "000040",
+          "duration_frames": 6,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ],
+            [
+              "Preparing",
+              "instrument_table"
+            ]
+          ],
+          "segment_id": "nurse_L0_004",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 200,
+          "time_end": 205,
+          "duration_s": 6,
+          "description": "scrub nurse: is holding surgical instrument; is preparing instrument table",
+          "transcript": []
+        },
+        {
+          "tp_start": "000041",
+          "tp_end": "000046",
+          "duration_frames": 6,
+          "active_predicates": [
+            [
+              "Preparing",
+              "instrument_table"
+            ]
+          ],
+          "segment_id": "nurse_L0_005",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 206,
+          "time_end": 211,
+          "duration_s": 6,
+          "description": "scrub nurse: is preparing instrument table",
+          "transcript": []
+        },
+        {
+          "tp_start": "000047",
+          "tp_end": "000051",
+          "duration_frames": 5,
+          "active_predicates": [],
+          "segment_id": "nurse_L0_006",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 212,
+          "time_end": 216,
+          "duration_s": 5,
+          "description": "scrub nurse: no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000052",
+          "tp_end": "000058",
+          "duration_frames": 7,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ]
+          ],
+          "segment_id": "nurse_L0_007",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 217,
+          "time_end": 223,
+          "duration_s": 7,
+          "description": "scrub nurse: is holding surgical instrument",
+          "transcript": []
+        },
+        {
+          "tp_start": "000059",
+          "tp_end": "000080",
+          "duration_frames": 22,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ],
+            [
+              "Preparing",
+              "instrument_table"
+            ]
+          ],
+          "segment_id": "nurse_L0_008",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 224,
+          "time_end": 245,
+          "duration_s": 22,
+          "description": "scrub nurse: is holding surgical instrument; is preparing instrument table",
+          "transcript": []
+        },
+        {
+          "tp_start": "000081",
+          "tp_end": "000082",
+          "duration_frames": 2,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ]
+          ],
+          "segment_id": "nurse_L0_009",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 246,
+          "time_end": 247,
+          "duration_s": 2,
+          "description": "scrub nurse: is holding surgical instrument",
+          "transcript": []
+        },
+        {
+          "tp_start": "000083",
+          "tp_end": "000104",
+          "duration_frames": 22,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ],
+            [
+              "Holding",
+              "saw"
+            ],
+            [
+              "Manipulating",
+              "mako_robot"
+            ]
+          ],
+          "segment_id": "nurse_L0_010",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 248,
+          "time_end": 269,
+          "duration_s": 22,
+          "description": "scrub nurse: is holding surgical instrument; is holding bone saw; is manipulating Mako robotic arm",
+          "transcript": []
+        },
+        {
+          "tp_start": "000105",
+          "tp_end": "000106",
+          "duration_frames": 2,
+          "active_predicates": [
+            [
+              "Touching",
+              "mako_robot"
+            ]
+          ],
+          "segment_id": "nurse_L0_011",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 270,
+          "time_end": 271,
+          "duration_s": 2,
+          "description": "scrub nurse: is touching Mako robotic arm",
+          "transcript": []
+        },
+        {
+          "tp_start": "000107",
+          "tp_end": "000122",
+          "duration_frames": 16,
+          "active_predicates": [],
+          "segment_id": "nurse_L0_012",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 272,
+          "time_end": 287,
+          "duration_s": 16,
+          "description": "scrub nurse: no active interactions",
+          "transcript": []
+        },
+        {
+          "tp_start": "000123",
+          "tp_end": "000141",
+          "duration_frames": 19,
+          "active_predicates": [
+            [
+              "Holding",
+              "instrument"
+            ],
+            [
+              "Manipulating",
+              "mako_robot"
+            ]
+          ],
+          "segment_id": "nurse_L0_013",
+          "role": "nurse",
+          "level": 0,
+          "role_human": "scrub nurse",
+          "time_start": 288,
+          "time_end": 306,
+          "duration_s": 19,
+          "description": "scrub nurse: is holding surgical instrument; is manipulating Mako robotic arm",
+          "transcript": []
+        }
+      ],
+      "num_segments": 14,
+      "level1_segments": [
+        {
+          "segment_id": "nurse_L1_000",
+          "role": "nurse",
+          "level": 1,
+          "role_human": "scrub nurse",
+          "segment_ids": [
+            "nurse_L0_000",
+            "nurse_L0_001",
+            "nurse_L0_002",
+            "nurse_L0_003",
+            "nurse_L0_004",
+            "nurse_L0_005",
+            "nurse_L0_006",
+            "nurse_L0_007",
+            "nurse_L0_008",
+            "nurse_L0_009"
+          ],
+          "time_start": 165,
+          "time_end": 247,
+          "duration_s": 83,
+          "summary": "The scrub nurse prepares the instrument table and handles various surgical instruments, including a brief pause.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "nurse_L1_001",
+          "role": "nurse",
+          "level": 1,
+          "role_human": "scrub nurse",
+          "segment_ids": [
+            "nurse_L0_010",
+            "nurse_L0_011",
+            "nurse_L0_012",
+            "nurse_L0_013"
+          ],
+          "time_start": 248,
+          "time_end": 306,
+          "duration_s": 59,
+          "summary": "The scrub nurse manipulates the Mako robotic arm while holding a bone saw and surgical instrument.",
+          "audio_summary": "",
+          "transcript": []
+        }
+      ],
+      "num_level1_segments": 2,
+      "level2_segments": [
+        {
+          "segment_id": "nurse_L2_000",
+          "role": "nurse",
+          "level": 2,
+          "role_human": "scrub nurse",
+          "child_ids": [
+            "nurse_L1_000",
+            "nurse_L1_001"
+          ],
+          "time_start": 165,
+          "time_end": 306,
+          "duration_s": 142,
+          "summary": "The scrub nurse prepares the instrument table and assists with the initial setup of the Mako robotic arm for the procedure.",
+          "audio_summary": "",
+          "transcript": []
+        }
+      ],
+      "num_level2_segments": 1
+    },
+    "robot_monitor": {
+      "level0_segments": [
+        {
+          "tp_start": "000000",
+          "tp_end": "000040",
+          "duration_frames": 41,
+          "active_predicates": [
+            [
+              "Phase",
+              "Before Surgery RIO Check"
+            ]
+          ],
+          "segment_id": "robot_monitor_L0_000",
+          "role": "robot_monitor",
+          "level": 0,
+          "role_human": "robot monitor (Mako screen)",
+          "time_start": 165,
+          "time_end": 205,
+          "duration_s": 41,
+          "description": "robot monitor (Mako screen): Before Surgery RIO Check",
+          "transcript": []
+        },
+        {
+          "tp_start": "000041",
+          "tp_end": "000128",
+          "duration_frames": 88,
+          "active_predicates": [
+            [
+              "Phase",
+              "Surgery Planning"
+            ]
+          ],
+          "segment_id": "robot_monitor_L0_001",
+          "role": "robot_monitor",
+          "level": 0,
+          "role_human": "robot monitor (Mako screen)",
+          "time_start": 206,
+          "time_end": 293,
+          "duration_s": 88,
+          "description": "robot monitor (Mako screen): Surgery Planning",
+          "transcript": []
+        },
+        {
+          "tp_start": "000129",
+          "tp_end": "000141",
+          "duration_frames": 13,
+          "active_predicates": [
+            [
+              "Phase",
+              "Before Surgery RIO Check"
+            ]
+          ],
+          "segment_id": "robot_monitor_L0_002",
+          "role": "robot_monitor",
+          "level": 0,
+          "role_human": "robot monitor (Mako screen)",
+          "time_start": 294,
+          "time_end": 306,
+          "duration_s": 13,
+          "description": "robot monitor (Mako screen): Before Surgery RIO Check",
+          "transcript": []
+        }
+      ],
+      "num_segments": 3,
+      "level1_segments": [
+        {
+          "segment_id": "robot_monitor_L1_000",
+          "role": "robot_monitor",
+          "level": 1,
+          "role_human": "robot monitor (Mako screen)",
+          "segment_ids": [
+            "robot_monitor_L0_000",
+            "robot_monitor_L0_001",
+            "robot_monitor_L0_002"
+          ],
+          "time_start": 165,
+          "time_end": 306,
+          "duration_s": 142,
+          "summary": "The robot monitor performed pre-surgical RIO checks and surgery planning in a continuous sequence.",
+          "audio_summary": "",
+          "transcript": []
+        }
+      ],
+      "num_level1_segments": 1,
+      "level2_segments": [
+        {
+          "segment_id": "robot_monitor_L2_000",
+          "role": "robot_monitor",
+          "level": 2,
+          "role_human": "robot monitor (Mako screen)",
+          "child_ids": [
+            "robot_monitor_L1_000"
+          ],
+          "time_start": 165,
+          "time_end": 306,
+          "summary": "The robot monitor performed pre-surgical RIO checks and surgery planning in a continuous sequence.",
+          "transcript": []
+        }
+      ],
+      "num_level2_segments": 1
+    },
+    "robot_setup": {
+      "level0_segments": [
+        {
+          "tp_start": "000000",
+          "tp_end": "000141",
+          "duration_frames": 142,
+          "active_predicates": [
+            [
+              "Phase",
+              "Turn On"
+            ]
+          ],
+          "segment_id": "robot_setup_L0_000",
+          "role": "robot_setup",
+          "level": 0,
+          "role_human": "robot setup (physical)",
+          "time_start": 165,
+          "time_end": 306,
+          "duration_s": 142,
+          "description": "robot setup (physical): Turn On",
+          "transcript": []
+        }
+      ],
+      "num_segments": 1,
+      "level1_segments": [
+        {
+          "segment_id": "robot_setup_L1_000",
+          "role": "robot_setup",
+          "level": 1,
+          "role_human": "robot setup (physical)",
+          "segment_ids": [
+            "robot_setup_L0_000"
+          ],
+          "time_start": 165,
+          "time_end": 306,
+          "summary": "robot setup (physical): Turn On",
+          "transcript": []
+        }
+      ],
+      "num_level1_segments": 1,
+      "level2_segments": [
+        {
+          "segment_id": "robot_setup_L2_000",
+          "role": "robot_setup",
+          "level": 2,
+          "role_human": "robot setup (physical)",
+          "child_ids": [
+            "robot_setup_L1_000"
+          ],
+          "time_start": 165,
+          "time_end": 306,
+          "summary": "robot setup (physical): Turn On",
+          "transcript": []
+        }
+      ],
+      "num_level2_segments": 1
+    },
+    "saw": {
+      "level0_segments": [
+        {
+          "tp_start": "000022",
+          "tp_end": "000104",
+          "duration_frames": 27,
+          "active_predicates": [
+            [
+              "Holding",
+              "nurse"
+            ]
+          ],
+          "segment_id": "saw_L0_000",
+          "role": "saw",
+          "level": 0,
+          "role_human": "bone saw",
+          "time_start": 187,
+          "time_end": 269,
+          "duration_s": 83,
+          "description": "bone saw: scrub nurse is holding",
+          "transcript": []
+        }
+      ],
+      "num_segments": 1,
+      "level1_segments": [
+        {
+          "segment_id": "saw_L1_000",
+          "role": "saw",
+          "level": 1,
+          "role_human": "bone saw",
+          "segment_ids": [
+            "saw_L0_000"
+          ],
+          "time_start": 187,
+          "time_end": 269,
+          "summary": "bone saw: scrub nurse is holding",
+          "transcript": []
+        }
+      ],
+      "num_level1_segments": 1,
+      "level2_segments": [
+        {
+          "segment_id": "saw_L2_000",
+          "role": "saw",
+          "level": 2,
+          "role_human": "bone saw",
+          "child_ids": [
+            "saw_L1_000"
+          ],
+          "time_start": 187,
+          "time_end": 269,
+          "summary": "bone saw: scrub nurse is holding",
+          "transcript": []
+        }
+      ],
+      "num_level2_segments": 1
+    }
+  },
+  "metadata": {
+    "total_roles": 7,
+    "total_level0_segments": 39,
+    "debounce_frames": 2,
+    "take_dir": "/tmp/nhatvu/nas_mount_13509/MM-OR_data/MM-OR_processed/033_PKA",
+    "tp_range": [
+      "000000",
+      "000141"
+    ],
+    "num_timepoints": 142,
+    "time_range": [
+      165,
+      306
+    ],
+    "total_level1_segments": 9,
+    "total_level2_segments": 7
+  },
+  "debounce_analysis": {
+    "debounce": 2,
+    "segments_without_debounce": 37,
+    "segments_with_debounce": 27,
+    "segments_removed": 10,
+    "one_frame_segments_analyzed": 9,
+    "categories": {
+      "FLICKER": {
+        "count": 3,
+        "percent": 33.3
+      },
+      "PRE_TRANSITION": {
+        "count": 2,
+        "percent": 22.2
+      },
+      "POST_ACTIVITY": {
+        "count": 2,
+        "percent": 22.2
+      },
+      "UNIQUE": {
+        "count": 1,
+        "percent": 11.1
+      },
+      "DROPOUT": {
+        "count": 1,
+        "percent": 11.1
+      }
+    },
+    "per_role": {
+      "circulator": {
+        "raw": 6,
+        "debounced": 5,
+        "removed": 1
+      },
+      "mps": {
+        "raw": 8,
+        "debounced": 8,
+        "removed": 0
+      },
+      "nurse": {
+        "raw": 23,
+        "debounced": 14,
+        "removed": 9
+      }
+    }
+  }
+}

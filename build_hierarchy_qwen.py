@@ -20,6 +20,7 @@ Usage:
 import argparse
 import json
 import logging
+import os
 import re
 import sys
 from collections import defaultdict
@@ -578,7 +579,7 @@ constant.
 Your task: group consecutive segments into coherent "action steps". An action \
 step is a sequence of related atomic activities that together accomplish a \
 sub-task (e.g., "drilling the femur", "calibrating the robot", "preparing \
-instruments").
+instruments", ...).
 
 Rules:
 - Groups MUST be consecutive -- no skipping or reordering segments.
@@ -807,10 +808,178 @@ def _group_chunks(
     return all_groups
 
 
+# ---------------------------------------------------------------------------
+# Post-process: collapse singleton-idle L1 segments
+# ---------------------------------------------------------------------------
+
+_IDLE_SIM_THRESHOLD = 0.75
+_EMB_MODEL_NAME = "all-MiniLM-L6-v2"
+_emb_model_cache = None
+
+
+def _lazy_import_emb_model():
+    global _emb_model_cache
+    if _emb_model_cache is None:
+        from sentence_transformers import SentenceTransformer
+        logger.info("Loading embedding model for idle L1 collapse: %s", _EMB_MODEL_NAME)
+        _emb_model_cache = SentenceTransformer(_EMB_MODEL_NAME)
+    return _emb_model_cache
+
+
+def _is_idle_l0(l0_seg: Dict[str, Any]) -> bool:
+    preds = l0_seg.get("active_predicates") or []
+    if not preds:
+        return True
+    state = {k: v for k, v in preds}
+    phase = state.get("Phase")
+    if phase is not None and str(phase).lower() == "idle":
+        return True
+    return False
+
+
+def _is_singleton_idle_l1(
+    l1_seg: Dict[str, Any],
+    l0_lookup: Dict[str, Dict[str, Any]],
+) -> bool:
+    child_ids = l1_seg.get("segment_ids") or []
+    if len(child_ids) != 1:
+        return False
+    l0 = l0_lookup.get(child_ids[0])
+    return l0 is not None and _is_idle_l0(l0)
+
+
+def _l1_summary_similarity(
+    a: Dict[str, Any],
+    b: Dict[str, Any],
+    emb_model,
+) -> float:
+    texts = [
+        a.get("summary") or a.get("description") or "",
+        b.get("summary") or b.get("description") or "",
+    ]
+    if hasattr(emb_model, "embed"):
+        embs = emb_model.embed(texts)
+    else:
+        embs = emb_model.encode(texts, normalize_embeddings=True, show_progress_bar=False)
+    return float(embs[0] @ embs[1])
+
+
+def _merge_l1_segments(
+    parts: List[Dict[str, Any]],
+    role: str,
+    anchor: Dict[str, Any],
+) -> Dict[str, Any]:
+    all_ids: List[str] = []
+    child_transcript: List[Dict[str, Any]] = []
+    for part in parts:
+        all_ids.extend(part.get("segment_ids", []))
+        child_transcript.extend(part.get("transcript", []))
+
+    t_start = parts[0].get("time_start")
+    t_end = parts[-1].get("time_end")
+    duration_s = None
+    if t_start is not None and t_end is not None:
+        duration_s = t_end - t_start + 1
+
+    audio_parts = [p.get("audio_summary", "") for p in parts if p.get("audio_summary")]
+    if len(audio_parts) == 1:
+        audio_summary = audio_parts[0]
+    elif audio_parts:
+        audio_summary = "; ".join(audio_parts)
+    else:
+        audio_summary = anchor.get("audio_summary", "")
+
+    return {
+        "segment_id": parts[0]["segment_id"],
+        "role": role,
+        "level": 1,
+        "role_human": humanize(role),
+        "segment_ids": all_ids,
+        "time_start": t_start,
+        "time_end": t_end,
+        "duration_s": duration_s,
+        "summary": anchor.get("summary", ""),
+        "audio_summary": audio_summary,
+        "transcript": child_transcript,
+    }
+
+
+def _reindex_l1_segment_ids(l1_segs: List[Dict[str, Any]], role: str) -> List[Dict[str, Any]]:
+    for i, seg in enumerate(l1_segs):
+        seg["segment_id"] = f"{role}_L1_{i:03d}"
+    return l1_segs
+
+
+def collapse_idle_l1(
+    role: str,
+    l1_segs: List[Dict[str, Any]],
+    l0_segs: List[Dict[str, Any]],
+    sim_threshold: float = _IDLE_SIM_THRESHOLD,
+    emb_model=None,
+) -> Tuple[List[Dict[str, Any]], int]:
+    """
+    Collapse L1 segments that contain only a single idle L0.
+
+    - sim(prev, next) >= threshold: merge prev + idle + next into one L1
+    - sim(prev, next) <  threshold: merge idle into previous L1
+    - timeline start (no prev): merge idle into next
+    - timeline end   (no next): merge idle into previous
+    """
+    if len(l1_segs) <= 1:
+        return l1_segs, 0
+
+    l0_lookup = {s["segment_id"]: s for s in l0_segs}
+    if not any(_is_singleton_idle_l1(seg, l0_lookup) for seg in l1_segs):
+        return l1_segs, 0
+
+    if emb_model is None:
+        emb_model = _lazy_import_emb_model()
+
+    total_collapsed = 0
+    while True:
+        merged_any = False
+        i = 0
+        while i < len(l1_segs):
+            if not _is_singleton_idle_l1(l1_segs[i], l0_lookup):
+                i += 1
+                continue
+
+            prev = l1_segs[i - 1] if i > 0 else None
+            nxt = l1_segs[i + 1] if i + 1 < len(l1_segs) else None
+            idle = l1_segs[i]
+
+            if prev is not None and nxt is not None:
+                sim = _l1_summary_similarity(prev, nxt, emb_model)
+                if sim >= sim_threshold:
+                    merged = _merge_l1_segments([prev, idle, nxt], role, anchor=prev)
+                    l1_segs = l1_segs[: i - 1] + [merged] + l1_segs[i + 2 :]
+                else:
+                    merged = _merge_l1_segments([prev, idle], role, anchor=prev)
+                    l1_segs = l1_segs[: i - 1] + [merged] + l1_segs[i + 1 :]
+            elif prev is not None:
+                merged = _merge_l1_segments([prev, idle], role, anchor=prev)
+                l1_segs = l1_segs[: i - 1] + [merged] + l1_segs[i + 1 :]
+            elif nxt is not None:
+                merged = _merge_l1_segments([idle, nxt], role, anchor=nxt)
+                l1_segs = [merged] + l1_segs[i + 2 :]
+            else:
+                i += 1
+                continue
+
+            total_collapsed += 1
+            merged_any = True
+
+        if not merged_any:
+            break
+
+    return _reindex_l1_segment_ids(l1_segs, role), total_collapsed
+
+
 def build_level1(
     hierarchy: Dict[str, Any],
     model,
     tokenizer,
+    idle_sim_threshold: float = _IDLE_SIM_THRESHOLD,
 ) -> None:
     """
     Use the LLM to group each role's level-0 segments into level-1 action steps.
@@ -890,6 +1059,15 @@ def build_level1(
                 "transcript": child_transcript,
             })
 
+        level1_segs, n_collapsed = collapse_idle_l1(
+            role, level1_segs, l0_segs, sim_threshold=idle_sim_threshold,
+        )
+        if n_collapsed:
+            logger.info(
+                "  %-25s  collapsed %d idle L1(s) -> %d level-1 segments",
+                humanize(role), n_collapsed, len(level1_segs),
+            )
+
         role_data["level1_segments"] = level1_segs
         role_data["num_level1_segments"] = len(level1_segs)
         logger.info("  %-25s  %2d level-1 segments", humanize(role), len(level1_segs))
@@ -910,13 +1088,14 @@ action step groups several atomic activities that accomplish a sub-task.
 Your task: group consecutive action steps into high-level "surgical phases". \
 A phase represents a major stage of the procedure from this person's perspective \
 (e.g., "patient preparation", "femoral bone work", "robot-assisted implant \
-placement", "wound closure").
+placement", "wound closure", ...).
 
 Rules:
 - Groups MUST be consecutive -- no skipping or reordering segments.
 - Every segment must belong to exactly one group.
 - Each group gets a 1-sentence natural language summary describing the phase.
 - A role with few action steps may have only 1-2 phases -- that is fine.
+- IMPORTANT: Do NOT create a 1:1 mapping where each action step becomes its own phase. Each phase should contain at least 2 action steps. Only create a single-step phase if it is truly a distinct major surgical stage (e.g., a long preparation or closure).
 - Output ONLY valid JSON, no other text.
 
 Output format (JSON array):
@@ -959,6 +1138,7 @@ Output format (JSON array):
 # - Each group gets a brief "audio_summary" independently synthesizing the \
 # communication pattern across the included steps.
 # - A role with few action steps may have only 1-2 phases -- that is fine.
+# - IMPORTANT: Do NOT create a 1:1 mapping where each action step becomes its own phase. Each phase should contain at least 2 action steps. Only create a single-step phase if it is truly a distinct major surgical stage (e.g., a long preparation or closure).
 # - Output ONLY valid JSON, no other text.
 
 # Output format (JSON array):
@@ -1137,8 +1317,12 @@ def parse_args():
     )
     parser.add_argument(
         "--hf_token", type=str,
-        default="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",
-        help="HuggingFace access token.",
+        default=os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN"),
+        help="HuggingFace access token (or set HF_TOKEN env var).",
+    )
+    parser.add_argument(
+        "--idle_sim_threshold", type=float, default=_IDLE_SIM_THRESHOLD,
+        help="Cosine similarity threshold for bridging idle L1 between similar neighbors.",
     )
     return parser.parse_args()
 
@@ -1207,7 +1391,7 @@ def main():
         logger.info("=== Building Level-1 (LLM grouping) ===")
         _, load_model, _, _ = _lazy_import_llm()
         model, tokenizer = load_model(args.model, args.hf_token)
-        build_level1(hierarchy, model, tokenizer)
+        build_level1(hierarchy, model, tokenizer, idle_sim_threshold=args.idle_sim_threshold)
 
         total_l1 = sum(
             d.get("num_level1_segments", 0) for d in hierarchy["roles"].values()

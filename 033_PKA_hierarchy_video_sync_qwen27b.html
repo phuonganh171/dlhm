@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hierarchy + Frame Player</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --card: #1a1f35;
+      --surface: #232a45;
+      --text: #ecf0ff;
+      --muted: #a8b1d9;
+      --accent: #53a8ff;
+      --l2: #8b5cf6;
+      --l1: #3b82f6;
+      --l0: #64748b;
+      --ok: #58d68d;
+      --warn: #f5b041;
+      --danger: #ff6b6b;
+      --border: #2b3356;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0; font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg); color: var(--text);
+      height: 100vh; overflow: hidden;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 500px 1fr;
+      height: 100vh;
+    }
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      flex-shrink: 0;
+    }
+    .panel-header h2 { font-size: 14px; font-weight: 700; margin: 0; }
+    .panel-header .subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .monitor-status {
+      margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .monitor-status .mon-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 2px 8px; border-radius: 5px;
+      background: var(--surface); border: 1px solid var(--border);
+    }
+    .monitor-status .mon-key {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted);
+    }
+    .monitor-status .mon-val { font-size: 11px; font-weight: 600; color: var(--l2); }
+
+    .controls-bar {
+      display: flex; align-items: center; gap: 6px; padding: 6px 14px;
+      background: var(--card); border-bottom: 1px solid var(--border);
+      flex-shrink: 0; flex-wrap: wrap;
+    }
+    button {
+      border: 1px solid #44518b; background: #1e2645; color: var(--text);
+      padding: 5px 9px; border-radius: 5px; cursor: pointer; font-size: 11px;
+      white-space: nowrap;
+    }
+    button:hover { background: #2a3562; }
+    button.active { border-color: var(--accent); color: var(--accent); }
+    input[type="range"] { flex: 1; min-width: 80px; }
+    .time-display {
+      font-family: monospace; font-size: 12px; color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .role-tabs {
+      display: flex; gap: 3px; padding: 6px 14px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+      overflow-x: auto; background: var(--card);
+    }
+    .role-tab {
+      padding: 3px 8px; border-radius: 4px; font-size: 10px;
+      font-weight: 600; cursor: pointer; white-space: nowrap;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted); transition: all 0.15s;
+    }
+    .role-tab:hover { color: var(--text); border-color: var(--accent); }
+    .role-tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+    /* Window (L2 phase) info box */
+    .window-info {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      flex-shrink: 0;
+    }
+    .window-title {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    }
+    .window-title .badge {
+      font-size: 9px; font-weight: 700; padding: 2px 6px;
+      border-radius: 3px; color: white; background: var(--l2);
+    }
+    .window-title .win-num {
+      font-size: 12px; color: var(--muted);
+    }
+    .window-summary {
+      font-size: 13px; line-height: 1.4; padding: 8px 10px;
+      border-left: 3px solid var(--l2); background: rgba(139,92,246,0.06);
+      border-radius: 4px; margin-bottom: 4px;
+    }
+    .window-audio {
+      font-size: 11px; line-height: 1.3; padding: 5px 10px;
+      border-left: 3px solid var(--accent); background: rgba(83,168,255,0.06);
+      border-radius: 4px; margin-bottom: 8px; color: var(--muted);
+      font-style: italic;
+    }
+    .window-audio:empty { display: none; }
+    .l1-audio {
+      font-size: 9px; color: var(--muted); font-style: italic;
+      padding: 2px 8px 4px 8px; border-top: 1px solid var(--border);
+      background: rgba(83,168,255,0.03);
+    }
+    .window-meta {
+      font-size: 10px; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .window-progress {
+      margin-top: 6px;
+    }
+    .window-progress-label { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+    .window-progress-bar {
+      width: 100%; height: 8px; border-radius: 4px;
+      background: var(--surface); overflow: hidden; border: 1px solid var(--border);
+    }
+    .window-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--l2), #b794f6);
+      transition: width 100ms linear;
+    }
+
+    /* Scene graph panel */
+    .sg-panel {
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      max-height: 160px;
+      overflow-y: auto;
+      padding: 8px 14px;
+      background: rgba(26,31,53,0.7);
+    }
+    .sg-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 5px;
+    }
+    .sg-triplets {
+      display: flex; flex-wrap: wrap; gap: 3px;
+    }
+    .sg-triplet {
+      font-size: 10px; padding: 2px 5px; border-radius: 3px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: inline-flex; align-items: center; gap: 2px;
+    }
+    .sg-subj { font-weight: 600; color: var(--ok); }
+    .sg-pred { font-weight: 600; padding: 0 3px; border-radius: 2px; }
+    .sg-obj { color: var(--warn); }
+    .sg-empty { color: var(--muted); font-style: italic; font-size: 11px; }
+
+    /* Transcript status in right panel header */
+    .transcript-status {
+      margin-top: 6px; padding: 2px 8px;
+      background: rgba(83,168,255,0.08);
+      border: 1px solid rgba(83,168,255,0.2);
+      border-radius: 5px;
+      max-height: 48px; overflow-y: auto;
+      font-size: 11px; line-height: 1.4;
+    }
+    .transcript-status .transcript-line {
+      color: #e8ecff;
+    }
+    .transcript-status .transcript-empty {
+      color: var(--muted); font-style: italic;
+    }
+
+    /* Hierarchy content (L1 steps + L0 segments for current window) */
+    .hierarchy-content {
+      flex: 1; overflow-y: auto; padding: 8px 14px;
+    }
+    .section-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 6px;
+    }
+
+    .step-block {
+      margin-bottom: 4px; border: 1px solid var(--border);
+      border-radius: 5px; overflow: hidden; transition: border-color 0.2s;
+    }
+    .step-block.active { border-color: var(--l1); background: rgba(59,130,246,0.06); }
+    .step-header {
+      padding: 5px 8px; background: var(--surface);
+      display: flex; align-items: center; gap: 5px;
+      cursor: pointer;
+    }
+    .step-header:hover { background: #2a3358; }
+    .step-summary { font-size: 10px; flex: 1; }
+    .phase-badge {
+      font-size: 9px; font-weight: 700; padding: 2px 5px;
+      border-radius: 3px; color: white; flex-shrink: 0;
+    }
+    .phase-badge.l2 { background: var(--l2); }
+    .phase-badge.l1 { background: var(--l1); }
+    .phase-badge.l0 { background: var(--l0); }
+    .phase-time {
+      font-size: 9px; color: var(--muted); font-family: monospace; flex-shrink: 0;
+    }
+    .phase-dur { font-size: 9px; color: var(--muted); flex-shrink: 0; }
+    .step-body { display: none; padding: 3px 6px 4px 18px; }
+    .step-block.expanded .step-body { display: block; }
+
+    .l0-item {
+      padding: 3px 6px; font-size: 10px; border-radius: 3px;
+      margin: 2px 0; display: flex; align-items: center; gap: 4px;
+      transition: background 0.15s; border-left: 2px solid transparent;
+    }
+    .l0-item.active { background: rgba(100,116,139,0.2); border-left-color: var(--l0); }
+    .l0-time { font-size: 9px; color: var(--muted); font-family: monospace; flex-shrink: 0; }
+    .l0-desc { flex: 1; color: var(--text); }
+    .l0-dur { font-size: 9px; color: var(--muted); flex-shrink: 0; }
+    .pred-badge {
+      font-size: 9px; font-weight: 500; padding: 1px 5px;
+      border-radius: 3px; border: 1px solid; white-space: nowrap;
+    }
+    .idle { color: var(--muted); font-style: italic; font-size: 10px; }
+
+    /* Camera grid */
+    .camera-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 5px;
+      padding: 6px;
+      background: #0a0e1d;
+      min-height: 0;
+    }
+    .camera-cell {
+      display: flex; flex-direction: column;
+      min-height: 0; border: 1px solid #3a4574;
+      border-radius: 5px; overflow: hidden; background: #12182c;
+    }
+    .camera-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--muted);
+      padding: 2px 6px; background: #1a2240;
+      border-bottom: 1px solid #3a4574; flex-shrink: 0;
+    }
+    .camera-frame {
+      flex: 1; width: 100%; min-height: 0;
+      object-fit: contain; background: #000;
+    }
+    .camera-cell.span-full { grid-column: 1 / -1; }
+    .camera-cell.monitor-cell { border-color: var(--l2); }
+    .camera-cell.monitor-cell .camera-label { background: #1e1040; color: var(--l2); }
+
+    .foot {
+      font-size: 10px; color: var(--muted); padding: 6px 14px;
+      border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class="panel-header">
+        <h2>Hierarchy Video Player</h2>
+        <div class="subtitle">Window = L2 Phase | L1 Steps | L0 Atomic | Scene Graph</div>
+      </div>
+      <div class="controls-bar">
+        <button id="playBtn">Play</button>
+        <button id="prevBtn">-1s</button>
+        <button id="nextBtn">+1s</button>
+        <button id="prevWinBtn">◀ Prev Phase</button>
+        <button id="nextWinBtn">Next Phase ▶</button>
+        <button id="speedBtn">1x</button>
+        <input id="timeline" type="range" min="0" max="0" value="0" step="1" />
+        <span class="time-display" id="timeDisplay">0s</span>
+      </div>
+      <div class="role-tabs" id="roleTabs"></div>
+      <div class="window-info" id="windowInfo">
+        <div class="window-title">
+          <span class="badge">L2</span>
+          <span class="win-num" id="winNum">Phase 1 / ?</span>
+        </div>
+        <div class="window-summary" id="winSummary">—</div>
+        <div class="window-audio" id="winAudio"></div>
+        <div class="window-meta">
+          <span id="winTime">?</span>
+          <span id="winDur">?</span>
+        </div>
+        <div class="window-progress">
+          <div class="window-progress-label" id="winProgressLabel">0 / 0s</div>
+          <div class="window-progress-bar">
+            <div class="window-progress-fill" id="winProgressFill"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sg-panel">
+        <div class="sg-title">Scene Graph at <span id="sgTime">t=?</span></div>
+        <div class="sg-triplets" id="sgTriplets">
+          <span class="sg-empty">No data</span>
+        </div>
+      </div>
+      <div class="hierarchy-content" id="hierarchyContent">
+        <div class="section-label">L1 Steps & L0 Segments in this Phase</div>
+      </div>
+      <div class="foot">
+        Serve: <code>python3 -m http.server 8080 --directory /mnt/home/nhatvu/dlhm</code> |
+        Open: <code>http://localhost:8080/033_PKA_hierarchy_video_sync_qwen27b.html</code>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="panel-header">
+        <h2>Multi-Camera View</h2>
+        <div class="subtitle" id="frameInfo">—</div>
+        <div class="monitor-status" id="monitorStatus"></div>
+        <div class="transcript-status" id="transcriptStatus">
+          <div class="transcript-empty">— silence —</div>
+        </div>
+      </div>
+      <div id="cameraGrid" class="camera-grid">
+        <div class="camera-cell" data-camera="camera01">
+          <div class="camera-label">camera01</div>
+          <img class="camera-frame" alt="camera01" />
+        </div>
+        <div class="camera-cell" data-camera="camera02">
+          <div class="camera-label">camera02</div>
+          <img class="camera-frame" alt="camera02" />
+        </div>
+        <div class="camera-cell" data-camera="camera03">
+          <div class="camera-label">camera03</div>
+          <img class="camera-frame" alt="camera03" />
+        </div>
+        <div class="camera-cell" data-camera="camera04">
+          <div class="camera-label">camera04</div>
+          <img class="camera-frame" alt="camera04" />
+        </div>
+        <div class="camera-cell" data-camera="camera05">
+          <div class="camera-label">camera05</div>
+          <img class="camera-frame" alt="camera05" />
+        </div>
+        <div class="camera-cell monitor-cell" data-camera="simstation">
+          <div class="camera-label">Robot Monitor Screen</div>
+          <img class="camera-frame" alt="simstation" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const hierarchyData = {"roles": {"circulator": {"role_human": "circulator nurse", "level0": [{"tp_start": "000000", "tp_end": "000034", "duration_frames": 2, "active_predicates": [], "segment_id": "circulator_L0_000", "role": "circulator", "level": 0, "role_human": "circulator nurse", "time_start": 165, "time_end": 199, "duration_s": 35, "description": "circulator nurse: no active interactions", "transcript": []}, {"tp_start": "000035", "tp_end": "000038", "duration_frames": 4, "active_predicates": [["Assisting", "nurse"], ["Holding", "instrument"]], "segment_id": "circulator_L0_001", "role": "circulator", "level": 0, "role_human": "circulator nurse", "time_start": 200, "time_end": 203, "duration_s": 4, "description": "circulator nurse: is assisting scrub nurse; is holding surgical instrument", "transcript": []}, {"tp_start": "000039", "tp_end": "000050", "duration_frames": 6, "active_predicates": [["Holding", "instrument"]], "segment_id": "circulator_L0_002", "role": "circulator", "level": 0, "role_human": "circulator nurse", "time_start": 204, "time_end": 215, "duration_s": 12, "description": "circulator nurse: is holding surgical instrument", "transcript": []}, {"tp_start": "000051", "tp_end": "000061", "duration_frames": 4, "active_predicates": [], "segment_id": "circulator_L0_003", "role": "circulator", "level": 0, "role_human": "circulator nurse", "time_start": 216, "time_end": 226, "duration_s": 11, "description": "circulator nurse: no active interactions", "transcript": []}, {"tp_start": "000062", "tp_end": "000065", "duration_frames": 4, "active_predicates": [["Holding", "instrument"]], "segment_id": "circulator_L0_004", "role": "circulator", "level": 0, "role_human": "circulator nurse", "time_start": 227, "time_end": 230, "duration_s": 4, "description": "circulator nurse: is holding surgical instrument", "transcript": []}], "level1": [{"segment_id": "circulator_L1_000", "role": "circulator", "level": 1, "role_human": "circulator nurse", "segment_ids": ["circulator_L0_000", "circulator_L0_001", "circulator_L0_002", "circulator_L0_003", "circulator_L0_004"], "time_start": 165, "time_end": 230, "duration_s": 66, "summary": "The circulator nurse assists the scrub nurse and holds a surgical instrument with brief pauses in between.", "audio_summary": "", "transcript": []}], "level2": [{"segment_id": "circulator_L2_000", "role": "circulator", "level": 2, "role_human": "circulator nurse", "child_ids": ["circulator_L1_000"], "time_start": 165, "time_end": 230, "summary": "The circulator nurse assists the scrub nurse and holds a surgical instrument with brief pauses in between.", "transcript": []}], "is_robot": false, "is_tool": false}, "instrument": {"role_human": "surgical instrument", "level0": [{"tp_start": "000027", "tp_end": "000034", "duration_frames": 5, "active_predicates": [["Holding", "nurse"]], "segment_id": "instrument_L0_000", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 192, "time_end": 199, "duration_s": 8, "description": "surgical instrument: scrub nurse is holding", "transcript": []}, {"tp_start": "000035", "tp_end": "000040", "duration_frames": 6, "active_predicates": [["Holding", "circulator"], ["Holding", "nurse"]], "segment_id": "instrument_L0_001", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 200, "time_end": 205, "duration_s": 6, "description": "surgical instrument: circulator nurse is holding; scrub nurse is holding", "transcript": []}, {"tp_start": "000047", "tp_end": "000050", "duration_frames": 4, "active_predicates": [["Holding", "circulator"]], "segment_id": "instrument_L0_002", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 212, "time_end": 215, "duration_s": 4, "description": "surgical instrument: circulator nurse is holding", "transcript": []}, {"tp_start": "000052", "tp_end": "000060", "duration_frames": 9, "active_predicates": [["Holding", "nurse"]], "segment_id": "instrument_L0_003", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 217, "time_end": 225, "duration_s": 9, "description": "surgical instrument: scrub nurse is holding", "transcript": []}, {"tp_start": "000062", "tp_end": "000063", "duration_frames": 2, "active_predicates": [["Holding", "circulator"]], "segment_id": "instrument_L0_004", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 227, "time_end": 228, "duration_s": 2, "description": "surgical instrument: circulator nurse is holding", "transcript": []}, {"tp_start": "000064", "tp_end": "000065", "duration_frames": 2, "active_predicates": [["Holding", "circulator"], ["Holding", "nurse"]], "segment_id": "instrument_L0_005", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 229, "time_end": 230, "duration_s": 2, "description": "surgical instrument: circulator nurse is holding; scrub nurse is holding", "transcript": []}, {"tp_start": "000067", "tp_end": "000139", "duration_frames": 55, "active_predicates": [["Holding", "nurse"]], "segment_id": "instrument_L0_006", "role": "instrument", "level": 0, "role_human": "surgical instrument", "time_start": 232, "time_end": 304, "duration_s": 73, "description": "surgical instrument: scrub nurse is holding", "transcript": []}], "level1": [{"segment_id": "instrument_L1_000", "role": "instrument", "level": 1, "role_human": "surgical instrument", "segment_ids": ["instrument_L0_000", "instrument_L0_001", "instrument_L0_002", "instrument_L0_003", "instrument_L0_004", "instrument_L0_005", "instrument_L0_006"], "time_start": 192, "time_end": 304, "duration_s": 113, "summary": "The surgical instrument is repeatedly transferred between the scrub nurse and the circulator nurse before being held continuously by the scrub nurse.", "audio_summary": "", "transcript": []}], "level2": [{"segment_id": "instrument_L2_000", "role": "instrument", "level": 2, "role_human": "surgical instrument", "child_ids": ["instrument_L1_000"], "time_start": 192, "time_end": 304, "summary": "The surgical instrument is repeatedly transferred between the scrub nurse and the circulator nurse before being held continuously by the scrub nurse.", "transcript": []}], "is_robot": false, "is_tool": true}, "mps": {"role_human": "robot technician (MPS)", "level0": [{"tp_start": "000000", "tp_end": "000003", "duration_frames": 4, "active_predicates": [["Manipulating", "mps_station"]], "segment_id": "mps_L0_000", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 165, "time_end": 168, "duration_s": 4, "description": "robot technician (MPS): is manipulating MPS workstation", "transcript": []}, {"tp_start": "000004", "tp_end": "000005", "duration_frames": 2, "active_predicates": [], "segment_id": "mps_L0_001", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 169, "time_end": 170, "duration_s": 2, "description": "robot technician (MPS): no active interactions", "transcript": []}, {"tp_start": "000006", "tp_end": "000018", "duration_frames": 13, "active_predicates": [["Manipulating", "mps_station"]], "segment_id": "mps_L0_002", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 171, "time_end": 183, "duration_s": 13, "description": "robot technician (MPS): is manipulating MPS workstation", "transcript": []}, {"tp_start": "000019", "tp_end": "000037", "duration_frames": 19, "active_predicates": [], "segment_id": "mps_L0_003", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 184, "time_end": 202, "duration_s": 19, "description": "robot technician (MPS): no active interactions", "transcript": []}, {"tp_start": "000038", "tp_end": "000049", "duration_frames": 12, "active_predicates": [["Manipulating", "mps_station"]], "segment_id": "mps_L0_004", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 203, "time_end": 214, "duration_s": 12, "description": "robot technician (MPS): is manipulating MPS workstation", "transcript": []}, {"tp_start": "000050", "tp_end": "000114", "duration_frames": 65, "active_predicates": [], "segment_id": "mps_L0_005", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 215, "time_end": 279, "duration_s": 65, "description": "robot technician (MPS): no active interactions", "transcript": []}, {"tp_start": "000115", "tp_end": "000138", "duration_frames": 24, "active_predicates": [["Manipulating", "mps_station"]], "segment_id": "mps_L0_006", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 280, "time_end": 303, "duration_s": 24, "description": "robot technician (MPS): is manipulating MPS workstation", "transcript": []}, {"tp_start": "000139", "tp_end": "000141", "duration_frames": 3, "active_predicates": [], "segment_id": "mps_L0_007", "role": "mps", "level": 0, "role_human": "robot technician (MPS)", "time_start": 304, "time_end": 306, "duration_s": 3, "description": "robot technician (MPS): no active interactions", "transcript": []}], "level1": [{"segment_id": "mps_L1_000", "role": "mps", "level": 1, "role_human": "robot technician (MPS)", "segment_ids": ["mps_L0_000", "mps_L0_001", "mps_L0_002"], "time_start": 165, "time_end": 183, "duration_s": 19, "summary": "The robot technician manipulates the MPS workstation with a brief pause in between.", "audio_summary": "", "transcript": []}, {"segment_id": "mps_L1_001", "role": "mps", "level": 1, "role_human": "robot technician (MPS)", "segment_ids": ["mps_L0_003", "mps_L0_004", "mps_L0_005", "mps_L0_006", "mps_L0_007"], "time_start": 184, "time_end": 306, "duration_s": 123, "summary": "The robot technician resumes manipulating the MPS workstation after a short idle period.", "audio_summary": "", "transcript": []}], "level2": [{"segment_id": "mps_L2_000", "role": "mps", "level": 2, "role_human": "robot technician (MPS)", "child_ids": ["mps_L1_000", "mps_L1_001"], "time_start": 165, "time_end": 306, "duration_s": 142, "summary": "The robot technician operates the MPS workstation to prepare and configure the robotic system for the procedure.", "audio_summary": "", "transcript": []}], "is_robot": false, "is_tool": false}, "nurse": {"role_human": "scrub nurse", "level0": [{"tp_start": "000000", "tp_end": "000021", "duration_frames": 22, "active_predicates": [], "segment_id": "nurse_L0_000", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 165, "time_end": 186, "duration_s": 22, "description": "scrub nurse: no active interactions", "transcript": []}, {"tp_start": "000022", "tp_end": "000027", "duration_frames": 6, "active_predicates": [["Holding", "saw"], ["Manipulating", "mako_robot"]], "segment_id": "nurse_L0_001", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 187, "time_end": 192, "duration_s": 6, "description": "scrub nurse: is holding bone saw; is manipulating Mako robotic arm", "transcript": []}, {"tp_start": "000028", "tp_end": "000030", "duration_frames": 3, "active_predicates": [["Holding", "instrument"], ["Preparing", "instrument_table"]], "segment_id": "nurse_L0_002", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 193, "time_end": 195, "duration_s": 3, "description": "scrub nurse: is holding surgical instrument; is preparing instrument table", "transcript": []}, {"tp_start": "000031", "tp_end": "000034", "duration_frames": 4, "active_predicates": [["Preparing", "instrument_table"]], "segment_id": "nurse_L0_003", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 196, "time_end": 199, "duration_s": 4, "description": "scrub nurse: is preparing instrument table", "transcript": []}, {"tp_start": "000035", "tp_end": "000040", "duration_frames": 6, "active_predicates": [["Holding", "instrument"], ["Preparing", "instrument_table"]], "segment_id": "nurse_L0_004", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 200, "time_end": 205, "duration_s": 6, "description": "scrub nurse: is holding surgical instrument; is preparing instrument table", "transcript": []}, {"tp_start": "000041", "tp_end": "000046", "duration_frames": 6, "active_predicates": [["Preparing", "instrument_table"]], "segment_id": "nurse_L0_005", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 206, "time_end": 211, "duration_s": 6, "description": "scrub nurse: is preparing instrument table", "transcript": []}, {"tp_start": "000047", "tp_end": "000051", "duration_frames": 5, "active_predicates": [], "segment_id": "nurse_L0_006", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 212, "time_end": 216, "duration_s": 5, "description": "scrub nurse: no active interactions", "transcript": []}, {"tp_start": "000052", "tp_end": "000058", "duration_frames": 7, "active_predicates": [["Holding", "instrument"]], "segment_id": "nurse_L0_007", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 217, "time_end": 223, "duration_s": 7, "description": "scrub nurse: is holding surgical instrument", "transcript": []}, {"tp_start": "000059", "tp_end": "000080", "duration_frames": 22, "active_predicates": [["Holding", "instrument"], ["Preparing", "instrument_table"]], "segment_id": "nurse_L0_008", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 224, "time_end": 245, "duration_s": 22, "description": "scrub nurse: is holding surgical instrument; is preparing instrument table", "transcript": []}, {"tp_start": "000081", "tp_end": "000082", "duration_frames": 2, "active_predicates": [["Holding", "instrument"]], "segment_id": "nurse_L0_009", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 246, "time_end": 247, "duration_s": 2, "description": "scrub nurse: is holding surgical instrument", "transcript": []}, {"tp_start": "000083", "tp_end": "000104", "duration_frames": 22, "active_predicates": [["Holding", "instrument"], ["Holding", "saw"], ["Manipulating", "mako_robot"]], "segment_id": "nurse_L0_010", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 248, "time_end": 269, "duration_s": 22, "description": "scrub nurse: is holding surgical instrument; is holding bone saw; is manipulating Mako robotic arm", "transcript": []}, {"tp_start": "000105", "tp_end": "000106", "duration_frames": 2, "active_predicates": [["Touching", "mako_robot"]], "segment_id": "nurse_L0_011", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 270, "time_end": 271, "duration_s": 2, "description": "scrub nurse: is touching Mako robotic arm", "transcript": []}, {"tp_start": "000107", "tp_end": "000122", "duration_frames": 16, "active_predicates": [], "segment_id": "nurse_L0_012", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 272, "time_end": 287, "duration_s": 16, "description": "scrub nurse: no active interactions", "transcript": []}, {"tp_start": "000123", "tp_end": "000141", "duration_frames": 19, "active_predicates": [["Holding", "instrument"], ["Manipulating", "mako_robot"]], "segment_id": "nurse_L0_013", "role": "nurse", "level": 0, "role_human": "scrub nurse", "time_start": 288, "time_end": 306, "duration_s": 19, "description": "scrub nurse: is holding surgical instrument; is manipulating Mako robotic arm", "transcript": []}], "level1": [{"segment_id": "nurse_L1_000", "role": "nurse", "level": 1, "role_human": "scrub nurse", "segment_ids": ["nurse_L0_000", "nurse_L0_001", "nurse_L0_002", "nurse_L0_003", "nurse_L0_004", "nurse_L0_005", "nurse_L0_006", "nurse_L0_007", "nurse_L0_008", "nurse_L0_009"], "time_start": 165, "time_end": 247, "duration_s": 83, "summary": "The scrub nurse prepares the instrument table and handles various surgical instruments, including a brief pause.", "audio_summary": "", "transcript": []}, {"segment_id": "nurse_L1_001", "role": "nurse", "level": 1, "role_human": "scrub nurse", "segment_ids": ["nurse_L0_010", "nurse_L0_011", "nurse_L0_012", "nurse_L0_013"], "time_start": 248, "time_end": 306, "duration_s": 59, "summary": "The scrub nurse manipulates the Mako robotic arm while holding a bone saw and surgical instrument.", "audio_summary": "", "transcript": []}], "level2": [{"segment_id": "nurse_L2_000", "role": "nurse", "level": 2, "role_human": "scrub nurse", "child_ids": ["nurse_L1_000", "nurse_L1_001"], "time_start": 165, "time_end": 306, "duration_s": 142, "summary": "The scrub nurse prepares the instrument table and assists with the initial setup of the Mako robotic arm for the procedure.", "audio_summary": "", "transcript": []}], "is_robot": false, "is_tool": false}, "robot_monitor": {"role_human": "robot monitor (Mako screen)", "level0": [{"tp_start": "000000", "tp_end": "000040", "duration_frames": 41, "active_predicates": [["Phase", "Before Surgery RIO Check"]], "segment_id": "robot_monitor_L0_000", "role": "robot_monitor", "level": 0, "role_human": "robot monitor (Mako screen)", "time_start": 165, "time_end": 205, "duration_s": 41, "description": "robot monitor (Mako screen): Before Surgery RIO Check", "transcript": []}, {"tp_start": "000041", "tp_end": "000128", "duration_frames": 88, "active_predicates": [["Phase", "Surgery Planning"]], "segment_id": "robot_monitor_L0_001", "role": "robot_monitor", "level": 0, "role_human": "robot monitor (Mako screen)", "time_start": 206, "time_end": 293, "duration_s": 88, "description": "robot monitor (Mako screen): Surgery Planning", "transcript": []}, {"tp_start": "000129", "tp_end": "000141", "duration_frames": 13, "active_predicates": [["Phase", "Before Surgery RIO Check"]], "segment_id": "robot_monitor_L0_002", "role": "robot_monitor", "level": 0, "role_human": "robot monitor (Mako screen)", "time_start": 294, "time_end": 306, "duration_s": 13, "description": "robot monitor (Mako screen): Before Surgery RIO Check", "transcript": []}], "level1": [{"segment_id": "robot_monitor_L1_000", "role": "robot_monitor", "level": 1, "role_human": "robot monitor (Mako screen)", "segment_ids": ["robot_monitor_L0_000", "robot_monitor_L0_001", "robot_monitor_L0_002"], "time_start": 165, "time_end": 306, "duration_s": 142, "summary": "The robot monitor performed pre-surgical RIO checks and surgery planning in a continuous sequence.", "audio_summary": "", "transcript": []}], "level2": [{"segment_id": "robot_monitor_L2_000", "role": "robot_monitor", "level": 2, "role_human": "robot monitor (Mako screen)", "child_ids": ["robot_monitor_L1_000"], "time_start": 165, "time_end": 306, "summary": "The robot monitor performed pre-surgical RIO checks and surgery planning in a continuous sequence.", "transcript": []}], "is_robot": true, "is_tool": false}, "saw": {"role_human": "bone saw", "level0": [{"tp_start": "000022", "tp_end": "000104", "duration_frames": 27, "active_predicates": [["Holding", "nurse"]], "segment_id": "saw_L0_000", "role": "saw", "level": 0, "role_human": "bone saw", "time_start": 187, "time_end": 269, "duration_s": 83, "description": "bone saw: scrub nurse is holding", "transcript": []}], "level1": [{"segment_id": "saw_L1_000", "role": "saw", "level": 1, "role_human": "bone saw", "segment_ids": ["saw_L0_000"], "time_start": 187, "time_end": 269, "summary": "bone saw: scrub nurse is holding", "transcript": []}], "level2": [{"segment_id": "saw_L2_000", "role": "saw", "level": 2, "role_human": "bone saw", "child_ids": ["saw_L1_000"], "time_start": 187, "time_end": 269, "summary": "bone saw: scrub nurse is holding", "transcript": []}], "is_robot": false, "is_tool": true}}, "role_order": ["circulator", "mps", "nurse", "robot_monitor", "instrument", "saw"], "time_range": [165, 306], "metadata": {"total_roles": 7, "total_level0_segments": 39, "debounce_frames": 2, "take_dir": "/tmp/nhatvu/nas_mount_13509/MM-OR_data/MM-OR_processed/033_PKA", "tp_range": ["000000", "000141"], "num_timepoints": 142, "time_range": [165, 306], "total_level1_segments": 9, "total_level2_segments": 7}, "monitor_timeline": [[165, 205, "Before Surgery RIO Check"], [206, 293, "Surgery Planning"], [294, 306, "Before Surgery RIO Check"]]};
+    const sceneGraphs = {"165": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "CloseTo", "instrument_table"]], "166": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "167": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "168": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "169": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "170": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "171": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "172": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "173": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "174": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "175": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "176": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "177": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "178": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "179": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "180": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "181": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "182": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "183": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "184": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "185": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"]], "186": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "patient"]], "187": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "saw"]], "188": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "saw"]], "189": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "saw"]], "190": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "saw"]], "191": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "saw"]], "192": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "patient"], ["nurse", "Holding", "instrument"]], "193": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "194": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "195": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "196": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "197": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "198": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "199": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"]], "200": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "Assisting", "nurse"], ["nurse", "Holding", "instrument"]], "201": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "Assisting", "nurse"], ["nurse", "Holding", "instrument"]], "202": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "Assisting", "nurse"], ["nurse", "Holding", "instrument"]], "203": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "Assisting", "nurse"], ["nurse", "Holding", "instrument"]], "204": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["nurse", "Holding", "instrument"]], "205": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["nurse", "Holding", "instrument"]], "206": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "207": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "208": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "209": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "210": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "211": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Preparing", "instrument_table"]], "212": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "CloseTo", "instrument_table"]], "213": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "CloseTo", "instrument_table"]], "214": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "CloseTo", "instrument_table"]], "215": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["circulator", "CloseTo", "instrument_table"]], "216": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "CloseTo", "instrument_table"]], "217": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "218": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "219": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "220": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "221": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "222": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "223": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "224": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "225": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "226": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"]], "227": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"]], "228": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"]], "229": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["nurse", "Holding", "instrument"]], "230": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["circulator", "CloseTo", "instrument_table"], ["circulator", "Holding", "instrument"], ["nurse", "Holding", "instrument"]], "231": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"]], "232": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "233": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "234": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "235": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "236": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "237": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "238": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "239": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "240": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "241": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "242": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "243": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "244": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "245": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "Preparing", "instrument_table"], ["nurse", "Holding", "instrument"]], "246": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "instrument_table"], ["nurse", "CloseTo", "instrument_table"], ["nurse", "Holding", "instrument"]], "247": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "patient"], ["nurse", "Holding", "instrument"]], "248": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "249": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "250": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "251": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "252": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "253": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "254": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "255": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "256": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "257": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "258": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "259": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "260": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "261": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "262": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "263": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "264": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "265": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "266": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "267": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "268": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "269": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"], ["nurse", "Holding", "saw"]], "270": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Touching", "mako_robot"]], "271": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Touching", "mako_robot"]], "272": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "273": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "274": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "275": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "276": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "277": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "278": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "279": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "280": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "281": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "282": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "283": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "284": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "285": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "286": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "287": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "CloseTo", "mako_robot"]], "288": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "289": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "290": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "291": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "292": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "293": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "294": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "295": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "296": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "297": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "298": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "299": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "300": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "301": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "302": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "303": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "Manipulating", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "304": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"], ["nurse", "Holding", "instrument"]], "305": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "Manipulating", "mako_robot"]], "306": [["patient", "LyingOn", "ot"], ["drape", "LyingOn", "ot"], ["mps", "CloseTo", "mps_station"], ["nurse", "CloseTo", "mako_robot"]]};
+    const colorDir = "viewer_links/033_PKA/colorimage";
+    const cameras = ["camera01", "camera02", "camera03", "camera04", "camera05"];
+    const predColors = {"Manipulating": "#3b82f6", "Calibrating": "#8b5cf6", "Preparing": "#f59e0b", "Assisting": "#10b981", "Holding": "#06b6d4", "Touching": "#64748b", "Drilling": "#ef4444", "Sawing": "#dc2626", "Hammering": "#b91c1c", "Suturing": "#ec4899", "Cutting": "#f97316", "Cementing": "#84cc16", "Cleaning": "#22d3ee", "Scanning": "#a78bfa", "CloseTo": "#475569", "LyingOn": "#374151", "Phase": "#a855f7", "Step": "#f59e0b"};
+    const entityNames = {"patient": "patient", "nurse": "scrub nurse", "mps": "robot technician (MPS)", "instrument_table": "instrument table", "anest": "anaesthetist", "ot": "operating table", "drape": "surgical drape", "circulator": "circulator nurse", "head_surgeon": "head surgeon", "ae": "anaesthesia equipment", "assistant_surgeon": "assistant surgeon", "instrument": "surgical instrument", "mps_station": "MPS workstation", "mako_robot": "Mako robotic arm", "monitor": "monitor", "tracker": "infrared tracker", "saw": "bone saw", "drill": "drill", "c_arm": "C-arm", "hammer": "hammer", "unrelated_person": "unrelated person", "robot_setup": "robot setup (physical)", "robot_monitor": "robot monitor (Mako screen)"};
+    const predicateNames = {"CloseTo": "is close to", "LyingOn": "is lying on", "Holding": "is holding", "Manipulating": "is manipulating", "Preparing": "is preparing", "Assisting": "is assisting", "Touching": "is touching", "Calibrating": "is calibrating", "Drilling": "is drilling", "Sawing": "is sawing", "Hammering": "is hammering", "Suturing": "is suturing", "Cutting": "is cutting", "Cementing": "is cementing", "Cleaning": "is cleaning", "Scanning": "is scanning"};
+    const timeStart = 165;
+    const timeEnd = 306;
+    const monitorTimeline = hierarchyData.monitor_timeline || [];
+    const simstationDir = "viewer_links/033_PKA/simstation";
+    const simstationMap = {"165": "007880", "166": "007881", "167": "007882", "168": "007883", "169": "007884", "170": "007885", "171": "007886", "172": "007887", "173": "007888", "174": "007889", "175": "007890", "176": "007891", "177": "007892", "178": "007893", "179": "007894", "180": "007895", "181": "007896", "182": "007897", "183": "007898", "184": "007899", "185": "007900", "186": "007901", "187": "007902", "188": "007903", "189": "007904", "190": "007905", "191": "007906", "192": "007907", "193": "007908", "194": "007909", "195": "007910", "196": "007911", "197": "007912", "198": "007913", "199": "007914", "200": "007915", "201": "007916", "202": "007917", "203": "007918", "204": "007919", "205": "007920", "206": "007921", "207": "007922", "208": "007923", "209": "007924", "210": "007925", "211": "007926", "212": "007927", "213": "007928", "214": "007929", "215": "007930", "216": "007931", "217": "007932", "218": "007933", "219": "007934", "220": "007935", "221": "007936", "222": "007937", "223": "007938", "224": "007939", "225": "007940", "226": "007941", "227": "007942", "228": "007943", "229": "007944", "230": "007945", "231": "007946", "232": "007947", "233": "007948", "234": "007949", "235": "007950", "236": "007951", "237": "007952", "238": "007953", "239": "007954", "240": "007955", "241": "007956", "242": "007957", "243": "007958", "244": "007959", "245": "007960", "246": "007961", "247": "007962", "248": "007963", "249": "007964", "250": "007965", "251": "007966", "252": "007967", "253": "007968", "254": "007969", "255": "007970", "256": "007971", "257": "007972", "258": "007973", "259": "007974", "260": "007975", "261": "007976", "262": "007977", "263": "007978", "264": "007979", "265": "007980", "266": "007981", "267": "007982", "268": "007983", "269": "007984", "270": "007985", "271": "007986", "272": "007987", "273": "007988", "274": "007989", "275": "007990", "276": "007991", "277": "007992", "278": "007993", "279": "007994", "280": "007995", "281": "007996", "282": "007997", "283": "007998", "284": "007999", "285": "008000", "286": "008001", "287": "008002", "288": "008003", "289": "008004", "290": "008005", "291": "008006", "292": "008007", "293": "008008", "294": "008009", "295": "008010", "296": "008011", "297": "008012", "298": "008013", "299": "008014", "300": "008015", "301": "008016", "302": "008017", "303": "008018", "304": "008019", "305": "008020", "306": "008021"};
+    const transcriptEntries = [];
+
+    const allValidTimes = Object.keys(sceneGraphs).map(Number).sort((a,b) => a - b);
+
+    // Per-role valid timestamps: only frames where the role appears as a subject
+    const roleTimesCache = {};
+    function buildRoleValidTimes(role) {
+      if (roleTimesCache[role]) return roleTimesCache[role];
+      const rd = hierarchyData.roles[role];
+      let times;
+      if (rd && rd.is_robot) {
+        // Robot roles (monitor logs) never appear as a scene-graph subject;
+        // they are valid across the whole colorimage timeline.
+        times = allValidTimes.slice();
+      } else if (rd && rd.is_tool) {
+        // Tool roles appear as the object (or implied by an action verb), not
+        // the subject -- include any frame where the tool is referenced.
+        times = allValidTimes.filter(t => {
+          const triplets = sceneGraphs[String(t)] || [];
+          return triplets.some(([s, p, o]) => o === role || s === role);
+        });
+        if (!times.length) times = allValidTimes.slice();
+      } else {
+        times = allValidTimes.filter(t => {
+          const triplets = sceneGraphs[String(t)] || [];
+          return triplets.some(([s, p, o]) => s === role);
+        });
+      }
+      roleTimesCache[role] = times;
+      return times;
+    }
+
+    function labelAtTime(timeline, t) {
+      for (let i = 0; i < timeline.length; i++) {
+        if (t >= timeline[i][0] && t <= timeline[i][1]) return timeline[i][2];
+      }
+      return null;
+    }
+
+    function renderMonitorStatus() {
+      const el = document.getElementById('monitorStatus');
+      if (!el) return;
+      const mon = labelAtTime(monitorTimeline, currentTime);
+      let html = '';
+      if (monitorTimeline.length) {
+        html += `<span class="mon-chip"><span class="mon-key">Robot Monitor</span>` +
+          `<span class="mon-val">${mon ? escapeHtml(mon) : '\u2014'}</span></span>`;
+      }
+      el.innerHTML = html;
+    }
+    let validTimes = allValidTimes;
+
+    function nextValidTime(t) {
+      for (let i = 0; i < validTimes.length; i++) { if (validTimes[i] > t) return validTimes[i]; }
+      return t;
+    }
+    function prevValidTime(t) {
+      for (let i = validTimes.length - 1; i >= 0; i--) { if (validTimes[i] < t) return validTimes[i]; }
+      return t;
+    }
+    function nearestValidTime(t) {
+      if (!validTimes.length) return t;
+      let best = validTimes[0];
+      for (const v of validTimes) { if (Math.abs(v - t) < Math.abs(best - t)) best = v; }
+      return best;
+    }
+    function nextValidTimeInRange(t, lo, hi) {
+      const nxt = nextValidTime(t);
+      return nxt <= hi ? nxt : null;
+    }
+    function prevValidTimeInRange(t, lo, hi) {
+      const prv = prevValidTime(t);
+      return prv >= lo ? prv : null;
+    }
+    function firstValidTimeInRange(lo, hi) {
+      for (const v of validTimes) { if (v >= lo && v <= hi) return v; }
+      return null;
+    }
+
+    let currentTime = allValidTimes.length ? allValidTimes[0] : timeStart;
+    let currentWindowIdx = 0;
+    let timer = null;
+    let playing = false;
+    let speed = 1;
+    let activeRole = null;
+
+    // Per-role L2 windows (the main navigation unit)
+    let windows = [];  // array of L2 segments for active role
+    let l1Lookup = {};
+    let l0Lookup = {};
+
+    // Init camera grid (5th spans)
+    (function() {
+      const cells = document.querySelectorAll('.camera-cell');
+      if (cells.length === 5) cells[4].classList.add('span-full');
+    })();
+
+    // Build role tabs
+    (function() {
+      const container = document.getElementById('roleTabs');
+      const roles = hierarchyData.role_order || Object.keys(hierarchyData.roles).sort();
+      roles.forEach((role, i) => {
+        const rd = hierarchyData.roles[role];
+        const tab = document.createElement('div');
+        tab.className = 'role-tab' + (i === 0 ? ' active' : '');
+        tab.dataset.role = role;
+        tab.textContent = rd.role_human;
+        tab.addEventListener('click', () => selectRole(role));
+        container.appendChild(tab);
+      });
+      if (roles.length) selectRole(roles[0]);
+    })();
+
+    function selectRole(role) {
+      activeRole = role;
+      validTimes = buildRoleValidTimes(role);
+      document.querySelectorAll('.role-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.role === role)
+      );
+      const rd = hierarchyData.roles[role];
+      windows = rd.level2 || [];
+      const l1segs = rd.level1 || [];
+      const l0segs = rd.level0 || [];
+      l1Lookup = {};
+      l1segs.forEach(s => l1Lookup[s.segment_id] = s);
+      l0Lookup = {};
+      l0segs.forEach(s => l0Lookup[s.segment_id] = s);
+
+      // Reset to first window
+      currentWindowIdx = 0;
+      if (windows.length) {
+        const ws = windows[0].time_start || timeStart;
+        const we = windows[0].time_end || timeEnd;
+        currentTime = firstValidTimeInRange(ws, we) ?? ws;
+      }
+      updateTimeline();
+      renderWindow();
+      syncUI();
+    }
+
+    function updateTimeline() {
+      const slider = document.getElementById('timeline');
+      if (!windows.length) { slider.min = timeStart; slider.max = timeEnd; return; }
+      const win = windows[currentWindowIdx];
+      slider.min = String(win.time_start || timeStart);
+      slider.max = String(win.time_end || timeEnd);
+      slider.value = String(currentTime);
+    }
+
+    function findWindowForTime(t) {
+      for (let i = 0; i < windows.length; i++) {
+        if (t >= windows[i].time_start && t <= windows[i].time_end) return i;
+      }
+      return currentWindowIdx;
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function humanizeEntity(id) {
+      return entityNames[id] || id.replace(/_/g, ' ');
+    }
+
+    function humanizePred(id) {
+      return predicateNames[id] || id;
+    }
+
+    function predBadgeHtml(pred, obj, toolRole) {
+      const color = predColors[pred] || '#94a3b8';
+      const label = toolRole
+        ? `${humanizeEntity(obj)} ${humanizePred(pred)}`
+        : `${humanizePred(pred)} ${humanizeEntity(obj)}`;
+      return `<span class="pred-badge" style="background:${color}20;color:${color};border-color:${color}50">${escapeHtml(label)}</span>`;
+    }
+
+    function renderSceneGraph() {
+      const triplets = sceneGraphs[String(currentTime)] || [];
+      document.getElementById('sgTime').textContent = `t=${currentTime}s`;
+      const container = document.getElementById('sgTriplets');
+      if (!triplets.length) {
+        container.innerHTML = '<span class="sg-empty">No relations at this frame</span>';
+        return;
+      }
+      container.innerHTML = triplets.map(([s, p, o]) => {
+        const color = predColors[p] || '#94a3b8';
+        return `<span class="sg-triplet">` +
+          `<span class="sg-subj">${escapeHtml(s)}</span>` +
+          `<span class="sg-pred" style="background:${color}25;color:${color}">${escapeHtml(p)}</span>` +
+          `<span class="sg-obj">${escapeHtml(o)}</span></span>`;
+      }).join('');
+    }
+
+    function renderTranscript() {
+      const container = document.getElementById('transcriptStatus');
+      const t = currentTime;
+      const active = transcriptEntries.filter(e => t >= e.start && t <= e.end);
+      if (!active.length) {
+        container.innerHTML = '<div class="transcript-empty">— silence —</div>';
+      } else {
+        container.innerHTML = active.map(e =>
+          `<div class="transcript-line">"${escapeHtml(e.text)}"</div>`
+        ).join('');
+      }
+    }
+
+    function renderWindow() {
+      if (!windows.length) {
+        document.getElementById('winNum').textContent = 'No phases';
+        document.getElementById('winSummary').textContent = '—';
+        document.getElementById('winTime').textContent = '';
+        document.getElementById('winDur').textContent = '';
+        document.getElementById('hierarchyContent').innerHTML = '';
+        return;
+      }
+
+      const win = windows[currentWindowIdx];
+      document.getElementById('winNum').textContent =
+        `Phase ${currentWindowIdx + 1} / ${windows.length}`;
+      document.getElementById('winSummary').textContent = win.summary || '—';
+      const audioEl = document.getElementById('winAudio');
+      audioEl.textContent = win.audio_summary ? `♫ ${win.audio_summary}` : '';
+      document.getElementById('winTime').textContent =
+        `${win.time_start}s – ${win.time_end}s`;
+      document.getElementById('winDur').textContent =
+        `Duration: ${win.duration_s || '?'}s`;
+
+      // Render L1 steps and L0 segments for this window
+      const childIds = win.child_ids || win.segment_ids || [];
+      let html = '<div class="section-label">L1 Steps & L0 Segments in this Phase</div>';
+
+      const isToolRole = !!(activeRole && hierarchyData.roles[activeRole]?.is_tool);
+
+      childIds.forEach(cid => {
+        const step = l1Lookup[cid];
+        if (!step) return;
+        const stepChildIds = step.segment_ids || [];
+        let atomicHtml = '';
+        stepChildIds.forEach(sid => {
+          const seg = l0Lookup[sid];
+          if (!seg) return;
+          const preds = (seg.active_predicates || []);
+          const predsHtml = preds.length
+            ? preds.map(([p,o]) => predBadgeHtml(p, o, isToolRole)).join(' ')
+            : '<span class="idle">idle</span>';
+          const dur = seg.duration_s != null ? seg.duration_s + 's' : '?';
+          atomicHtml += `<div class="l0-item" data-ts="${seg.time_start}" data-te="${seg.time_end}">` +
+            `<span class="phase-badge l0">L0</span>` +
+            `<span class="l0-time">${seg.time_start}–${seg.time_end}</span>` +
+            `<span class="l0-desc">${predsHtml}</span>` +
+            `<span class="l0-dur">${dur}</span></div>`;
+        });
+        const dur = step.duration_s != null ? step.duration_s + 's' : '?';
+        const l1Audio = step.audio_summary
+          ? `<div class="l1-audio">♫ ${escapeHtml(step.audio_summary)}</div>`
+          : '';
+        html += `<div class="step-block expanded" data-ts="${step.time_start}" data-te="${step.time_end}">` +
+          `<div class="step-header" onclick="this.parentElement.classList.toggle('expanded')">` +
+          `<span class="phase-badge l1">L1</span>` +
+          `<span class="phase-time">${step.time_start}–${step.time_end}</span>` +
+          `<span class="step-summary">${escapeHtml(step.summary || '')}</span>` +
+          `<span class="phase-dur">${dur}</span></div>` +
+          l1Audio +
+          `<div class="step-body">${atomicHtml}</div></div>`;
+      });
+
+      document.getElementById('hierarchyContent').innerHTML = html;
+    }
+
+    function padded(num, width = 6) {
+      return String(num).padStart(width, '0');
+    }
+
+    function buildFramePath(camera, timestamp) {
+      return `${colorDir}/${camera}_colorimage-${padded(timestamp)}.jpg`;
+    }
+
+    function syncUI() {
+      if (!windows.length) return;
+      const win = windows[currentWindowIdx];
+      const wStart = win.time_start || timeStart;
+      const wEnd = win.time_end || timeEnd;
+
+      if (currentTime < wStart) currentTime = wStart;
+      if (currentTime > wEnd) currentTime = wEnd;
+
+      document.getElementById('timeDisplay').textContent = `${currentTime}s`;
+      document.getElementById('timeline').value = String(currentTime);
+
+      // Window progress
+      const wDur = Math.max(wEnd - wStart, 1);
+      const elapsed = currentTime - wStart;
+      const pct = (elapsed / wDur) * 100;
+      document.getElementById('winProgressFill').style.width = pct + '%';
+      document.getElementById('winProgressLabel').textContent =
+        `${elapsed}s / ${wDur}s into phase`;
+
+      document.getElementById('frameInfo').textContent =
+        `t=${currentTime}s | frame ${padded(currentTime)} | Phase ${currentWindowIdx + 1}/${windows.length}`;
+
+      // Scene graph
+      renderSceneGraph();
+
+      // Transcript subtitle
+      renderTranscript();
+
+      // Robot monitor status (always synced to the frame)
+      renderMonitorStatus();
+
+      // Highlight active L1 and L0
+      document.querySelectorAll('.step-block').forEach(el => {
+        const ts = Number(el.dataset.ts), te = Number(el.dataset.te);
+        const active = currentTime >= ts && currentTime <= te;
+        el.classList.toggle('active', active);
+      });
+      document.querySelectorAll('.l0-item').forEach(el => {
+        const ts = Number(el.dataset.ts), te = Number(el.dataset.te);
+        el.classList.toggle('active', currentTime >= ts && currentTime <= te);
+      });
+
+      // Scroll active L0 into view
+      const activeL0 = document.querySelector('.l0-item.active');
+      if (activeL0) activeL0.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+      // Camera frames
+      document.querySelectorAll('.camera-cell').forEach(cell => {
+        const cam = cell.dataset.camera;
+        const img = cell.querySelector('.camera-frame');
+        let path;
+        if (cam === 'simstation') {
+          const simFrame = simstationMap[String(currentTime)];
+          path = simFrame
+            ? `${simstationDir}/camera01_${simFrame}.jpg`
+            : '';
+        } else {
+          path = buildFramePath(cam, currentTime);
+        }
+        if (path && img.getAttribute('data-path') !== path) {
+          img.setAttribute('data-path', path);
+          img.src = path;
+        }
+      });
+    }
+
+    function tick() {
+      if (!windows.length) return;
+      const win = windows[currentWindowIdx];
+      const wEnd = win.time_end || timeEnd;
+      const nxt = nextValidTimeInRange(currentTime, win.time_start || timeStart, wEnd);
+      if (nxt == null) {
+        // No more valid frames in this window -- advance to next
+        if (currentWindowIdx < windows.length - 1) {
+          currentWindowIdx++;
+          const nw = windows[currentWindowIdx];
+          const first = firstValidTimeInRange(nw.time_start || timeStart, nw.time_end || timeEnd);
+          currentTime = first ?? (nw.time_start || timeStart);
+          updateTimeline();
+          renderWindow();
+          syncUI();
+        } else {
+          stopPlayback();
+        }
+        return;
+      }
+      currentTime = nxt;
+      syncUI();
+    }
+
+    function startPlayback() {
+      if (timer) return;
+      timer = setInterval(tick, 1000 / speed);
+      playing = true;
+      document.getElementById('playBtn').textContent = 'Pause';
+    }
+
+    function stopPlayback() {
+      if (timer) { clearInterval(timer); timer = null; }
+      playing = false;
+      document.getElementById('playBtn').textContent = 'Play';
+    }
+
+    function togglePlayback() {
+      if (playing) stopPlayback(); else startPlayback();
+    }
+
+    function cycleSpeed() {
+      const speeds = [1, 2, 4, 8, 16];
+      const idx = (speeds.indexOf(speed) + 1) % speeds.length;
+      speed = speeds[idx];
+      document.getElementById('speedBtn').textContent = speed + 'x';
+      if (playing) { clearInterval(timer); timer = setInterval(tick, 1000 / speed); }
+    }
+
+    function goToPrevWindow() {
+      if (currentWindowIdx > 0) {
+        currentWindowIdx--;
+        const nw = windows[currentWindowIdx];
+        const first = firstValidTimeInRange(nw.time_start || timeStart, nw.time_end || timeEnd);
+        currentTime = first ?? (nw.time_start || timeStart);
+        updateTimeline();
+        renderWindow();
+        syncUI();
+      }
+    }
+
+    function goToNextWindow() {
+      if (currentWindowIdx < windows.length - 1) {
+        currentWindowIdx++;
+        const nw = windows[currentWindowIdx];
+        const first = firstValidTimeInRange(nw.time_start || timeStart, nw.time_end || timeEnd);
+        currentTime = first ?? (nw.time_start || timeStart);
+        updateTimeline();
+        renderWindow();
+        syncUI();
+      }
+    }
+
+    document.getElementById('playBtn').addEventListener('click', togglePlayback);
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      if (!windows.length) return;
+      const wStart = windows[currentWindowIdx].time_start || timeStart;
+      const prv = prevValidTimeInRange(currentTime, wStart, windows[currentWindowIdx].time_end || timeEnd);
+      if (prv != null) {
+        currentTime = prv;
+        syncUI();
+      } else if (currentWindowIdx > 0) {
+        goToPrevWindow();
+      }
+    });
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (!windows.length) return;
+      const wEnd = windows[currentWindowIdx].time_end || timeEnd;
+      const nxt = nextValidTimeInRange(currentTime, windows[currentWindowIdx].time_start || timeStart, wEnd);
+      if (nxt != null) {
+        currentTime = nxt;
+        syncUI();
+      } else if (currentWindowIdx < windows.length - 1) {
+        goToNextWindow();
+      }
+    });
+    document.getElementById('prevWinBtn').addEventListener('click', goToPrevWindow);
+    document.getElementById('nextWinBtn').addEventListener('click', goToNextWindow);
+    document.getElementById('speedBtn').addEventListener('click', cycleSpeed);
+    document.getElementById('timeline').addEventListener('input', (e) => {
+      currentTime = nearestValidTime(Number(e.target.value)); syncUI();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.key === ' ' || e.key === 'k') { e.preventDefault(); togglePlayback(); }
+      else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const wS = windows[currentWindowIdx]?.time_start || timeStart;
+        const wE = windows[currentWindowIdx]?.time_end || timeEnd;
+        const prv = prevValidTimeInRange(currentTime, wS, wE);
+        if (prv != null) { currentTime = prv; syncUI(); }
+        else if (currentWindowIdx > 0) goToPrevWindow();
+      }
+      else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        const wS = windows[currentWindowIdx]?.time_start || timeStart;
+        const wE = windows[currentWindowIdx]?.time_end || timeEnd;
+        const nxt = nextValidTimeInRange(currentTime, wS, wE);
+        if (nxt != null) { currentTime = nxt; syncUI(); }
+        else if (currentWindowIdx < windows.length - 1) goToNextWindow();
+      }
+      else if (e.key === 'ArrowUp' || e.key === 'p') { e.preventDefault(); goToPrevWindow(); }
+      else if (e.key === 'ArrowDown' || e.key === 'n') { e.preventDefault(); goToNextWindow(); }
+    });
+
+    syncUI();
+    if (playing) startPlayback();
+  </script>
+</body>
+</html>
