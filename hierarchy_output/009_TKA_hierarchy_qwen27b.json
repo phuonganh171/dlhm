@@ -52,7 +52,7 @@
           "time_start": 1260,
           "time_end": 3414,
           "duration_s": 2155,
-          "summary": "The anaesthetist briefly manipulated the operating table.",
+          "summary": "The anaesthetist briefly manipulates the operating table.",
           "audio_summary": "",
           "transcript": []
         }
@@ -69,7 +69,7 @@
           ],
           "time_start": 1260,
           "time_end": 3414,
-          "summary": "The anaesthetist briefly manipulated the operating table.",
+          "summary": "The anaesthetist briefly manipulates the operating table.",
           "transcript": []
         }
       ],
@@ -1104,32 +1104,18 @@
           "level": 2,
           "role_human": "assistant surgeon",
           "child_ids": [
-            "assistant_surgeon_L1_000"
+            "assistant_surgeon_L1_000",
+            "assistant_surgeon_L1_001"
           ],
           "time_start": 1020,
-          "time_end": 1302,
-          "duration_s": 283,
-          "summary": "The assistant surgeon calibrates the Mako robotic arm and prepares instruments.",
+          "time_end": 1710,
+          "duration_s": 691,
+          "summary": "The assistant surgeon performs initial robotic calibration and prepares the patient and instruments for the procedure.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "assistant_surgeon_L2_001",
-          "role": "assistant_surgeon",
-          "level": 2,
-          "role_human": "assistant surgeon",
-          "child_ids": [
-            "assistant_surgeon_L1_001"
-          ],
-          "time_start": 1308,
-          "time_end": 1710,
-          "duration_s": 403,
-          "summary": "The assistant surgeon performs continuous cleaning and preparation of the patient and instruments.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "assistant_surgeon_L2_002",
           "role": "assistant_surgeon",
           "level": 2,
           "role_human": "assistant surgeon",
@@ -1140,12 +1126,12 @@
           "time_start": 1716,
           "time_end": 2988,
           "duration_s": 1273,
-          "summary": "The assistant surgeon actively assists the head surgeon by holding instruments and interacting with the patient.",
+          "summary": "The assistant surgeon actively supports the head surgeon by holding instruments and assisting with patient contact during the main surgical steps.",
           "audio_summary": "",
           "transcript": []
         }
       ],
-      "num_level2_segments": 3
+      "num_level2_segments": 2
     },
     "c_arm": {
       "level0_segments": [
@@ -1379,7 +1365,7 @@
           "time_start": 3324,
           "time_end": 3420,
           "duration_s": 97,
-          "summary": "The circulator nurse holds a surgical instrument and then pauses briefly.",
+          "summary": "The circulator nurse holds a surgical instrument followed by a short period of inactivity.",
           "audio_summary": "",
           "transcript": []
         }
@@ -1398,7 +1384,7 @@
           "time_start": 1008,
           "time_end": 1410,
           "duration_s": 403,
-          "summary": "The circulator nurse assists the surgical team and prepares the patient for the procedure.",
+          "summary": "The circulator nurse assists the surgical team and prepares the patient by manipulating the operating table.",
           "audio_summary": "",
           "transcript": []
         },
@@ -1413,7 +1399,7 @@
           "time_start": 3324,
           "time_end": 3420,
           "duration_s": 97,
-          "summary": "The circulator nurse handles a surgical instrument during the procedure.",
+          "summary": "The circulator nurse holds a surgical instrument during a brief period of inactivity.",
           "audio_summary": "",
           "transcript": []
         }
@@ -2488,7 +2474,7 @@
           "time_start": 1854,
           "time_end": 2226,
           "duration_s": 373,
-          "summary": "The head surgeon calibrates the Mako robotic arm and touches the patient with short interruptions.",
+          "summary": "The head surgeon calibrates the Mako robotic arm and touches the patient with intermittent short pauses.",
           "audio_summary": "",
           "transcript": []
         },
@@ -2502,18 +2488,12 @@
             "head_surgeon_L0_017",
             "head_surgeon_L0_018",
             "head_surgeon_L0_019",
-            "head_surgeon_L0_020",
-            "head_surgeon_L0_021",
-            "head_surgeon_L0_022",
-            "head_surgeon_L0_023",
-            "head_surgeon_L0_024",
-            "head_surgeon_L0_025",
-            "head_surgeon_L0_026"
+            "head_surgeon_L0_020"
           ],
           "time_start": 2232,
-          "time_end": 2718,
-          "duration_s": 487,
-          "summary": "The head surgeon performs extensive sawing and drilling using the Mako robotic arm and bone saw, interspersed with calibration and brief pauses.",
+          "time_end": 2370,
+          "duration_s": 139,
+          "summary": "The head surgeon uses a bone saw with the robotic arm and manipulates the patient, interspersed with brief pauses.",
           "audio_summary": "",
           "transcript": []
         },
@@ -2523,28 +2503,76 @@
           "level": 1,
           "role_human": "head surgeon",
           "segment_ids": [
-            "head_surgeon_L0_027",
-            "head_surgeon_L0_028",
-            "head_surgeon_L0_029",
-            "head_surgeon_L0_030",
-            "head_surgeon_L0_031",
-            "head_surgeon_L0_032",
-            "head_surgeon_L0_033",
-            "head_surgeon_L0_034",
-            "head_surgeon_L0_035",
-            "head_surgeon_L0_036",
-            "head_surgeon_L0_037",
-            "head_surgeon_L0_038"
+            "head_surgeon_L0_021",
+            "head_surgeon_L0_022",
+            "head_surgeon_L0_023",
+            "head_surgeon_L0_024",
+            "head_surgeon_L0_025",
+            "head_surgeon_L0_026"
           ],
-          "time_start": 2724,
-          "time_end": 3114,
-          "duration_s": 391,
-          "summary": "The head surgeon performs bone cutting and drilling on the patient, interspersed with brief touches and instrument handling.",
+          "time_start": 2376,
+          "time_end": 2718,
+          "duration_s": 343,
+          "summary": "The head surgeon calibrates the robotic arm and performs extensive sawing of the patient.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "head_surgeon_L1_004",
+          "role": "head_surgeon",
+          "level": 1,
+          "role_human": "head surgeon",
+          "segment_ids": [
+            "head_surgeon_L0_027",
+            "head_surgeon_L0_028",
+            "head_surgeon_L0_029",
+            "head_surgeon_L0_030",
+            "head_surgeon_L0_031"
+          ],
+          "time_start": 2724,
+          "time_end": 2850,
+          "duration_s": 127,
+          "summary": "The head surgeon performs bone cutting and drilling on the patient, interspersed with brief touches and instrument handling.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "head_surgeon_L1_005",
+          "role": "head_surgeon",
+          "level": 1,
+          "role_human": "head surgeon",
+          "segment_ids": [
+            "head_surgeon_L0_032",
+            "head_surgeon_L0_033",
+            "head_surgeon_L0_034",
+            "head_surgeon_L0_035"
+          ],
+          "time_start": 2856,
+          "time_end": 3018,
+          "duration_s": 163,
+          "summary": "After a short pause, the surgeon resumes manipulating the patient with surgical instruments and direct contact.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "head_surgeon_L1_006",
+          "role": "head_surgeon",
+          "level": 1,
+          "role_human": "head surgeon",
+          "segment_ids": [
+            "head_surgeon_L0_036",
+            "head_surgeon_L0_037",
+            "head_surgeon_L0_038"
+          ],
+          "time_start": 3024,
+          "time_end": 3114,
+          "duration_s": 91,
+          "summary": "Following a brief idle period, the surgeon drills the patient and then proceeds to suture the wound.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "head_surgeon_L1_007",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -2557,12 +2585,12 @@
           "time_start": 3120,
           "time_end": 3204,
           "duration_s": 85,
-          "summary": "The head surgeon prepares the patient, with brief pauses in between.",
+          "summary": "The surgeon prepares the patient, with brief pauses in between the preparation activities.",
           "audio_summary": "",
           "transcript": []
         }
       ],
-      "num_level1_segments": 5,
+      "num_level1_segments": 8,
       "level2_segments": [
         {
           "segment_id": "head_surgeon_L2_000",
@@ -2570,12 +2598,13 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_000"
+            "head_surgeon_L1_000",
+            "head_surgeon_L1_001"
           ],
           "time_start": 1386,
-          "time_end": 1848,
-          "duration_s": 463,
-          "summary": "The head surgeon performs initial patient preparation.",
+          "time_end": 2226,
+          "duration_s": 841,
+          "summary": "The head surgeon performs initial patient preparation and calibrates the robotic arm for the procedure.",
           "audio_summary": "",
           "transcript": []
         },
@@ -2585,14 +2614,15 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_001",
             "head_surgeon_L1_002",
-            "head_surgeon_L1_003"
+            "head_surgeon_L1_003",
+            "head_surgeon_L1_004",
+            "head_surgeon_L1_005"
           ],
-          "time_start": 1854,
-          "time_end": 3114,
-          "duration_s": 1261,
-          "summary": "The head surgeon calibrates the robotic system and performs extensive bone cutting and drilling.",
+          "time_start": 2232,
+          "time_end": 3018,
+          "duration_s": 787,
+          "summary": "The surgeon utilizes the robotic arm and manual instruments to perform extensive bone cutting, drilling, and manipulation.",
           "audio_summary": "",
           "transcript": []
         },
@@ -2602,12 +2632,13 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_004"
+            "head_surgeon_L1_006",
+            "head_surgeon_L1_007"
           ],
-          "time_start": 3120,
+          "time_start": 3024,
           "time_end": 3204,
-          "duration_s": 85,
-          "summary": "The head surgeon performs final patient preparation steps.",
+          "duration_s": 181,
+          "summary": "The procedure concludes with final drilling, wound suturing, and post-operative patient preparation.",
           "audio_summary": "",
           "transcript": []
         }
@@ -3504,7 +3535,7 @@
           "time_start": 2124,
           "time_end": 2346,
           "duration_s": 223,
-          "summary": "The instrument is transferred back to the assistant surgeon, who holds it for the remainder of the sequence with occasional shared handling.",
+          "summary": "The instrument is transferred back to the assistant surgeon, who holds it for the remainder of the sequence with occasional joint handling.",
           "audio_summary": "",
           "transcript": []
         },
@@ -3556,7 +3587,7 @@
           "time_start": 3282,
           "time_end": 3330,
           "duration_s": 49,
-          "summary": "The instrument is passed from the robot technician and scrub nurse to the circulator nurse, concluding its active use in this sequence.",
+          "summary": "The instrument is handed off from the scrub nurse to the robot technician and finally to the circulator nurse.",
           "audio_summary": "",
           "transcript": []
         }
@@ -3575,7 +3606,7 @@
           "time_start": 323,
           "time_end": 1206,
           "duration_s": 884,
-          "summary": "The surgical instrument remains in the pre-operative holding phase, managed primarily by the scrub nurse and briefly by the robot technician before active use begins.",
+          "summary": "The surgical instrument undergoes an initial holding and brief transfer phase between the scrub nurse and the robot technician before active use.",
           "audio_summary": "",
           "transcript": []
         },
@@ -3587,14 +3618,12 @@
           "child_ids": [
             "instrument_L1_002",
             "instrument_L1_003",
-            "instrument_L1_004",
-            "instrument_L1_005",
-            "instrument_L1_006"
+            "instrument_L1_004"
           ],
           "time_start": 1218,
-          "time_end": 3216,
-          "duration_s": 1999,
-          "summary": "The instrument enters its active surgical phase, undergoing rapid exchanges and continuous manipulation by the head surgeon, assistant surgeon, and scrub nurse to perform core procedural tasks.",
+          "time_end": 2346,
+          "duration_s": 1129,
+          "summary": "The instrument transitions from rapid exchanges between the assistant and scrub nurse to primary control by the head surgeon and subsequent transfer to the assistant.",
           "audio_summary": "",
           "transcript": []
         },
@@ -3604,17 +3633,33 @@
           "level": 2,
           "role_human": "surgical instrument",
           "child_ids": [
+            "instrument_L1_005",
+            "instrument_L1_006"
+          ],
+          "time_start": 2352,
+          "time_end": 3216,
+          "duration_s": 865,
+          "summary": "The instrument is actively manipulated by both surgeons during a continuous procedural phase followed by a transfer back to the scrub nurse and then the head surgeon.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "instrument_L2_003",
+          "role": "instrument",
+          "level": 2,
+          "role_human": "surgical instrument",
+          "child_ids": [
             "instrument_L1_007"
           ],
           "time_start": 3282,
           "time_end": 3330,
           "duration_s": 49,
-          "summary": "The instrument's active lifecycle concludes as it is passed from the surgical team to the circulator nurse for final handling.",
+          "summary": "The instrument is handed off from the scrub nurse to the robot technician and finally to the circulator nurse, concluding its active usage in the procedure.",
           "audio_summary": "",
           "transcript": []
         }
       ],
-      "num_level2_segments": 3
+      "num_level2_segments": 4
     },
     "mps": {
       "level0_segments": [
@@ -4147,18 +4192,12 @@
             "mps_L0_003",
             "mps_L0_004",
             "mps_L0_005",
-            "mps_L0_006",
-            "mps_L0_007",
-            "mps_L0_008",
-            "mps_L0_009",
-            "mps_L0_010",
-            "mps_L0_011",
-            "mps_L0_012"
+            "mps_L0_006"
           ],
           "time_start": 479,
-          "time_end": 972,
-          "duration_s": 494,
-          "summary": "The robot technician performs initial manipulations of the Mako robotic arm and workstation with brief pauses in between.",
+          "time_end": 713,
+          "duration_s": 235,
+          "summary": "The robot technician performs initial manipulations of the Mako robotic arm and workstation with brief pauses.",
           "audio_summary": "",
           "transcript": []
         },
@@ -4168,18 +4207,38 @@
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
-            "mps_L0_013",
-            "mps_L0_014"
+            "mps_L0_007",
+            "mps_L0_008",
+            "mps_L0_009",
+            "mps_L0_010",
+            "mps_L0_011"
           ],
-          "time_start": 978,
-          "time_end": 1074,
-          "duration_s": 97,
-          "summary": "The technician briefly manipulates the robotic arm followed by a long idle period.",
+          "time_start": 719,
+          "time_end": 906,
+          "duration_s": 188,
+          "summary": "After a long idle period, the technician resumes manipulating the robotic arm and workstation while briefly holding a surgical instrument.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "mps_L1_002",
+          "role": "mps",
+          "level": 1,
+          "role_human": "robot technician (MPS)",
+          "segment_ids": [
+            "mps_L0_012",
+            "mps_L0_013",
+            "mps_L0_014"
+          ],
+          "time_start": 912,
+          "time_end": 1074,
+          "duration_s": 163,
+          "summary": "The technician briefly manipulates the robotic arm before entering a long idle period.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "mps_L1_003",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -4194,12 +4253,12 @@
           "time_start": 1146,
           "time_end": 1404,
           "duration_s": 259,
-          "summary": "The technician alternates between manipulating the workstation and holding instruments with short gaps in between.",
+          "summary": "The technician alternates between manipulating the workstation and holding a surgical instrument with intermittent pauses.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_003",
+          "segment_id": "mps_L1_004",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -4211,23 +4270,7 @@
           "time_start": 1476,
           "time_end": 2796,
           "duration_s": 1321,
-          "summary": "The robot technician engages in an extended session of manipulating the MPS workstation with a brief pause.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_004",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
-            "mps_L0_024",
-            "mps_L0_025"
-          ],
-          "time_start": 2826,
-          "time_end": 3018,
-          "duration_s": 193,
-          "summary": "The technician pauses briefly before resuming manipulation of the MPS workstation.",
+          "summary": "The technician engages in an extended session of manipulating the MPS workstation with a short break in between.",
           "audio_summary": "",
           "transcript": []
         },
@@ -4237,13 +4280,15 @@
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
+            "mps_L0_024",
+            "mps_L0_025",
             "mps_L0_026",
             "mps_L0_027"
           ],
-          "time_start": 3216,
+          "time_start": 2826,
           "time_end": 3420,
-          "duration_s": 205,
-          "summary": "The technician holds a surgical instrument for an extended period and then briefly manipulates the workstation.",
+          "duration_s": 595,
+          "summary": "Following a pause, the technician manipulates the workstation, holds a surgical instrument, and performs final workstation adjustments.",
           "audio_summary": "",
           "transcript": []
         }
@@ -4261,9 +4306,9 @@
             "mps_L1_002"
           ],
           "time_start": 479,
-          "time_end": 1404,
-          "duration_s": 926,
-          "summary": "The robot technician performs initial setup and brief manipulations of the robotic arm and workstation.",
+          "time_end": 1074,
+          "duration_s": 596,
+          "summary": "The robot technician performs initial setup and intermittent manipulations of the robotic arm and workstation during the early stages of the procedure.",
           "audio_summary": "",
           "transcript": []
         },
@@ -4277,10 +4322,10 @@
             "mps_L1_004",
             "mps_L1_005"
           ],
-          "time_start": 1476,
+          "time_start": 1146,
           "time_end": 3420,
-          "duration_s": 1945,
-          "summary": "The technician engages in an extended session of manipulating the MPS workstation and holding surgical instruments.",
+          "duration_s": 2275,
+          "summary": "The technician engages in extended workstation manipulation and final adjustments while coordinating with surgical instruments for the remainder of the procedure.",
           "audio_summary": "",
           "transcript": []
         }
@@ -6033,7 +6078,7 @@
           "time_start": 1158,
           "time_end": 1278,
           "duration_s": 121,
-          "summary": "The scrub nurse briefly pauses before preparing the instrument table and then waits.",
+          "summary": "The scrub nurse briefly prepares the instrument table after a short idle period.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6049,7 +6094,7 @@
           "time_start": 1284,
           "time_end": 1350,
           "duration_s": 67,
-          "summary": "The scrub nurse calibrates the Mako robotic arm and then pauses.",
+          "summary": "The scrub nurse calibrates the Mako robotic arm while holding an instrument, followed by a brief pause.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6068,7 +6113,7 @@
           "time_start": 1356,
           "time_end": 1512,
           "duration_s": 157,
-          "summary": "The scrub nurse prepares the patient while holding instruments, briefly organizes the table, and then pauses.",
+          "summary": "The scrub nurse prepares the patient while holding instruments and briefly organizes the instrument table.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6087,7 +6132,7 @@
           "time_start": 1518,
           "time_end": 1674,
           "duration_s": 157,
-          "summary": "The scrub nurse holds an instrument, prepares the instrument table, and then pauses.",
+          "summary": "The scrub nurse holds instruments and prepares the instrument table with intermittent pauses.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6105,7 +6150,7 @@
           "time_start": 1680,
           "time_end": 1788,
           "duration_s": 109,
-          "summary": "The scrub nurse holds an instrument, briefly prepares the table, and then enters a long pause.",
+          "summary": "The scrub nurse holds an instrument and briefly prepares the instrument table before a long idle period.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6126,7 +6171,7 @@
           "time_start": 1794,
           "time_end": 2034,
           "duration_s": 241,
-          "summary": "The scrub nurse intermittently prepares the instrument table with brief pauses in between.",
+          "summary": "The scrub nurse repeatedly prepares the instrument table and holds instruments with several short pauses in between.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6141,7 +6186,7 @@
           "time_start": 2040,
           "time_end": 2046,
           "duration_s": 7,
-          "summary": "The scrub nurse prepares the instrument table and holds instruments with short pauses in between.",
+          "summary": "The scrub nurse prepares the instrument table and holds instruments with brief interruptions.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6174,20 +6219,34 @@
             "nurse_L0_074",
             "nurse_L0_075",
             "nurse_L0_076",
-            "nurse_L0_077",
-            "nurse_L0_078",
-            "nurse_L0_079",
-            "nurse_L0_080"
+            "nurse_L0_077"
           ],
           "time_start": 2052,
-          "time_end": 3162,
-          "duration_s": 1111,
+          "time_end": 3126,
+          "duration_s": 1075,
           "summary": "The scrub nurse briefly holds a surgical instrument and prepares the instrument table.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "nurse_L1_011",
+          "role": "nurse",
+          "level": 1,
+          "role_human": "scrub nurse",
+          "segment_ids": [
+            "nurse_L0_078",
+            "nurse_L0_079",
+            "nurse_L0_080"
+          ],
+          "time_start": 3132,
+          "time_end": 3162,
+          "duration_s": 31,
+          "summary": "The scrub nurse alternates between preparing the instrument table and holding a surgical instrument with short pauses.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "nurse_L1_012",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -6207,7 +6266,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 12,
+      "num_level1_segments": 13,
       "level2_segments": [
         {
           "segment_id": "nurse_L2_000",
@@ -6224,7 +6283,7 @@
           "time_start": 221,
           "time_end": 1350,
           "duration_s": 1130,
-          "summary": "The scrub nurse prepares the instrument table and assists with the initial setup and calibration of the Mako robotic arm.",
+          "summary": "The scrub nurse manages the instrument table and assists with the initial setup and calibration of the Mako robotic arm.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6240,12 +6299,13 @@
             "nurse_L1_008",
             "nurse_L1_009",
             "nurse_L1_010",
-            "nurse_L1_011"
+            "nurse_L1_011",
+            "nurse_L1_012"
           ],
           "time_start": 1356,
           "time_end": 3318,
           "duration_s": 1963,
-          "summary": "The scrub nurse continuously manages the instrument table and provides instruments while assisting with patient preparation and the main surgical procedure.",
+          "summary": "The scrub nurse continuously prepares the instrument table and provides instruments to the surgical team throughout the main procedure.",
           "audio_summary": "",
           "transcript": []
         }
@@ -6823,12 +6883,13 @@
           "level": 2,
           "role_human": "robot monitor (Mako screen)",
           "child_ids": [
-            "robot_monitor_L1_000"
+            "robot_monitor_L1_000",
+            "robot_monitor_L1_001"
           ],
           "time_start": 197,
-          "time_end": 888,
-          "duration_s": 692,
-          "summary": "The robotic system undergoes a comprehensive pre-surgery calibration sequence to verify arm status, homing, accuracy, and angles.",
+          "time_end": 3018,
+          "duration_s": 2822,
+          "summary": "The robotic system completes its pre-surgery calibration and the team performs detailed bone registration for the femur and tibia.",
           "audio_summary": "",
           "transcript": []
         },
@@ -6838,13 +6899,12 @@
           "level": 2,
           "role_human": "robot monitor (Mako screen)",
           "child_ids": [
-            "robot_monitor_L1_001",
             "robot_monitor_L1_002"
           ],
-          "time_start": 894,
+          "time_start": 3024,
           "time_end": 3468,
-          "duration_s": 2575,
-          "summary": "The surgical team performs detailed bone registration for the femur and tibia, followed by the initiation of the next procedural phase.",
+          "duration_s": 445,
+          "summary": "The robotic system initiates the next major phase of the procedure following the completion of bone registration.",
           "audio_summary": "",
           "transcript": []
         }
@@ -7259,7 +7319,7 @@
           "time_start": 990,
           "time_end": 1002,
           "duration_s": 13,
-          "summary": "The bone saw is held by the scrub nurse while awaiting use.",
+          "summary": "The scrub nurse holds the bone saw while it remains idle.",
           "audio_summary": "",
           "transcript": []
         },
@@ -7274,7 +7334,7 @@
           "time_start": 1140,
           "time_end": 1230,
           "duration_s": 91,
-          "summary": "The bone saw is held by the assistant surgeon during a long idle period.",
+          "summary": "The assistant surgeon holds the bone saw during a long idle period.",
           "audio_summary": "",
           "transcript": []
         },
@@ -7293,7 +7353,7 @@
           "time_start": 2232,
           "time_end": 2772,
           "duration_s": 541,
-          "summary": "The head surgeon holds and actively uses the bone saw to cut bone in a continuous sequence of operations.",
+          "summary": "The head surgeon holds and actively uses the bone saw to cut bone with brief pauses in between.",
           "audio_summary": "",
           "transcript": []
         }
@@ -7312,7 +7372,7 @@
           "time_start": 990,
           "time_end": 1230,
           "duration_s": 241,
-          "summary": "The bone saw remains idle while being held by the scrub nurse and then the assistant surgeon before active use.",
+          "summary": "The bone saw remains idle while being held by the scrub nurse and then the assistant surgeon during the pre-operative preparation phase.",
           "audio_summary": "",
           "transcript": []
         },
@@ -7327,7 +7387,7 @@
           "time_start": 2232,
           "time_end": 2772,
           "duration_s": 541,
-          "summary": "The head surgeon actively uses the bone saw to perform continuous bone cutting operations.",
+          "summary": "The head surgeon actively utilizes the bone saw to perform extensive bone cutting with brief pauses.",
           "audio_summary": "",
           "transcript": []
         }
@@ -7339,7 +7399,7 @@
     "total_roles": 13,
     "total_level0_segments": 286,
     "debounce_frames": 2,
-    "take_dir": "/tmp/nhatvu/nas_mount_13509/MM-OR_data/MM-OR_processed/009_TKA",
+    "take_dir": "/tmp/nhatvu/nas_mount_13597/MM-OR_data/MM-OR_processed/009_TKA",
     "tp_range": [
       "000000",
       "000546"
@@ -7349,7 +7409,7 @@
       197,
       3468
     ],
-    "total_level1_segments": 53,
+    "total_level1_segments": 57,
     "total_level2_segments": 25
   },
   "debounce_analysis": {

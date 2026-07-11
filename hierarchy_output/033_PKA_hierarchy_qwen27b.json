@@ -114,7 +114,7 @@
           "time_start": 165,
           "time_end": 230,
           "duration_s": 66,
-          "summary": "The circulator nurse assists the scrub nurse and holds a surgical instrument with brief pauses in between.",
+          "summary": "The circulator nurse assists the scrub nurse by holding a surgical instrument, with brief pauses in between.",
           "audio_summary": "",
           "transcript": []
         }
@@ -131,7 +131,7 @@
           ],
           "time_start": 165,
           "time_end": 230,
-          "summary": "The circulator nurse assists the scrub nurse and holds a surgical instrument with brief pauses in between.",
+          "summary": "The circulator nurse assists the scrub nurse by holding a surgical instrument, with brief pauses in between.",
           "transcript": []
         }
       ],
@@ -307,7 +307,7 @@
           "time_start": 192,
           "time_end": 304,
           "duration_s": 113,
-          "summary": "The surgical instrument is repeatedly transferred between the scrub nurse and the circulator nurse before being held continuously by the scrub nurse.",
+          "summary": "The surgical instrument is passed between the scrub nurse and circulator nurse before being held by the scrub nurse for an extended period.",
           "audio_summary": "",
           "transcript": []
         }
@@ -324,7 +324,7 @@
           ],
           "time_start": 192,
           "time_end": 304,
-          "summary": "The surgical instrument is repeatedly transferred between the scrub nurse and the circulator nurse before being held continuously by the scrub nurse.",
+          "summary": "The surgical instrument is passed between the scrub nurse and circulator nurse before being held by the scrub nurse for an extended period.",
           "transcript": []
         }
       ],
@@ -526,7 +526,7 @@
           "time_start": 165,
           "time_end": 306,
           "duration_s": 142,
-          "summary": "The robot technician operates the MPS workstation to prepare and configure the robotic system for the procedure.",
+          "summary": "The robot technician performs continuous manipulation of the MPS workstation to configure the robotic system.",
           "audio_summary": "",
           "transcript": []
         }
@@ -888,7 +888,7 @@
           "time_start": 165,
           "time_end": 306,
           "duration_s": 142,
-          "summary": "The scrub nurse prepares the instrument table and assists with the initial setup of the Mako robotic arm for the procedure.",
+          "summary": "The scrub nurse prepares the instrument table and then assists with the Mako robotic arm and bone saw during the initial phase of the procedure.",
           "audio_summary": "",
           "transcript": []
         }
@@ -973,7 +973,7 @@
           "time_start": 165,
           "time_end": 306,
           "duration_s": 142,
-          "summary": "The robot monitor performed pre-surgical RIO checks and surgery planning in a continuous sequence.",
+          "summary": "The robot monitor performed pre-surgery RIO checks and surgery planning in a continuous sequence.",
           "audio_summary": "",
           "transcript": []
         }
@@ -990,7 +990,7 @@
           ],
           "time_start": 165,
           "time_end": 306,
-          "summary": "The robot monitor performed pre-surgical RIO checks and surgery planning in a continuous sequence.",
+          "summary": "The robot monitor performed pre-surgery RIO checks and surgery planning in a continuous sequence.",
           "transcript": []
         }
       ],
@@ -1115,7 +1115,7 @@
     "total_roles": 7,
     "total_level0_segments": 39,
     "debounce_frames": 2,
-    "take_dir": "/tmp/nhatvu/nas_mount_13509/MM-OR_data/MM-OR_processed/033_PKA",
+    "take_dir": "/tmp/nhatvu/nas_mount_13597/MM-OR_data/MM-OR_processed/033_PKA",
     "tp_range": [
       "000000",
       "000141"

@@ -411,33 +411,19 @@
             "mps_L0_001",
             "mps_L0_002",
             "mps_L0_003",
-            "mps_L0_004"
-          ],
-          "time_start": 60,
-          "time_end": 582,
-          "duration_s": 523,
-          "summary": "The robot technician briefly holds a surgical instrument, pauses, and then holds it again as part of a short instrument handling sequence.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_001",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
+            "mps_L0_004",
             "mps_L0_005",
             "mps_L0_006"
           ],
-          "time_start": 588,
+          "time_start": 60,
           "time_end": 660,
-          "duration_s": 73,
-          "summary": "The robot technician touches the patient and then briefly pauses while remaining engaged in the immediate task area.",
+          "duration_s": 601,
+          "summary": "The robot technician briefly holds a surgical instrument, pauses, and then holds it again in a short sequence of related actions.",
           "audio_summary": "",
           "transcript": []
         }
       ],
-      "num_level1_segments": 2,
+      "num_level1_segments": 1,
       "level2_segments": [
         {
           "segment_id": "mps_L2_000",
@@ -445,14 +431,11 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
-            "mps_L1_000",
-            "mps_L1_001"
+            "mps_L1_000"
           ],
           "time_start": 60,
           "time_end": 660,
-          "duration_s": 601,
-          "summary": "The robot technician performs initial instrument handling and patient contact to prepare for the upcoming surgical task.",
-          "audio_summary": "",
+          "summary": "The robot technician briefly holds a surgical instrument, pauses, and then holds it again in a short sequence of related actions.",
           "transcript": []
         }
       ],
@@ -887,7 +870,7 @@
     "total_roles": 5,
     "total_level0_segments": 32,
     "debounce_frames": 2,
-    "take_dir": "/tmp/nhatvu/nas_mount_13509/MM-OR_data/MM-OR_processed/013_PKA",
+    "take_dir": "/tmp/nhatvu/nas_mount_13597/MM-OR_data/MM-OR_processed/013_PKA",
     "tp_range": [
       "000000",
       "000103"
@@ -897,7 +880,7 @@
       60,
       660
     ],
-    "total_level1_segments": 7,
+    "total_level1_segments": 6,
     "total_level2_segments": 5
   },
   "debounce_analysis": {
