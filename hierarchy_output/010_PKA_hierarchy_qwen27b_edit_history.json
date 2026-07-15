@@ -1,0 +1,72 @@
+[
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "head_surgeon_L1_002",
+      "head_surgeon_L1_003"
+    ],
+    "result_id": "head_surgeon_L1_002",
+    "role": "head_surgeon",
+    "file": "010_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:42:27+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "mps_L1_009",
+      "mps_L1_010",
+      "mps_L1_011"
+    ],
+    "result_id": "mps_L1_009",
+    "role": "mps",
+    "file": "010_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:43:07+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "mps_L1_009",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The technician holds a surgical instrument and subsequently manipulates the Mako robotic arm.",
+    "new_value": "The robot technician alternates between manipulating the Mako robotic arm and holding a surgical instrument with short pauses.",
+    "role": "mps",
+    "file": "010_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:43:09+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_005",
+      "nurse_L1_006"
+    ],
+    "result_id": "nurse_L1_005",
+    "role": "nurse",
+    "file": "010_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:43:56+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "nurse_L1_005",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The scrub nurse prepares the patient and organizes the instrument table with brief pauses in between.",
+    "new_value": "The scrub nurse prepares the patient, organizes the instrument table, and assists the head surgeon with brief pauses in between.",
+    "role": "nurse",
+    "file": "010_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:44:08+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "nurse_L1_006",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The scrub nurse prepares the instrument table and holds surgical instruments with brief pauses in between.",
+    "new_value": "The scrub nurse prepares the instrument table and holds surgical instruments and assists assistant surgeon with brief pauses in between.",
+    "role": "nurse",
+    "file": "010_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:45:09+0200"
+  }
+]

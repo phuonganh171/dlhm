@@ -1,0 +1,14 @@
+[
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "mps_L1_006",
+      "mps_L1_007"
+    ],
+    "result_id": "mps_L1_006",
+    "role": "mps",
+    "file": "011_TKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:45:34+0200"
+  }
+]

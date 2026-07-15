@@ -3119,32 +3119,18 @@
             "head_surgeon_L0_022",
             "head_surgeon_L0_023",
             "head_surgeon_L0_024",
-            "head_surgeon_L0_025"
+            "head_surgeon_L0_025",
+            "head_surgeon_L0_026"
           ],
           "time_start": 3081,
-          "time_end": 3193,
-          "duration_s": 113,
+          "time_end": 3271,
+          "duration_s": 191,
           "summary": "The head surgeon performs a continuous drilling procedure on the patient, alternating between drilling, holding the drill, and touching the patient.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "head_surgeon_L1_002",
-          "role": "head_surgeon",
-          "level": 1,
-          "role_human": "head surgeon",
-          "segment_ids": [
-            "head_surgeon_L0_026"
-          ],
-          "time_start": 3199,
-          "time_end": 3271,
-          "duration_s": 73,
-          "summary": "The head surgeon inspects or manipulates the surgical site by touching the patient with a brief pause in between.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "head_surgeon_L1_003",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3165,7 +3151,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_004",
+          "segment_id": "head_surgeon_L1_003",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3185,7 +3171,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_005",
+          "segment_id": "head_surgeon_L1_004",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3205,7 +3191,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_006",
+          "segment_id": "head_surgeon_L1_005",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3222,7 +3208,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 7,
+      "num_level1_segments": 6,
       "level2_segments": [
         {
           "segment_id": "head_surgeon_L2_000",
@@ -3231,8 +3217,7 @@
           "role_human": "head surgeon",
           "child_ids": [
             "head_surgeon_L1_000",
-            "head_surgeon_L1_001",
-            "head_surgeon_L1_002"
+            "head_surgeon_L1_001"
           ],
           "time_start": 2641,
           "time_end": 3271,
@@ -3247,8 +3232,8 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_003",
-            "head_surgeon_L1_004"
+            "head_surgeon_L1_002",
+            "head_surgeon_L1_003"
           ],
           "time_start": 3277,
           "time_end": 4447,
@@ -3263,8 +3248,8 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_005",
-            "head_surgeon_L1_006"
+            "head_surgeon_L1_004",
+            "head_surgeon_L1_005"
           ],
           "time_start": 4453,
           "time_end": 4651,
@@ -5785,32 +5770,18 @@
             "mps_L0_022",
             "mps_L0_023",
             "mps_L0_024",
-            "mps_L0_025"
+            "mps_L0_025",
+            "mps_L0_026"
           ],
           "time_start": 1763,
-          "time_end": 2821,
-          "duration_s": 1059,
-          "summary": "The technician performs a series of distinct, short tasks including adjusting the robotic arm, operating table, infrared tracker, holding an instrument, and preparing the patient, separated by long idle periods.",
+          "time_end": 2845,
+          "duration_s": 1083,
+          "summary": "The technician performs a series of distinct, short tasks including adjusting the robotic arm, operating table, infrared tracker, holding an instrument, and preparing the patient, separated by idle periods.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "mps_L1_004",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
-            "mps_L0_026"
-          ],
-          "time_start": 2827,
-          "time_end": 2845,
-          "duration_s": 19,
-          "summary": "The technician interacts with the MPS workstation, assists the head surgeon, and then touches the workstation again after a brief pause.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_005",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -5825,7 +5796,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_006",
+          "segment_id": "mps_L1_005",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -5865,7 +5836,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_007",
+          "segment_id": "mps_L1_006",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -5904,27 +5875,13 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_008",
+          "segment_id": "mps_L1_007",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
             "mps_L0_079",
-            "mps_L0_080"
-          ],
-          "time_start": 5161,
-          "time_end": 5191,
-          "duration_s": 31,
-          "summary": "The robot technician adjusts the surgical drape, holds an instrument, and then manipulates the robotic arm.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_009",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
+            "mps_L0_080",
             "mps_L0_081",
             "mps_L0_082",
             "mps_L0_083",
@@ -5935,15 +5892,15 @@
             "mps_L0_088",
             "mps_L0_089"
           ],
-          "time_start": 5197,
+          "time_start": 5161,
           "time_end": 5695,
-          "duration_s": 499,
-          "summary": "The robot technician alternates between holding surgical instruments and manipulating the Mako robotic arm with brief pauses in between.",
+          "duration_s": 535,
+          "summary": "The robot technician adjusts the surgical drape, holds an instrument, and then manipulates the robotic arm.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_010",
+          "segment_id": "mps_L1_008",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -5960,7 +5917,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 11,
+      "num_level1_segments": 9,
       "level2_segments": [
         {
           "segment_id": "mps_L2_000",
@@ -5986,8 +5943,7 @@
           "role_human": "robot technician (MPS)",
           "child_ids": [
             "mps_L1_003",
-            "mps_L1_004",
-            "mps_L1_005"
+            "mps_L1_004"
           ],
           "time_start": 1763,
           "time_end": 2875,
@@ -6002,8 +5958,8 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
-            "mps_L1_006",
-            "mps_L1_007"
+            "mps_L1_005",
+            "mps_L1_006"
           ],
           "time_start": 2881,
           "time_end": 5155,
@@ -6018,9 +5974,8 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
-            "mps_L1_008",
-            "mps_L1_009",
-            "mps_L1_010"
+            "mps_L1_007",
+            "mps_L1_008"
           ],
           "time_start": 5161,
           "time_end": 5911,
@@ -8852,35 +8807,21 @@
             "nurse_L0_104",
             "nurse_L0_105",
             "nurse_L0_106",
-            "nurse_L0_107"
-          ],
-          "time_start": 4837,
-          "time_end": 4914,
-          "duration_s": 78,
-          "summary": "The scrub nurse briefly touches the patient.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_011",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_107",
             "nurse_L0_108",
             "nurse_L0_109",
             "nurse_L0_110",
             "nurse_L0_111"
           ],
-          "time_start": 4915,
+          "time_start": 4837,
           "time_end": 5125,
-          "duration_s": 211,
+          "duration_s": 289,
           "summary": "The scrub nurse performs drilling on the patient and provides manual support to the surgical site.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_012",
+          "segment_id": "nurse_L1_011",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8913,7 +8854,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 13,
+      "num_level1_segments": 12,
       "level2_segments": [
         {
           "segment_id": "nurse_L2_000",
@@ -8973,8 +8914,7 @@
           "child_ids": [
             "nurse_L1_008",
             "nurse_L1_009",
-            "nurse_L1_010",
-            "nurse_L1_011"
+            "nurse_L1_010"
           ],
           "time_start": 4785,
           "time_end": 5125,
@@ -8989,7 +8929,7 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
-            "nurse_L1_012"
+            "nurse_L1_011"
           ],
           "time_start": 5131,
           "time_end": 5911,
@@ -10402,7 +10342,7 @@
       263,
       5911
     ],
-    "total_level1_segments": 70,
+    "total_level1_segments": 66,
     "total_level2_segments": 31
   },
   "debounce_analysis": {
@@ -10426,7 +10366,7 @@
       },
       "DROPOUT": {
         "count": 4,
-        "percent": 1.0
+        "percent": 1
       },
       "UNIQUE": {
         "count": 2,

@@ -3907,34 +3907,20 @@
             "head_surgeon_L0_020",
             "head_surgeon_L0_021",
             "head_surgeon_L0_022",
-            "head_surgeon_L0_023"
+            "head_surgeon_L0_023",
+            "head_surgeon_L0_024",
+            "head_surgeon_L0_025",
+            "head_surgeon_L0_026"
           ],
           "time_start": 2464,
-          "time_end": 2922,
-          "duration_s": 459,
+          "time_end": 3000,
+          "duration_s": 537,
           "summary": "The head surgeon transitions from touching the patient to holding and manipulating a surgical instrument with brief pauses.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "head_surgeon_L1_003",
-          "role": "head_surgeon",
-          "level": 1,
-          "role_human": "head surgeon",
-          "segment_ids": [
-            "head_surgeon_L0_024",
-            "head_surgeon_L0_025",
-            "head_surgeon_L0_026"
-          ],
-          "time_start": 2928,
-          "time_end": 3000,
-          "duration_s": 73,
-          "summary": "The head surgeon performs a series of actions including touching the patient, holding an instrument, and hammering the patient.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "head_surgeon_L1_004",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3975,7 +3961,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_005",
+          "segment_id": "head_surgeon_L1_004",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3995,7 +3981,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_006",
+          "segment_id": "head_surgeon_L1_005",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -4017,7 +4003,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_007",
+          "segment_id": "head_surgeon_L1_006",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -4032,7 +4018,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_008",
+          "segment_id": "head_surgeon_L1_007",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -4048,7 +4034,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_009",
+          "segment_id": "head_surgeon_L1_008",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -4066,7 +4052,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 10,
+      "num_level1_segments": 9,
       "level2_segments": [
         {
           "segment_id": "head_surgeon_L2_000",
@@ -4090,9 +4076,7 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_002",
-            "head_surgeon_L1_003",
-            "head_surgeon_L1_004"
+            "head_surgeon_L1_002"
           ],
           "time_start": 2464,
           "time_end": 3413,
@@ -4107,9 +4091,9 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
+            "head_surgeon_L1_004",
             "head_surgeon_L1_005",
-            "head_surgeon_L1_006",
-            "head_surgeon_L1_007"
+            "head_surgeon_L1_006"
           ],
           "time_start": 3414,
           "time_end": 3604,
@@ -4124,8 +4108,8 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_008",
-            "head_surgeon_L1_009"
+            "head_surgeon_L1_007",
+            "head_surgeon_L1_008"
           ],
           "time_start": 3610,
           "time_end": 3767,
@@ -10146,7 +10130,7 @@
       187,
       4269
     ],
-    "total_level1_segments": 60,
+    "total_level1_segments": 59,
     "total_level2_segments": 26
   },
   "debounce_analysis": {

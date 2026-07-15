@@ -1,0 +1,64 @@
+[
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_003",
+      "circulator_L1_004"
+    ],
+    "result_id": "circulator_L1_003",
+    "role": "circulator",
+    "file": "002_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:59:59+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_003",
+      "circulator_L1_004"
+    ],
+    "result_id": "circulator_L1_003",
+    "role": "circulator",
+    "file": "002_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:07:00+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_006",
+      "circulator_L1_007"
+    ],
+    "result_id": "circulator_L1_006",
+    "role": "circulator",
+    "file": "002_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:07:29+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_007",
+      "nurse_L1_008",
+      "nurse_L1_009"
+    ],
+    "result_id": "nurse_L1_007",
+    "role": "nurse",
+    "file": "002_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:09:17+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_008",
+      "nurse_L1_009",
+      "nurse_L1_010"
+    ],
+    "result_id": "nurse_L1_008",
+    "role": "nurse",
+    "file": "002_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:10:37+0200"
+  }
+]

@@ -8687,36 +8687,22 @@
             "nurse_L0_059",
             "nurse_L0_060",
             "nurse_L0_061",
-            "nurse_L0_062"
-          ],
-          "time_start": 2011,
-          "time_end": 2572,
-          "duration_s": 562,
-          "summary": "The scrub nurse prepares the instrument table.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_008",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_062",
             "nurse_L0_063",
             "nurse_L0_064",
             "nurse_L0_065",
             "nurse_L0_066",
             "nurse_L0_067"
           ],
-          "time_start": 2573,
+          "time_start": 2011,
           "time_end": 2635,
-          "duration_s": 63,
+          "duration_s": 625,
           "summary": "The nurse prepares the instrument table and assists the surgeon with holding an instrument before a brief pause.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_009",
+          "segment_id": "nurse_L1_008",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8742,7 +8728,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_010",
+          "segment_id": "nurse_L1_009",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8758,7 +8744,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_011",
+          "segment_id": "nurse_L1_010",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8789,7 +8775,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_012",
+          "segment_id": "nurse_L1_011",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8806,7 +8792,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 13,
+      "num_level1_segments": 12,
       "level2_segments": [
         {
           "segment_id": "nurse_L2_000",
@@ -8853,8 +8839,7 @@
             "nurse_L1_008",
             "nurse_L1_009",
             "nurse_L1_010",
-            "nurse_L1_011",
-            "nurse_L1_012"
+            "nurse_L1_011"
           ],
           "time_start": 2011,
           "time_end": 3758,
@@ -10330,7 +10315,7 @@
       64,
       3764
     ],
-    "total_level1_segments": 68,
+    "total_level1_segments": 67,
     "total_level2_segments": 29
   },
   "debounce_analysis": {
@@ -10358,7 +10343,7 @@
       },
       "DROPOUT": {
         "count": 2,
-        "percent": 1.0
+        "percent": 1
       }
     },
     "per_role": {

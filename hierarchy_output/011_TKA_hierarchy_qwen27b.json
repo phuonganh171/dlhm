@@ -4366,21 +4366,7 @@
             "mps_L0_050",
             "mps_L0_051",
             "mps_L0_052",
-            "mps_L0_053"
-          ],
-          "time_start": 2498,
-          "time_end": 2714,
-          "duration_s": 217,
-          "summary": "The robot technician engages in intermittent interactions with the MPS workstation separated by short idle gaps.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_007",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
+            "mps_L0_053",
             "mps_L0_054",
             "mps_L0_055",
             "mps_L0_056",
@@ -4389,15 +4375,15 @@
             "mps_L0_059",
             "mps_L0_060"
           ],
-          "time_start": 2720,
+          "time_start": 2498,
           "time_end": 3122,
-          "duration_s": 403,
-          "summary": "The robot technician briefly interacts with the MPS workstation.",
+          "duration_s": 625,
+          "summary": "The robot technician engages in intermittent interactions with the MPS workstation separated by short idle gaps.",
           "audio_summary": "",
           "transcript": []
         }
       ],
-      "num_level1_segments": 8,
+      "num_level1_segments": 7,
       "level2_segments": [
         {
           "segment_id": "mps_L2_000",
@@ -4439,8 +4425,7 @@
           "role_human": "robot technician (MPS)",
           "child_ids": [
             "mps_L1_005",
-            "mps_L1_006",
-            "mps_L1_007"
+            "mps_L1_006"
           ],
           "time_start": 1160,
           "time_end": 3122,
@@ -7097,7 +7082,7 @@
       61,
       3188
     ],
-    "total_level1_segments": 57,
+    "total_level1_segments": 56,
     "total_level2_segments": 26
   },
   "debounce_analysis": {

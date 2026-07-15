@@ -1775,33 +1775,19 @@
           "role_human": "circulator nurse",
           "segment_ids": [
             "circulator_L0_010",
-            "circulator_L0_011"
+            "circulator_L0_011",
+            "circulator_L0_012",
+            "circulator_L0_013"
           ],
           "time_start": 805,
-          "time_end": 949,
-          "duration_s": 145,
+          "time_end": 1237,
+          "duration_s": 433,
           "summary": "The circulator nurse holds a surgical instrument after a long period of inactivity.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "circulator_L1_004",
-          "role": "circulator",
-          "level": 1,
-          "role_human": "circulator nurse",
-          "segment_ids": [
-            "circulator_L0_012",
-            "circulator_L0_013"
-          ],
-          "time_start": 973,
-          "time_end": 1237,
-          "duration_s": 265,
-          "summary": "The circulator nurse holds a surgical instrument following an extended idle period.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "circulator_L1_005",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -1821,7 +1807,7 @@
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_006",
+          "segment_id": "circulator_L1_005",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -1839,39 +1825,25 @@
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_007",
+          "segment_id": "circulator_L1_006",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
           "segment_ids": [
             "circulator_L0_024",
             "circulator_L0_025",
-            "circulator_L0_026"
+            "circulator_L0_026",
+            "circulator_L0_027"
           ],
           "time_start": 2334,
-          "time_end": 4031,
-          "duration_s": 1698,
+          "time_end": 4043,
+          "duration_s": 1710,
           "summary": "The circulator nurse holds instruments and assists the assistant surgeon after a very long period of inactivity.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_008",
-          "role": "circulator",
-          "level": 1,
-          "role_human": "circulator nurse",
-          "segment_ids": [
-            "circulator_L0_027"
-          ],
-          "time_start": 4037,
-          "time_end": 4043,
-          "duration_s": 7,
-          "summary": "The circulator nurse briefly assists the assistant surgeon.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "circulator_L1_009",
+          "segment_id": "circulator_L1_007",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -1888,7 +1860,7 @@
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_010",
+          "segment_id": "circulator_L1_008",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -1906,7 +1878,7 @@
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_011",
+          "segment_id": "circulator_L1_009",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -1921,7 +1893,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 12,
+      "num_level1_segments": 10,
       "level2_segments": [
         {
           "segment_id": "circulator_L2_000",
@@ -1932,8 +1904,7 @@
             "circulator_L1_000",
             "circulator_L1_001",
             "circulator_L1_002",
-            "circulator_L1_003",
-            "circulator_L1_004"
+            "circulator_L1_003"
           ],
           "time_start": 338,
           "time_end": 1237,
@@ -1948,11 +1919,10 @@
           "level": 2,
           "role_human": "circulator nurse",
           "child_ids": [
+            "circulator_L1_004",
             "circulator_L1_005",
             "circulator_L1_006",
-            "circulator_L1_007",
-            "circulator_L1_008",
-            "circulator_L1_009"
+            "circulator_L1_007"
           ],
           "time_start": 1243,
           "time_end": 4325,
@@ -1967,8 +1937,8 @@
           "level": 2,
           "role_human": "circulator nurse",
           "child_ids": [
-            "circulator_L1_010",
-            "circulator_L1_011"
+            "circulator_L1_008",
+            "circulator_L1_009"
           ],
           "time_start": 4409,
           "time_end": 4625,
@@ -8538,11 +8508,25 @@
             "nurse_L0_050",
             "nurse_L0_051",
             "nurse_L0_052",
-            "nurse_L0_053"
+            "nurse_L0_053",
+            "nurse_L0_054",
+            "nurse_L0_055",
+            "nurse_L0_056",
+            "nurse_L0_057",
+            "nurse_L0_058",
+            "nurse_L0_059",
+            "nurse_L0_060",
+            "nurse_L0_061",
+            "nurse_L0_062",
+            "nurse_L0_063",
+            "nurse_L0_064",
+            "nurse_L0_065",
+            "nurse_L0_066",
+            "nurse_L0_067"
           ],
           "time_start": 2496,
-          "time_end": 2515,
-          "duration_s": 20,
+          "time_end": 2612,
+          "duration_s": 117,
           "summary": "The scrub nurse performs a rapid series of short tasks including holding instruments, assisting with a drill, and preparing the table, interspersed with brief pauses.",
           "audio_summary": "",
           "transcript": []
@@ -8553,100 +8537,30 @@
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
-            "nurse_L0_054",
-            "nurse_L0_055",
-            "nurse_L0_056",
-            "nurse_L0_057",
-            "nurse_L0_058",
-            "nurse_L0_059",
-            "nurse_L0_060",
-            "nurse_L0_061",
-            "nurse_L0_062"
-          ],
-          "time_start": 2516,
-          "time_end": 2568,
-          "duration_s": 53,
-          "summary": "The scrub nurse briefly holds instruments and assists the surgeon while intermittently preparing the instrument table.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_009",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_063",
-            "nurse_L0_064",
-            "nurse_L0_065",
-            "nurse_L0_066",
-            "nurse_L0_067"
-          ],
-          "time_start": 2574,
-          "time_end": 2612,
-          "duration_s": 39,
-          "summary": "After a pause, the nurse prepares the instrument table, assists with a drill, and then pauses again.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_010",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
             "nurse_L0_068",
             "nurse_L0_069",
             "nurse_L0_070",
             "nurse_L0_071",
             "nurse_L0_072",
             "nurse_L0_073",
-            "nurse_L0_074"
-          ],
-          "time_start": 2613,
-          "time_end": 2652,
-          "duration_s": 40,
-          "summary": "The nurse holds instruments, assists the surgeon, and prepares the table with brief pauses in between.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_011",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_074",
             "nurse_L0_075",
             "nurse_L0_076",
-            "nurse_L0_077"
-          ],
-          "time_start": 2658,
-          "time_end": 2736,
-          "duration_s": 79,
-          "summary": "The nurse provides extended assistance to the head surgeon followed by a brief table preparation and a pause.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_012",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_077",
             "nurse_L0_078",
             "nurse_L0_079",
             "nurse_L0_080",
             "nurse_L0_081"
           ],
-          "time_start": 2742,
+          "time_start": 2613,
           "time_end": 2838,
-          "duration_s": 97,
-          "summary": "The nurse holds an instrument, pauses, prepares the instrument table, and then enters a long idle period.",
+          "duration_s": 226,
+          "summary": "The nurse holds instruments, assists the surgeon, and prepares the table with brief pauses in between.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_013",
+          "segment_id": "nurse_L1_009",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8675,7 +8589,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_014",
+          "segment_id": "nurse_L1_010",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8691,7 +8605,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_015",
+          "segment_id": "nurse_L1_011",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8714,7 +8628,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_016",
+          "segment_id": "nurse_L1_012",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8732,7 +8646,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_017",
+          "segment_id": "nurse_L1_013",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8750,7 +8664,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_018",
+          "segment_id": "nurse_L1_014",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8768,7 +8682,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_019",
+          "segment_id": "nurse_L1_015",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -8786,7 +8700,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 20,
+      "num_level1_segments": 16,
       "level2_segments": [
         {
           "segment_id": "nurse_L2_000",
@@ -8830,11 +8744,7 @@
             "nurse_L1_005",
             "nurse_L1_006",
             "nurse_L1_007",
-            "nurse_L1_008",
-            "nurse_L1_009",
-            "nurse_L1_010",
-            "nurse_L1_011",
-            "nurse_L1_012"
+            "nurse_L1_008"
           ],
           "time_start": 2280,
           "time_end": 2838,
@@ -8849,13 +8759,13 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
+            "nurse_L1_009",
+            "nurse_L1_010",
+            "nurse_L1_011",
+            "nurse_L1_012",
             "nurse_L1_013",
             "nurse_L1_014",
-            "nurse_L1_015",
-            "nurse_L1_016",
-            "nurse_L1_017",
-            "nurse_L1_018",
-            "nurse_L1_019"
+            "nurse_L1_015"
           ],
           "time_start": 2844,
           "time_end": 4613,
@@ -10029,7 +9939,7 @@
       321,
       4631
     ],
-    "total_level1_segments": 82,
+    "total_level1_segments": 76,
     "total_level2_segments": 31
   },
   "debounce_analysis": {
@@ -10045,15 +9955,15 @@
       },
       "UNIQUE": {
         "count": 12,
-        "percent": 6.0
+        "percent": 6
       },
       "DROPOUT": {
         "count": 6,
-        "percent": 3.0
+        "percent": 3
       },
       "POST_ACTIVITY": {
         "count": 4,
-        "percent": 2.0
+        "percent": 2
       },
       "PRE_TRANSITION": {
         "count": 3,

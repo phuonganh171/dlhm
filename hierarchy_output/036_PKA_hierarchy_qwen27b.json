@@ -1218,34 +1218,20 @@
             "assistant_surgeon_L0_023",
             "assistant_surgeon_L0_024",
             "assistant_surgeon_L0_025",
-            "assistant_surgeon_L0_026"
+            "assistant_surgeon_L0_026",
+            "assistant_surgeon_L0_027",
+            "assistant_surgeon_L0_028",
+            "assistant_surgeon_L0_029"
           ],
           "time_start": 3495,
-          "time_end": 3576,
-          "duration_s": 82,
+          "time_end": 3605,
+          "duration_s": 111,
           "summary": "The assistant surgeon holds a drill and performs drilling actions on the patient.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "assistant_surgeon_L1_003",
-          "role": "assistant_surgeon",
-          "level": 1,
-          "role_human": "assistant surgeon",
-          "segment_ids": [
-            "assistant_surgeon_L0_027",
-            "assistant_surgeon_L0_028",
-            "assistant_surgeon_L0_029"
-          ],
-          "time_start": 3577,
-          "time_end": 3605,
-          "duration_s": 29,
-          "summary": "The assistant surgeon holds and operates a drill on the patient.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "assistant_surgeon_L1_004",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -1263,7 +1249,7 @@
           "transcript": []
         },
         {
-          "segment_id": "assistant_surgeon_L1_005",
+          "segment_id": "assistant_surgeon_L1_004",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -1281,7 +1267,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 6,
+      "num_level1_segments": 5,
       "level2_segments": [
         {
           "segment_id": "assistant_surgeon_L2_000",
@@ -1305,8 +1291,7 @@
           "level": 2,
           "role_human": "assistant surgeon",
           "child_ids": [
-            "assistant_surgeon_L1_002",
-            "assistant_surgeon_L1_003"
+            "assistant_surgeon_L1_002"
           ],
           "time_start": 3495,
           "time_end": 3605,
@@ -1321,8 +1306,8 @@
           "level": 2,
           "role_human": "assistant surgeon",
           "child_ids": [
-            "assistant_surgeon_L1_004",
-            "assistant_surgeon_L1_005"
+            "assistant_surgeon_L1_003",
+            "assistant_surgeon_L1_004"
           ],
           "time_start": 3611,
           "time_end": 3840,
@@ -7832,34 +7817,20 @@
           "role_human": "robot technician (MPS)",
           "segment_ids": [
             "mps_L0_025",
-            "mps_L0_026"
+            "mps_L0_026",
+            "mps_L0_027",
+            "mps_L0_028",
+            "mps_L0_029"
           ],
           "time_start": 1359,
-          "time_end": 1471,
-          "duration_s": 113,
+          "time_end": 1723,
+          "duration_s": 365,
           "summary": "The technician manipulates the Mako robotic arm and holds a surgical instrument, interspersed with extended periods of inactivity.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "mps_L1_006",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
-            "mps_L0_027",
-            "mps_L0_028",
-            "mps_L0_029"
-          ],
-          "time_start": 1477,
-          "time_end": 1723,
-          "duration_s": 247,
-          "summary": "The robot technician briefly held a surgical instrument after a period of inactivity before returning to an idle state.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_007",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -7876,7 +7847,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_008",
+          "segment_id": "mps_L1_007",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -7911,7 +7882,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_009",
+          "segment_id": "mps_L1_008",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -7929,7 +7900,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_010",
+          "segment_id": "mps_L1_009",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -7946,7 +7917,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_011",
+          "segment_id": "mps_L1_010",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -7968,7 +7939,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_012",
+          "segment_id": "mps_L1_011",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -7989,7 +7960,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_013",
+          "segment_id": "mps_L1_012",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -8008,7 +7979,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_014",
+          "segment_id": "mps_L1_013",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -8025,7 +7996,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_015",
+          "segment_id": "mps_L1_014",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -8042,7 +8013,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 16,
+      "num_level1_segments": 15,
       "level2_segments": [
         {
           "segment_id": "mps_L2_000",
@@ -8069,8 +8040,7 @@
           "child_ids": [
             "mps_L1_003",
             "mps_L1_004",
-            "mps_L1_005",
-            "mps_L1_006"
+            "mps_L1_005"
           ],
           "time_start": 1115,
           "time_end": 1723,
@@ -8085,8 +8055,8 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
-            "mps_L1_007",
-            "mps_L1_008"
+            "mps_L1_006",
+            "mps_L1_007"
           ],
           "time_start": 1729,
           "time_end": 3105,
@@ -8101,9 +8071,9 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
+            "mps_L1_008",
             "mps_L1_009",
-            "mps_L1_010",
-            "mps_L1_011"
+            "mps_L1_010"
           ],
           "time_start": 3111,
           "time_end": 3605,
@@ -8118,10 +8088,10 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
+            "mps_L1_011",
             "mps_L1_012",
             "mps_L1_013",
-            "mps_L1_014",
-            "mps_L1_015"
+            "mps_L1_014"
           ],
           "time_start": 3611,
           "time_end": 4392,
@@ -10502,21 +10472,7 @@
           "segment_ids": [
             "nurse_L0_000",
             "nurse_L0_001",
-            "nurse_L0_002"
-          ],
-          "time_start": 54,
-          "time_end": 150,
-          "duration_s": 97,
-          "summary": "The scrub nurse briefly holds an instrument after an initial idle period before returning to inactivity.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_001",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_002",
             "nurse_L0_003",
             "nurse_L0_004",
             "nurse_L0_005",
@@ -10526,15 +10482,15 @@
             "nurse_L0_009",
             "nurse_L0_010"
           ],
-          "time_start": 156,
+          "time_start": 54,
           "time_end": 389,
-          "duration_s": 234,
+          "duration_s": 336,
           "summary": "The scrub nurse engages in intermittent instrument preparation and handling with short pauses in between.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_002",
+          "segment_id": "nurse_L1_001",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10560,7 +10516,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_003",
+          "segment_id": "nurse_L1_002",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10578,7 +10534,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_004",
+          "segment_id": "nurse_L1_003",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10601,7 +10557,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_005",
+          "segment_id": "nurse_L1_004",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10618,7 +10574,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_006",
+          "segment_id": "nurse_L1_005",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10638,7 +10594,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_007",
+          "segment_id": "nurse_L1_006",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10657,7 +10613,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_008",
+          "segment_id": "nurse_L1_007",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10673,60 +10629,32 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_009",
+          "segment_id": "nurse_L1_008",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
             "nurse_L0_052",
-            "nurse_L0_053"
-          ],
-          "time_start": 2039,
-          "time_end": 2051,
-          "duration_s": 13,
-          "summary": "The scrub nurse resumes preparing the instrument table and holding surgical instruments with brief pauses.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_010",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_053",
             "nurse_L0_054",
             "nurse_L0_055",
             "nurse_L0_056",
-            "nurse_L0_057"
-          ],
-          "time_start": 2053,
-          "time_end": 2080,
-          "duration_s": 28,
-          "summary": "The scrub nurse holds a surgical instrument and briefly prepares the instrument table with short pauses in between.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_011",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_057",
             "nurse_L0_058",
             "nurse_L0_059",
             "nurse_L0_060",
             "nurse_L0_061",
             "nurse_L0_062"
           ],
-          "time_start": 2081,
+          "time_start": 2039,
           "time_end": 2127,
-          "duration_s": 47,
+          "duration_s": 89,
           "summary": "The scrub nurse engages in intermittent instrument table preparation and holding instruments separated by brief idle moments.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_012",
+          "segment_id": "nurse_L1_009",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10745,7 +10673,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_013",
+          "segment_id": "nurse_L1_010",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10761,7 +10689,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_014",
+          "segment_id": "nurse_L1_011",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10777,7 +10705,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_015",
+          "segment_id": "nurse_L1_012",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10793,7 +10721,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_016",
+          "segment_id": "nurse_L1_013",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10801,34 +10729,20 @@
             "nurse_L0_074",
             "nurse_L0_075",
             "nurse_L0_076",
-            "nurse_L0_077"
+            "nurse_L0_077",
+            "nurse_L0_078",
+            "nurse_L0_079",
+            "nurse_L0_080"
           ],
           "time_start": 2751,
-          "time_end": 3057,
-          "duration_s": 307,
+          "time_end": 3244,
+          "duration_s": 494,
           "summary": "After a long idle period, the scrub nurse holds an instrument and then prepares the instrument table with short pauses.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_017",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_078",
-            "nurse_L0_079",
-            "nurse_L0_080"
-          ],
-          "time_start": 3063,
-          "time_end": 3244,
-          "duration_s": 182,
-          "summary": "The scrub nurse transitions from a long idle period to preparing the table, assisting the head surgeon, and holding instruments.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_018",
+          "segment_id": "nurse_L1_014",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -10869,43 +10783,29 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_019",
+          "segment_id": "nurse_L1_015",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
             "nurse_L0_108",
             "nurse_L0_109",
-            "nurse_L0_110"
-          ],
-          "time_start": 4182,
-          "time_end": 4296,
-          "duration_s": 115,
-          "summary": "The scrub nurse briefly holds a surgical instrument after a period of inactivity and then pauses again.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_020",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_110",
             "nurse_L0_111",
             "nurse_L0_112",
             "nurse_L0_113",
             "nurse_L0_114",
             "nurse_L0_115"
           ],
-          "time_start": 4302,
+          "time_start": 4182,
           "time_end": 4410,
-          "duration_s": 109,
+          "duration_s": 229,
           "summary": "The scrub nurse actively prepares the instrument table and handles surgical instruments with brief pauses in between.",
           "audio_summary": "",
           "transcript": []
         }
       ],
-      "num_level1_segments": 21,
+      "num_level1_segments": 16,
       "level2_segments": [
         {
           "segment_id": "nurse_L2_000",
@@ -10914,8 +10814,7 @@
           "role_human": "scrub nurse",
           "child_ids": [
             "nurse_L1_000",
-            "nurse_L1_001",
-            "nurse_L1_002"
+            "nurse_L1_001"
           ],
           "time_start": 54,
           "time_end": 1109,
@@ -10930,8 +10829,8 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
-            "nurse_L1_003",
-            "nurse_L1_004"
+            "nurse_L1_002",
+            "nurse_L1_003"
           ],
           "time_start": 1115,
           "time_end": 1477,
@@ -10946,10 +10845,10 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
+            "nurse_L1_004",
             "nurse_L1_005",
             "nurse_L1_006",
-            "nurse_L1_007",
-            "nurse_L1_008"
+            "nurse_L1_007"
           ],
           "time_start": 1483,
           "time_end": 2038,
@@ -10964,15 +10863,12 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
+            "nurse_L1_008",
             "nurse_L1_009",
             "nurse_L1_010",
             "nurse_L1_011",
             "nurse_L1_012",
-            "nurse_L1_013",
-            "nurse_L1_014",
-            "nurse_L1_015",
-            "nurse_L1_016",
-            "nurse_L1_017"
+            "nurse_L1_013"
           ],
           "time_start": 2039,
           "time_end": 3244,
@@ -10987,9 +10883,8 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
-            "nurse_L1_018",
-            "nurse_L1_019",
-            "nurse_L1_020"
+            "nurse_L1_014",
+            "nurse_L1_015"
           ],
           "time_start": 3245,
           "time_end": 4410,
@@ -12265,7 +12160,7 @@
       30,
       4410
     ],
-    "total_level1_segments": 93,
+    "total_level1_segments": 86,
     "total_level2_segments": 33
   },
   "debounce_analysis": {

@@ -1880,33 +1880,19 @@
             "assistant_surgeon_L0_075",
             "assistant_surgeon_L0_076",
             "assistant_surgeon_L0_077",
-            "assistant_surgeon_L0_078"
+            "assistant_surgeon_L0_078",
+            "assistant_surgeon_L0_079",
+            "assistant_surgeon_L0_080"
           ],
           "time_start": 3369,
-          "time_end": 3465,
-          "duration_s": 97,
+          "time_end": 3538,
+          "duration_s": 170,
           "summary": "The assistant surgeon manages surgical drapes over several intervals separated by short pauses.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "assistant_surgeon_L1_008",
-          "role": "assistant_surgeon",
-          "level": 1,
-          "role_human": "assistant surgeon",
-          "segment_ids": [
-            "assistant_surgeon_L0_079",
-            "assistant_surgeon_L0_080"
-          ],
-          "time_start": 3466,
-          "time_end": 3538,
-          "duration_s": 73,
-          "summary": "After a long idle period, the assistant surgeon briefly holds an instrument and then resumes touching and preparing the patient.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "assistant_surgeon_L1_009",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -1925,7 +1911,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 10,
+      "num_level1_segments": 9,
       "level2_segments": [
         {
           "segment_id": "assistant_surgeon_L2_000",
@@ -1969,8 +1955,7 @@
           "child_ids": [
             "assistant_surgeon_L1_006",
             "assistant_surgeon_L1_007",
-            "assistant_surgeon_L1_008",
-            "assistant_surgeon_L1_009"
+            "assistant_surgeon_L1_008"
           ],
           "time_start": 3320,
           "time_end": 3573,
@@ -3653,35 +3638,21 @@
           "segment_ids": [
             "circulator_L0_051",
             "circulator_L0_052",
-            "circulator_L0_053"
+            "circulator_L0_053",
+            "circulator_L0_054",
+            "circulator_L0_055",
+            "circulator_L0_056",
+            "circulator_L0_057"
           ],
           "time_start": 1500,
-          "time_end": 1511,
-          "duration_s": 12,
+          "time_end": 1916,
+          "duration_s": 417,
           "summary": "The circulator nurse holds surgical instruments and drapes while assisting the robot technician.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "circulator_L1_006",
-          "role": "circulator",
-          "level": 1,
-          "role_human": "circulator nurse",
-          "segment_ids": [
-            "circulator_L0_054",
-            "circulator_L0_055",
-            "circulator_L0_056",
-            "circulator_L0_057"
-          ],
-          "time_start": 1512,
-          "time_end": 1916,
-          "duration_s": 405,
-          "summary": "The circulator nurse holds a surgical drape while briefly assisting the robot technician.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "circulator_L1_007",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -3703,7 +3674,7 @@
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_008",
+          "segment_id": "circulator_L1_007",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -3721,7 +3692,7 @@
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_009",
+          "segment_id": "circulator_L1_008",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -3737,7 +3708,7 @@
           "transcript": []
         },
         {
-          "segment_id": "circulator_L1_010",
+          "segment_id": "circulator_L1_009",
           "role": "circulator",
           "level": 1,
           "role_human": "circulator nurse",
@@ -3753,7 +3724,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 11,
+      "num_level1_segments": 10,
       "level2_segments": [
         {
           "segment_id": "circulator_L2_000",
@@ -3780,8 +3751,7 @@
           "child_ids": [
             "circulator_L1_003",
             "circulator_L1_004",
-            "circulator_L1_005",
-            "circulator_L1_006"
+            "circulator_L1_005"
           ],
           "time_start": 1324,
           "time_end": 1916,
@@ -3796,10 +3766,10 @@
           "level": 2,
           "role_human": "circulator nurse",
           "child_ids": [
+            "circulator_L1_006",
             "circulator_L1_007",
             "circulator_L1_008",
-            "circulator_L1_009",
-            "circulator_L1_010"
+            "circulator_L1_009"
           ],
           "time_start": 3249,
           "time_end": 3597,
@@ -28737,7 +28707,7 @@
       196,
       3661
     ],
-    "total_level1_segments": 132,
+    "total_level1_segments": 130,
     "total_level2_segments": 33
   },
   "debounce_analysis": {

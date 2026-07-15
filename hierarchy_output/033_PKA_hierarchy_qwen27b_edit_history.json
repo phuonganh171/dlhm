@@ -1,0 +1,14 @@
+[
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "mps_L1_000",
+      "mps_L1_001"
+    ],
+    "result_id": "mps_L1_000",
+    "role": "mps",
+    "file": "033_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-13T17:07:14+0200"
+  }
+]

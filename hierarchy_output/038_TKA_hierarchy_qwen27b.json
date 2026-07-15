@@ -1527,21 +1527,7 @@
             "assistant_surgeon_L0_010",
             "assistant_surgeon_L0_011",
             "assistant_surgeon_L0_012",
-            "assistant_surgeon_L0_013"
-          ],
-          "time_start": 1112,
-          "time_end": 1478,
-          "duration_s": 367,
-          "summary": "The assistant surgeon engages in prolonged patient contact with short idle gaps in between.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "assistant_surgeon_L1_002",
-          "role": "assistant_surgeon",
-          "level": 1,
-          "role_human": "assistant surgeon",
-          "segment_ids": [
+            "assistant_surgeon_L0_013",
             "assistant_surgeon_L0_014",
             "assistant_surgeon_L0_015",
             "assistant_surgeon_L0_016",
@@ -1556,15 +1542,15 @@
             "assistant_surgeon_L0_025",
             "assistant_surgeon_L0_026"
           ],
-          "time_start": 1484,
+          "time_start": 1112,
           "time_end": 2138,
-          "duration_s": 655,
-          "summary": "The assistant surgeon alternates between brief periods of touching the patient and short idle intervals.",
+          "duration_s": 1027,
+          "summary": "The assistant surgeon engages in prolonged patient contact with short idle gaps in between.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "assistant_surgeon_L1_003",
+          "segment_id": "assistant_surgeon_L1_002",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -1600,7 +1586,7 @@
           "transcript": []
         },
         {
-          "segment_id": "assistant_surgeon_L1_004",
+          "segment_id": "assistant_surgeon_L1_003",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -1617,7 +1603,7 @@
           "transcript": []
         },
         {
-          "segment_id": "assistant_surgeon_L1_005",
+          "segment_id": "assistant_surgeon_L1_004",
           "role": "assistant_surgeon",
           "level": 1,
           "role_human": "assistant surgeon",
@@ -1636,7 +1622,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 6,
+      "num_level1_segments": 5,
       "level2_segments": [
         {
           "segment_id": "assistant_surgeon_L2_000",
@@ -1646,8 +1632,7 @@
           "child_ids": [
             "assistant_surgeon_L1_000",
             "assistant_surgeon_L1_001",
-            "assistant_surgeon_L1_002",
-            "assistant_surgeon_L1_003"
+            "assistant_surgeon_L1_002"
           ],
           "time_start": 866,
           "time_end": 2330,
@@ -1662,8 +1647,8 @@
           "level": 2,
           "role_human": "assistant surgeon",
           "child_ids": [
-            "assistant_surgeon_L1_004",
-            "assistant_surgeon_L1_005"
+            "assistant_surgeon_L1_003",
+            "assistant_surgeon_L1_004"
           ],
           "time_start": 2336,
           "time_end": 2522,
@@ -6170,21 +6155,7 @@
           "role_human": "robot technician (MPS)",
           "segment_ids": [
             "mps_L0_025",
-            "mps_L0_026"
-          ],
-          "time_start": 1112,
-          "time_end": 1184,
-          "duration_s": 73,
-          "summary": "The technician engages in a prolonged session of manipulating and touching the MPS workstation with brief interruptions.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_006",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
+            "mps_L0_026",
             "mps_L0_027",
             "mps_L0_028",
             "mps_L0_029",
@@ -6192,15 +6163,15 @@
             "mps_L0_031",
             "mps_L0_032"
           ],
-          "time_start": 1190,
+          "time_start": 1112,
           "time_end": 1514,
-          "duration_s": 325,
-          "summary": "The robot technician performs a series of interactions with the MPS workstation, including touching and manipulating it, with brief pauses in between.",
+          "duration_s": 403,
+          "summary": "The technician engages in a prolonged session of manipulating and touching the MPS workstation with brief interruptions.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_007",
+          "segment_id": "mps_L1_006",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -6219,7 +6190,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_008",
+          "segment_id": "mps_L1_007",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -6243,7 +6214,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_009",
+          "segment_id": "mps_L1_008",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -6253,36 +6224,22 @@
             "mps_L0_050",
             "mps_L0_051",
             "mps_L0_052",
-            "mps_L0_053"
-          ],
-          "time_start": 2274,
-          "time_end": 2336,
-          "duration_s": 63,
-          "summary": "The technician adjusts the Mako robotic arm and handles surgical instruments, with extended periods of inactivity occurring between these actions.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_010",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
+            "mps_L0_053",
             "mps_L0_054",
             "mps_L0_055",
             "mps_L0_056",
             "mps_L0_057",
             "mps_L0_058"
           ],
-          "time_start": 2342,
+          "time_start": 2274,
           "time_end": 2522,
-          "duration_s": 181,
-          "summary": "The robot technician manipulates the Mako robotic arm and handles surgical instruments with brief pauses in between.",
+          "duration_s": 249,
+          "summary": "The technician adjusts the Mako robotic arm and handles surgical instruments, with extended periods of inactivity occurring between these actions.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_011",
+          "segment_id": "mps_L1_009",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -6298,7 +6255,7 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_012",
+          "segment_id": "mps_L1_010",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
@@ -6316,7 +6273,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 13,
+      "num_level1_segments": 11,
       "level2_segments": [
         {
           "segment_id": "mps_L2_000",
@@ -6343,8 +6300,7 @@
             "mps_L1_002",
             "mps_L1_003",
             "mps_L1_004",
-            "mps_L1_005",
-            "mps_L1_006"
+            "mps_L1_005"
           ],
           "time_start": 686,
           "time_end": 1514,
@@ -6359,12 +6315,11 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
+            "mps_L1_006",
             "mps_L1_007",
             "mps_L1_008",
             "mps_L1_009",
-            "mps_L1_010",
-            "mps_L1_011",
-            "mps_L1_012"
+            "mps_L1_010"
           ],
           "time_start": 1526,
           "time_end": 2930,
@@ -8754,7 +8709,7 @@
       70,
       2942
     ],
-    "total_level1_segments": 62,
+    "total_level1_segments": 59,
     "total_level2_segments": 27
   },
   "debounce_analysis": {

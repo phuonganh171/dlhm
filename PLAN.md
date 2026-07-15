@@ -1,6 +1,21 @@
 ###
 - rclone lsf nas:ge42faj/
 
+- bash script/mount_nas.sh
+
+cd /mnt/home/nhatvu/dlhm
+MM_OR_PROCESSED_ROOT=/tmp/nhatvu/nas_mount/MM-OR_data/MM-OR_processed
+
+for d in viewer_links/*/; do
+  TAKE=$(basename "$d")
+  TAKE_DIR="$MM_OR_PROCESSED_ROOT/$TAKE"
+  if [ -d "$TAKE_DIR/colorimage" ]; then
+    ln -sfn "$TAKE_DIR/colorimage" "$d/colorimage"
+    [ -d "$TAKE_DIR/simstation" ] && ln -sfn "$TAKE_DIR/simstation" "$d/simstation"
+    echo "fixed $TAKE"
+  fi
+done
+
 ### Copy from NAS to /tmp
 - rclone copy nas:ge42faj/MM-OR_data /tmp/MM-OR_data --progress
 ### Mount directly
@@ -21,8 +36,8 @@ Build a role-aware hierarchical surgical scene summarization system:
 
 - [x] Extract shared utilities (data loading, entity maps, model loading) into `scene_graph_utils.py`
 - [x] Implement level-0 deterministic segmentation per role in `build_hierarchy.py`
-- [ ] Design level-1 prompt, run Qwen3-32B grouping on 001_PKA level-0 segments, inspect and iterate
-- [ ] Design level-2 prompt, run Qwen3-32B grouping on level-1 segments
+- [x] Design level-1 prompt, run Qwen3-32B grouping on 001_PKA level-0 segments, inspect and iterate
+- [x] Design level-2 prompt, run Qwen3-32B grouping on level-1 segments
 - [ ] Build `query_hierarchy.py` with retriever + Qwen3-32B answer generation
 - [ ] Extend visualization to show the per-role hierarchy tree
 

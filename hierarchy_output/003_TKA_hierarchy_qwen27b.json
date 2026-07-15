@@ -3179,34 +3179,20 @@
           "segment_ids": [
             "head_surgeon_L0_024",
             "head_surgeon_L0_025",
-            "head_surgeon_L0_026"
+            "head_surgeon_L0_026",
+            "head_surgeon_L0_027",
+            "head_surgeon_L0_028",
+            "head_surgeon_L0_029"
           ],
           "time_start": 3592,
-          "time_end": 3940,
-          "duration_s": 349,
+          "time_end": 4066,
+          "duration_s": 475,
           "summary": "The head surgeon uses the bone saw to cut the patient while manipulating the robotic arm, with brief pauses for instrument adjustment.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "head_surgeon_L1_006",
-          "role": "head_surgeon",
-          "level": 1,
-          "role_human": "head surgeon",
-          "segment_ids": [
-            "head_surgeon_L0_027",
-            "head_surgeon_L0_028",
-            "head_surgeon_L0_029"
-          ],
-          "time_start": 3946,
-          "time_end": 4066,
-          "duration_s": 121,
-          "summary": "The head surgeon uses a bone saw and the Mako robotic arm to perform a sawing procedure on the patient.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "head_surgeon_L1_007",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3223,7 +3209,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_008",
+          "segment_id": "head_surgeon_L1_007",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3246,7 +3232,7 @@
           "transcript": []
         },
         {
-          "segment_id": "head_surgeon_L1_009",
+          "segment_id": "head_surgeon_L1_008",
           "role": "head_surgeon",
           "level": 1,
           "role_human": "head surgeon",
@@ -3263,7 +3249,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 10,
+      "num_level1_segments": 9,
       "level2_segments": [
         {
           "segment_id": "head_surgeon_L2_000",
@@ -3290,8 +3276,7 @@
             "head_surgeon_L1_002",
             "head_surgeon_L1_003",
             "head_surgeon_L1_004",
-            "head_surgeon_L1_005",
-            "head_surgeon_L1_006"
+            "head_surgeon_L1_005"
           ],
           "time_start": 2710,
           "time_end": 4066,
@@ -3306,9 +3291,9 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
+            "head_surgeon_L1_006",
             "head_surgeon_L1_007",
-            "head_surgeon_L1_008",
-            "head_surgeon_L1_009"
+            "head_surgeon_L1_008"
           ],
           "time_start": 4072,
           "time_end": 4423,
@@ -10587,7 +10572,7 @@
       50,
       5124
     ],
-    "total_level1_segments": 81,
+    "total_level1_segments": 80,
     "total_level2_segments": 30
   },
   "debounce_analysis": {

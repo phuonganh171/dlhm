@@ -1,0 +1,414 @@
+[
+  {
+    "action": "move",
+    "level": "l0",
+    "moved_ids": [
+      "assistant_surgeon_L0_014",
+      "assistant_surgeon_L0_015",
+      "assistant_surgeon_L0_016",
+      "assistant_surgeon_L0_017",
+      "assistant_surgeon_L0_018",
+      "assistant_surgeon_L0_019",
+      "assistant_surgeon_L0_020",
+      "assistant_surgeon_L0_021"
+    ],
+    "from_l1": "assistant_surgeon_L1_000",
+    "to_l1": "assistant_surgeon_L1_001",
+    "role": "assistant_surgeon",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:26:03+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "assistant_surgeon_L1_001",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The assistant surgeon assists the head surgeon, touches the patient, and then drills the patient while holding a drill.",
+    "new_value": "The assistant surgeon assists the head surgeon, touches the patient",
+    "role": "assistant_surgeon",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:26:13+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_003",
+      "circulator_L1_004"
+    ],
+    "result_id": "circulator_L1_003",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:29:12+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_000",
+      "circulator_L1_001",
+      "circulator_L1_002"
+    ],
+    "result_id": "circulator_L1_000",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:30:06+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "circulator_L1_000",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The circulator nurse briefly pauses before assisting the scrub nurse and holding a surgical instrument.",
+    "new_value": "The circulator nurse engages in a continuous sequence of assisting the scrub nurse and holding surgical instruments with brief pauses.",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:30:11+0200"
+  },
+  {
+    "action": "move",
+    "level": "l0",
+    "moved_ids": [
+      "assistant_surgeon_L0_014",
+      "assistant_surgeon_L0_015",
+      "assistant_surgeon_L0_016",
+      "assistant_surgeon_L0_017",
+      "assistant_surgeon_L0_018",
+      "assistant_surgeon_L0_019",
+      "assistant_surgeon_L0_020",
+      "assistant_surgeon_L0_021"
+    ],
+    "from_l1": "assistant_surgeon_L1_000",
+    "to_l1": "assistant_surgeon_L1_001",
+    "role": "assistant_surgeon",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:31:11+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "assistant_surgeon_L1_001",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The assistant surgeon assists the head surgeon, touches the patient, and then drills the patient while holding a drill.",
+    "new_value": "The assistant surgeon assists the head surgeon, touches the patient.",
+    "role": "assistant_surgeon",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:31:16+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_000",
+      "circulator_L1_001",
+      "circulator_L1_002",
+      "circulator_L1_003",
+      "circulator_L1_004"
+    ],
+    "result_id": "circulator_L1_000",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:32:08+0200"
+  },
+  {
+    "action": "move",
+    "level": "l0",
+    "moved_ids": [
+      "assistant_surgeon_L0_014",
+      "assistant_surgeon_L0_015",
+      "assistant_surgeon_L0_016",
+      "assistant_surgeon_L0_017",
+      "assistant_surgeon_L0_018",
+      "assistant_surgeon_L0_019",
+      "assistant_surgeon_L0_020",
+      "assistant_surgeon_L0_021"
+    ],
+    "from_l1": "assistant_surgeon_L1_000",
+    "to_l1": "assistant_surgeon_L1_001",
+    "role": "assistant_surgeon",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:32:30+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "assistant_surgeon_L1_001",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The assistant surgeon assists the head surgeon, touches the patient, and then drills the patient while holding a drill.",
+    "new_value": "The assistant surgeon assists the head surgeon, touches the patient.",
+    "role": "assistant_surgeon",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:32:35+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_001",
+      "circulator_L1_002"
+    ],
+    "result_id": "circulator_L1_001",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:32:52+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_000",
+      "circulator_L1_001"
+    ],
+    "result_id": "circulator_L1_000",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:33:48+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "circulator_L1_000",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The circulator nurse briefly pauses before assisting the scrub nurse and holding a surgical instrument.",
+    "new_value": "The circulator nurse assists the scrub nurse and holding a surgical instrument.",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:34:21+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "circulator_L1_000",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The circulator nurse assists the scrub nurse and holding a surgical instrument.",
+    "new_value": "The circulator nurse assists the scrub nurse and holding a surgical instrument with brief pauses.",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:34:33+0200"
+  },
+  {
+    "action": "move",
+    "level": "l0",
+    "moved_ids": [
+      "circulator_L0_031",
+      "circulator_L0_032",
+      "circulator_L0_033",
+      "circulator_L0_034",
+      "circulator_L0_035",
+      "circulator_L0_036",
+      "circulator_L0_037",
+      "circulator_L0_038",
+      "circulator_L0_039",
+      "circulator_L0_040",
+      "circulator_L0_041",
+      "circulator_L0_042"
+    ],
+    "from_l1": "circulator_L1_003",
+    "to_l1": "(new L1)",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:37:24+0200"
+  },
+  {
+    "action": "move",
+    "level": "l1",
+    "moved_ids": [
+      "circulator_L1_001",
+      "circulator_L1_004"
+    ],
+    "from_l1": "circulator_L2_002",
+    "to_l1": "circulator_L2_000",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:42:26+0200"
+  },
+  {
+    "action": "reorder",
+    "level": "l1",
+    "segment_id": "circulator_L1_001",
+    "direction": "up",
+    "new_position": 0,
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:45:59+0200"
+  },
+  {
+    "action": "reorder",
+    "level": "l1",
+    "segment_id": "circulator_L1_000",
+    "direction": "down",
+    "new_position": 1,
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:46:24+0200"
+  },
+  {
+    "action": "reorder",
+    "level": "l1",
+    "segment_id": "circulator_L1_001",
+    "direction": "down",
+    "new_position": 2,
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:46:36+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "circulator_L1_009",
+      "circulator_L1_010"
+    ],
+    "result_id": "circulator_L1_009",
+    "role": "circulator",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:47:25+0200"
+  },
+  {
+    "action": "move",
+    "level": "l0",
+    "moved_ids": [
+      "mps_L0_028",
+      "mps_L0_029",
+      "mps_L0_030"
+    ],
+    "from_l1": "mps_L1_001",
+    "to_l1": "(new L1)",
+    "role": "mps",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:49:20+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "mps_L1_017",
+      "mps_L1_018"
+    ],
+    "result_id": "mps_L1_017",
+    "role": "mps",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:50:29+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "mps_L1_017",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The robot technician resumes manipulating the MPS workstation after a brief idle gap.",
+    "new_value": "The robot technician resumes manipulating the MPS workstation with short pauses.",
+    "role": "mps",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:50:47+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "mps_L1_020",
+      "mps_L1_021"
+    ],
+    "result_id": "mps_L1_020",
+    "role": "mps",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:51:57+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_001",
+      "nurse_L1_002"
+    ],
+    "result_id": "nurse_L1_001",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:53:15+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_001",
+      "nurse_L1_002",
+      "nurse_L1_003"
+    ],
+    "result_id": "nurse_L1_001",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:54:49+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_001",
+      "nurse_L1_002",
+      "nurse_L1_003"
+    ],
+    "result_id": "nurse_L1_001",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:55:50+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_001",
+      "nurse_L1_002"
+    ],
+    "result_id": "nurse_L1_001",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:57:06+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "nurse_L1_021",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The scrub nurse focuses on preparing the instrument table and holding surgical instruments following a brief pause.",
+    "new_value": "The scrub nurse focuses on preparing the instrument table and holding surgical instruments with brief pauses in between.",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:58:20+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_021",
+      "nurse_L1_022"
+    ],
+    "result_id": "nurse_L1_021",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T16:58:27+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_001",
+      "nurse_L1_002",
+      "nurse_L1_003"
+    ],
+    "result_id": "nurse_L1_001",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:04:45+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_014",
+      "nurse_L1_015"
+    ],
+    "result_id": "nurse_L1_014",
+    "role": "nurse",
+    "file": "001_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:05:37+0200"
+  }
+]

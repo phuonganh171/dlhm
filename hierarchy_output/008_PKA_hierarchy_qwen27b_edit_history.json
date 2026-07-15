@@ -1,0 +1,94 @@
+[
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "mps_L1_021",
+      "mps_L1_022"
+    ],
+    "result_id": "mps_L1_021",
+    "role": "mps",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:31:31+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "mps_L1_021",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The robot technician alternates between manipulating the Mako robotic arm and holding a surgical instrument.",
+    "new_value": "The robot technician alternates between manipulating the Mako robotic arm and holding a surgical instrument with short idle gaps.",
+    "role": "mps",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:31:42+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_000",
+      "nurse_L1_001"
+    ],
+    "result_id": "nurse_L1_000",
+    "role": "nurse",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:32:39+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_006",
+      "nurse_L1_007"
+    ],
+    "result_id": "nurse_L1_006",
+    "role": "nurse",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:33:37+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "nurse_L1_006",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "Following a short break, the nurse engages in an extended period of preparing the instrument table and holding surgical instruments.",
+    "new_value": "The scrub nurse prepares the instrument table and handles surgical instruments with brief pauses in between.",
+    "role": "nurse",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:33:40+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "nurse_L1_009",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The scrub nurse alternates between holding instruments, preparing the table, and managing drapes for the patient.",
+    "new_value": "The scrub nurse alternates between holding instruments, preparing the table,  managing drapes and assisting assistant surgeon  for the patient.",
+    "role": "nurse",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:34:57+0200"
+  },
+  {
+    "action": "edit_summary",
+    "segment_id": "nurse_L1_009",
+    "level": "l1",
+    "field": "summary",
+    "old_value": "The scrub nurse alternates between holding instruments, preparing the table,  managing drapes and assisting assistant surgeon  for the patient.",
+    "new_value": "The scrub nurse alternates between holding instruments, preparing the table,  managing drapes for the patient and assisting assistant surgeon",
+    "role": "nurse",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:35:14+0200"
+  },
+  {
+    "action": "merge",
+    "level": "l1",
+    "merged_ids": [
+      "nurse_L1_018",
+      "nurse_L1_019"
+    ],
+    "result_id": "nurse_L1_018",
+    "role": "nurse",
+    "file": "008_PKA_hierarchy_qwen27b.json",
+    "timestamp": "2026-07-14T17:37:13+0200"
+  }
+]

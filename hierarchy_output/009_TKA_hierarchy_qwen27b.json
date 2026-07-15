@@ -6056,34 +6056,20 @@
             "nurse_L0_023",
             "nurse_L0_024",
             "nurse_L0_025",
-            "nurse_L0_026"
+            "nurse_L0_026",
+            "nurse_L0_027",
+            "nurse_L0_028",
+            "nurse_L0_029"
           ],
           "time_start": 1020,
-          "time_end": 1152,
-          "duration_s": 133,
+          "time_end": 1278,
+          "duration_s": 259,
           "summary": "The scrub nurse resumes preparing the instrument table and holding surgical instruments, interspersed with periods of inactivity.",
           "audio_summary": "",
           "transcript": []
         },
         {
           "segment_id": "nurse_L1_003",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_027",
-            "nurse_L0_028",
-            "nurse_L0_029"
-          ],
-          "time_start": 1158,
-          "time_end": 1278,
-          "duration_s": 121,
-          "summary": "The scrub nurse briefly prepares the instrument table after a short idle period.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_004",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -6099,7 +6085,7 @@
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_005",
+          "segment_id": "nurse_L1_004",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -6108,36 +6094,22 @@
             "nurse_L0_033",
             "nurse_L0_034",
             "nurse_L0_035",
-            "nurse_L0_036"
-          ],
-          "time_start": 1356,
-          "time_end": 1512,
-          "duration_s": 157,
-          "summary": "The scrub nurse prepares the patient while holding instruments and briefly organizes the instrument table.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_006",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_036",
             "nurse_L0_037",
             "nurse_L0_038",
             "nurse_L0_039",
             "nurse_L0_040",
             "nurse_L0_041"
           ],
-          "time_start": 1518,
+          "time_start": 1356,
           "time_end": 1674,
-          "duration_s": 157,
-          "summary": "The scrub nurse holds instruments and prepares the instrument table with intermittent pauses.",
+          "duration_s": 319,
+          "summary": "The scrub nurse prepares the patient while holding instruments and briefly organizes the instrument table.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_007",
+          "segment_id": "nurse_L1_005",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
@@ -6145,57 +6117,15 @@
             "nurse_L0_042",
             "nurse_L0_043",
             "nurse_L0_044",
-            "nurse_L0_045"
-          ],
-          "time_start": 1680,
-          "time_end": 1788,
-          "duration_s": 109,
-          "summary": "The scrub nurse holds an instrument and briefly prepares the instrument table before a long idle period.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_008",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_045",
             "nurse_L0_046",
             "nurse_L0_047",
             "nurse_L0_048",
             "nurse_L0_049",
             "nurse_L0_050",
             "nurse_L0_051",
-            "nurse_L0_052"
-          ],
-          "time_start": 1794,
-          "time_end": 2034,
-          "duration_s": 241,
-          "summary": "The scrub nurse repeatedly prepares the instrument table and holds instruments with several short pauses in between.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_009",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
-            "nurse_L0_053"
-          ],
-          "time_start": 2040,
-          "time_end": 2046,
-          "duration_s": 7,
-          "summary": "The scrub nurse prepares the instrument table and holds instruments with brief interruptions.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_010",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_052",
+            "nurse_L0_053",
             "nurse_L0_054",
             "nurse_L0_055",
             "nurse_L0_056",
@@ -6221,36 +6151,22 @@
             "nurse_L0_076",
             "nurse_L0_077"
           ],
-          "time_start": 2052,
+          "time_start": 1680,
           "time_end": 3126,
-          "duration_s": 1075,
-          "summary": "The scrub nurse briefly holds a surgical instrument and prepares the instrument table.",
+          "duration_s": 1447,
+          "summary": "The scrub nurse holds an instrument and prepares the instrument table with pauses in between.",
           "audio_summary": "",
           "transcript": []
         },
         {
-          "segment_id": "nurse_L1_011",
+          "segment_id": "nurse_L1_006",
           "role": "nurse",
           "level": 1,
           "role_human": "scrub nurse",
           "segment_ids": [
             "nurse_L0_078",
             "nurse_L0_079",
-            "nurse_L0_080"
-          ],
-          "time_start": 3132,
-          "time_end": 3162,
-          "duration_s": 31,
-          "summary": "The scrub nurse alternates between preparing the instrument table and holding a surgical instrument with short pauses.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "nurse_L1_012",
-          "role": "nurse",
-          "level": 1,
-          "role_human": "scrub nurse",
-          "segment_ids": [
+            "nurse_L0_080",
             "nurse_L0_081",
             "nurse_L0_082",
             "nurse_L0_083",
@@ -6258,15 +6174,15 @@
             "nurse_L0_085",
             "nurse_L0_086"
           ],
-          "time_start": 3168,
+          "time_start": 3132,
           "time_end": 3318,
-          "duration_s": 151,
-          "summary": "The scrub nurse prepares the instrument table and handles surgical instruments with brief pauses in between.",
+          "duration_s": 187,
+          "summary": "The scrub nurse alternates between preparing the instrument table and holding a surgical instrument with short pauses.",
           "audio_summary": "",
           "transcript": []
         }
       ],
-      "num_level1_segments": 13,
+      "num_level1_segments": 7,
       "level2_segments": [
         {
           "segment_id": "nurse_L2_000",
@@ -6277,8 +6193,7 @@
             "nurse_L1_000",
             "nurse_L1_001",
             "nurse_L1_002",
-            "nurse_L1_003",
-            "nurse_L1_004"
+            "nurse_L1_003"
           ],
           "time_start": 221,
           "time_end": 1350,
@@ -6293,14 +6208,9 @@
           "level": 2,
           "role_human": "scrub nurse",
           "child_ids": [
+            "nurse_L1_004",
             "nurse_L1_005",
-            "nurse_L1_006",
-            "nurse_L1_007",
-            "nurse_L1_008",
-            "nurse_L1_009",
-            "nurse_L1_010",
-            "nurse_L1_011",
-            "nurse_L1_012"
+            "nurse_L1_006"
           ],
           "time_start": 1356,
           "time_end": 3318,
@@ -7409,7 +7319,7 @@
       197,
       3468
     ],
-    "total_level1_segments": 57,
+    "total_level1_segments": 51,
     "total_level2_segments": 25
   },
   "debounce_analysis": {
@@ -7421,7 +7331,7 @@
     "categories": {
       "FLICKER": {
         "count": 189,
-        "percent": 100.0
+        "percent": 100
       }
     },
     "per_role": {

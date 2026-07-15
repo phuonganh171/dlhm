@@ -1,0 +1,1419 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hierarchy Annotation Editor</title>
+  <style>
+    :root {
+      --bg: #0f1220; --card: #1a1f35; --surface: #232a45;
+      --text: #ecf0ff; --muted: #a8b1d9; --accent: #53a8ff;
+      --l2: #8b5cf6; --l1: #3b82f6; --l0: #64748b;
+      --ok: #58d68d; --warn: #f5b041; --danger: #ff6b6b;
+      --border: #2b3356;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      height: 100vh; overflow: hidden;
+    }
+
+    /* === LAYOUT === */
+    .app { display: flex; flex-direction: column; height: 100vh; }
+    .top-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 16px; background: var(--card);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .top-bar h1 { font-size: 15px; font-weight: 700; white-space: nowrap; }
+    .top-bar select, .top-bar button {
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 5px 10px; font-size: 12px; cursor: pointer;
+    }
+    .top-bar select:focus { outline: 1px solid var(--accent); }
+    .top-bar button:hover { background: #2a3562; }
+    .top-bar .spacer { flex: 1; }
+    .top-bar .status { font-size: 11px; color: var(--muted); }
+    .save-btn { background: #1a5f2a !important; border-color: #2a8f3a !important; font-weight: 600; }
+    .save-btn:hover { background: #238636 !important; }
+    .save-btn.dirty { animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: none; } 50% { box-shadow: 0 0 8px rgba(88,214,141,0.5); } }
+    .undo-btn { background: #5a3e1a !important; border-color: #8a6a2a !important; }
+    .undo-btn:hover { background: #7a5a2a !important; }
+    .save-btn.running { opacity: 0.6; cursor: wait; }
+
+    .main-area { display: flex; flex: 1; min-height: 0; }
+
+    /* === LEFT: role list + tree === */
+    .left-col { width: 70%; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+    .role-tabs {
+      display: flex; gap: 3px; padding: 6px 12px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+      overflow-x: auto; background: var(--card);
+    }
+    .role-tab {
+      padding: 4px 10px; border-radius: 5px; font-size: 11px;
+      font-weight: 600; cursor: pointer; white-space: nowrap;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted); transition: all 0.15s;
+    }
+    .role-tab:hover { color: var(--text); border-color: var(--accent); }
+    .role-tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+    .role-tab .seg-count { font-size: 9px; opacity: 0.7; margin-left: 4px; }
+
+    .tree-toolbar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; background: var(--card);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .tree-toolbar button { font-size: 11px; padding: 4px 8px; }
+    .tree-toolbar .merge-btn { background: #1a3a5f; border-color: #2a5a8f; }
+    .tree-toolbar .merge-btn:hover { background: #2a4a7f; }
+    .tree-toolbar .split-btn { background: #4a1a5f; border-color: #6a2a8f; }
+    .tree-toolbar .split-btn:hover { background: #5a2a6f; }
+    .tree-toolbar .move-btn { background: #1a4a3f; border-color: #2a7a5f; }
+    .tree-toolbar .move-btn:hover { background: #2a5a4f; }
+    .tree-toolbar .reorder-btn { background: #3a2a1a; border-color: #6a4a2a; min-width: 50px; }
+    .tree-toolbar .reorder-btn:hover { background: #4a3a2a; }
+    .tree-toolbar .hint { font-size: 10px; color: var(--muted); }
+
+    .tree-area { flex: 1; overflow-y: auto; padding: 8px 12px; }
+
+    /* === TREE NODES === */
+    .seg-node { margin-bottom: 3px; border-radius: 5px; border: 1px solid transparent; }
+    .seg-node.selected { border-color: var(--accent); background: rgba(83,168,255,0.08); }
+    .seg-header {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 8px; border-radius: 5px; cursor: pointer;
+      transition: background 0.1s;
+    }
+    .seg-header:hover { background: rgba(255,255,255,0.04); }
+    .seg-checkbox { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+    .seg-badge {
+      font-size: 9px; font-weight: 700; padding: 2px 6px;
+      border-radius: 3px; color: white; flex-shrink: 0;
+    }
+    .seg-badge.l2 { background: var(--l2); }
+    .seg-badge.l1 { background: var(--l1); }
+    .seg-badge.l0 { background: var(--l0); }
+    .seg-id { font-size: 9px; color: var(--muted); font-family: monospace; flex-shrink: 0; }
+    .seg-time { font-size: 9px; color: var(--muted); font-family: monospace; flex-shrink: 0; }
+    .seg-dur { font-size: 9px; color: var(--muted); flex-shrink: 0; }
+    .seg-summary { font-size: 11px; flex: 1; min-width: 0; cursor: text; line-height: 1.4; }
+    .seg-summary:hover { color: var(--accent); }
+    .seg-expand {
+      font-size: 10px; color: var(--muted); cursor: pointer;
+      width: 16px; text-align: center; flex-shrink: 0; user-select: none;
+    }
+    .seg-children { padding-left: 20px; border-left: 1px dashed var(--border); margin-left: 16px; }
+    .seg-children.collapsed { display: none; }
+
+    .pred-badge {
+      font-size: 9px; font-weight: 500; padding: 1px 5px;
+      border-radius: 3px; border: 1px solid; white-space: nowrap;
+      display: inline-block; margin: 1px 2px;
+    }
+    .idle-label { color: var(--muted); font-style: italic; font-size: 10px; }
+
+    /* Inline edit */
+    .seg-summary-edit {
+      font-size: 11px; width: 100%; padding: 3px 6px;
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--accent); border-radius: 3px;
+      font-family: inherit; resize: vertical; min-height: 28px;
+    }
+
+    /* === RIGHT: history panel === */
+    .right-col { width: 30%; display: flex; flex-direction: column; }
+    .history-header {
+      padding: 8px 12px; background: var(--card);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .history-header h2 { font-size: 13px; font-weight: 700; }
+    .history-header .subtitle { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .history-list { flex: 1; overflow-y: auto; padding: 8px; }
+    .history-empty { color: var(--muted); font-style: italic; font-size: 11px; padding: 12px; }
+    .history-entry {
+      padding: 6px 8px; margin-bottom: 4px; border-radius: 5px;
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: 10px;
+    }
+    .history-entry .he-time { color: var(--muted); font-family: monospace; font-size: 9px; }
+    .history-entry .he-action { font-weight: 600; color: var(--accent); margin: 2px 0; }
+    .history-entry .he-detail { color: var(--muted); line-height: 1.4; word-break: break-word; }
+    .history-entry .he-role { color: var(--l1); }
+    .history-entry .he-old { color: var(--danger); text-decoration: line-through; }
+    .history-entry .he-new { color: var(--ok); }
+
+    .history-filter {
+      display: flex; gap: 4px; padding: 4px 8px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .history-filter button { font-size: 10px; padding: 2px 6px; }
+    .history-filter button.active { border-color: var(--accent); color: var(--accent); }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      padding: 8px 20px; border-radius: 6px; font-size: 12px;
+      font-weight: 600; z-index: 999; opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #1a5f2a; color: #58d68d; border: 1px solid #2a8f3a; }
+    .toast.error { background: #5f1a1a; color: #ff6b6b; border: 1px solid #8f2a2a; }
+    .toast.info { background: #1a3a5f; color: var(--accent); border: 1px solid #2a5a8f; }
+
+    /* Split modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 100; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px; max-width: 600px; width: 90%;
+      max-height: 80vh; overflow-y: auto;
+    }
+    .modal h3 { font-size: 14px; margin-bottom: 12px; }
+    .modal label { font-size: 11px; color: var(--muted); display: block; margin-top: 10px; }
+    .modal input, .modal textarea {
+      width: 100%; padding: 6px 8px; margin-top: 4px;
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--border); border-radius: 4px;
+      font-family: inherit; font-size: 12px;
+    }
+    .modal textarea { min-height: 50px; resize: vertical; }
+    .modal .modal-actions { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
+    .modal .modal-actions button { padding: 6px 14px; font-size: 12px; }
+    .modal .cancel-btn { background: var(--surface); }
+    .modal .confirm-btn { background: #1a5f2a; border-color: #2a8f3a; font-weight: 600; }
+
+    .split-child-list { margin-top: 8px; }
+    .split-child {
+      display: flex; align-items: center; gap: 6px; padding: 3px 0;
+      font-size: 10px; color: var(--muted);
+    }
+    .split-child input[type="radio"] { accent-color: var(--accent); }
+    .split-child .sc-id { font-family: monospace; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <h1>Hierarchy Editor</h1>
+      <select id="fileSelect"><option value="">— select file —</option></select>
+      <button id="loadBtn">Load</button>
+      <span class="spacer"></span>
+      <span class="status" id="statusText">No file loaded</span>
+      <button class="undo-btn" id="undoBtn" title="Undo last edit (Ctrl+Z)">Undo</button>
+      <button class="save-btn" id="saveBtn" title="Save JSON + regenerate HTML viewer (Ctrl+S)">Save</button>
+    </div>
+
+    <div class="main-area">
+      <!-- LEFT -->
+      <div class="left-col">
+        <div class="role-tabs" id="roleTabs"></div>
+        <div class="tree-toolbar">
+          <button class="merge-btn" id="mergeBtn" title="Merge selected adjacent segments">Merge selected</button>
+          <button class="split-btn" id="splitBtn" title="Split the selected segment">Split selected</button>
+          <button class="move-btn" id="moveBtn" title="Move selected segments to another parent group">Move to...</button>
+          <button class="reorder-btn" id="moveUpBtn" title="Move selected segment up">&#9650; Up</button>
+          <button class="reorder-btn" id="moveDownBtn" title="Move selected segment down">&#9660; Down</button>
+          <button id="expandAllBtn">Expand all</button>
+          <button id="collapseAllBtn">Collapse all</button>
+          <span class="hint" id="selectionHint">Check boxes to select segments for merge/split</span>
+        </div>
+        <div class="tree-area" id="treeArea">
+          <div style="color:var(--muted);padding:40px;text-align:center;">Load a file to start editing</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: History -->
+      <div class="right-col">
+        <div class="history-header">
+          <h2>Edit History</h2>
+          <div class="subtitle" id="historySubtitle">No edits yet</div>
+        </div>
+        <div class="history-filter">
+          <button class="active" data-filter="all">All</button>
+          <button data-filter="edit_summary">Edits</button>
+          <button data-filter="merge">Merges</button>
+          <button data-filter="split">Splits</button>
+          <button data-filter="move">Moves</button>
+          <button data-filter="reorder">Reorder</button>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="history-empty">No edits recorded</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Split modal -->
+  <div class="modal-overlay" id="splitModal">
+    <div class="modal">
+      <h3>Split Segment</h3>
+      <div id="splitInfo"></div>
+      <label>Split after which child segment?</label>
+      <div class="split-child-list" id="splitChildList"></div>
+      <label>Summary for first half (optional — keeps original if blank)</label>
+      <textarea id="splitSummary1" rows="2"></textarea>
+      <label>Summary for second half</label>
+      <textarea id="splitSummary2" rows="2"></textarea>
+      <div class="modal-actions">
+        <button class="cancel-btn" id="splitCancel">Cancel</button>
+        <button class="confirm-btn" id="splitConfirm">Split</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Move modal -->
+  <div class="modal-overlay" id="moveModal">
+    <div class="modal">
+      <h3>Move L0 Segments</h3>
+      <div id="moveInfo"></div>
+      <label>Move to:</label>
+      <div class="split-child-list" id="moveTargetList"></div>
+      <label>Summary for new group (only if "Create new" is selected)</label>
+      <textarea id="moveNewSummary" rows="2" placeholder="Summary for the new L1 group..."></textarea>
+      <div class="modal-actions">
+        <button class="cancel-btn" id="moveCancel">Cancel</button>
+        <button class="confirm-btn" id="moveConfirm">Move</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // =========================================================================
+    // STATE
+    // =========================================================================
+    let currentFile = null;
+    let hierarchy = null;     // the live hierarchy object
+    let editHistory = [];     // loaded from server
+    let activeRole = null;
+    let isDirty = false;
+    let undoStack = [];       // local snapshots for undo
+    const MAX_UNDO = 50;
+    let historyFilter = 'all';
+
+    // =========================================================================
+    // INIT: populate file list
+    // =========================================================================
+    (async () => {
+      const res = await fetch('/api/hierarchies');
+      const files = await res.json();
+      const sel = document.getElementById('fileSelect');
+      files.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f; opt.textContent = f.replace('_hierarchy_qwen27b.json','').replace('_hierarchy','').replace('.json','');
+        sel.appendChild(opt);
+      });
+    })();
+
+    document.getElementById('loadBtn').addEventListener('click', loadFile);
+    document.getElementById('saveBtn').addEventListener('click', saveFile);
+    document.getElementById('undoBtn').addEventListener('click', undo);
+    document.getElementById('mergeBtn').addEventListener('click', mergeSelected);
+    document.getElementById('splitBtn').addEventListener('click', openSplitModal);
+    document.getElementById('moveBtn').addEventListener('click', openMoveModal);
+    document.getElementById('moveUpBtn').addEventListener('click', () => reorderSelected(-1));
+    document.getElementById('moveDownBtn').addEventListener('click', () => reorderSelected(1));
+    document.getElementById('moveCancel').addEventListener('click', () => {
+      document.getElementById('moveModal').classList.remove('open');
+    });
+    document.getElementById('moveConfirm').addEventListener('click', confirmMove);
+    document.getElementById('expandAllBtn').addEventListener('click', () => toggleAllExpand(true));
+    document.getElementById('collapseAllBtn').addEventListener('click', () => toggleAllExpand(false));
+    document.getElementById('splitCancel').addEventListener('click', () => {
+      document.getElementById('splitModal').classList.remove('open');
+    });
+    document.getElementById('splitConfirm').addEventListener('click', confirmSplit);
+
+    document.querySelectorAll('.history-filter button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        historyFilter = btn.dataset.filter;
+        document.querySelectorAll('.history-filter button').forEach(b => b.classList.toggle('active', b === btn));
+        renderHistory();
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); }
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveFile(); }
+    });
+
+    // =========================================================================
+    // LOAD / SAVE
+    // =========================================================================
+    async function loadFile() {
+      const filename = document.getElementById('fileSelect').value;
+      if (!filename) return toast('Select a file first', 'error');
+
+      const [hRes, histRes] = await Promise.all([
+        fetch(`/api/hierarchy/${filename}`),
+        fetch(`/api/history/${filename}`),
+      ]);
+      if (!hRes.ok) return toast('Failed to load hierarchy', 'error');
+
+      hierarchy = await hRes.json();
+      editHistory = histRes.ok ? await histRes.json() : [];
+      currentFile = filename;
+      isDirty = false;
+      undoStack = [];
+      updateStatus();
+      buildRoleTabs();
+      renderHistory();
+      toast('Loaded ' + filename, 'success');
+    }
+
+    async function saveFile() {
+      if (!currentFile || !hierarchy) return toast('Nothing to save', 'error');
+      const btn = document.getElementById('saveBtn');
+      btn.textContent = 'Saving...';
+      btn.classList.add('running');
+
+      // 1) Save JSON
+      const res = await fetch(`/api/hierarchy/${currentFile}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(hierarchy),
+      });
+      if (!res.ok) {
+        btn.textContent = 'Save'; btn.classList.remove('running');
+        return toast('Save failed!', 'error');
+      }
+      isDirty = false;
+      updateStatus();
+
+      // 2) Regenerate HTML automatically
+      btn.textContent = 'Regenerating HTML...';
+      try {
+        const regen = await fetch(`/api/regenerate/${currentFile}`, { method: 'POST' });
+        const result = await regen.json();
+        if (result.status === 'ok') {
+          toast(`Saved + HTML regenerated`, 'success');
+        } else if (result.status === 'partial') {
+          toast(`Saved. HTML partially regenerated`, 'info');
+        } else {
+          toast(`Saved JSON. HTML regen failed: ${result.errors[0] || '?'}`, 'error');
+        }
+      } catch (err) {
+        toast('Saved JSON. HTML regen error: ' + err.message, 'error');
+      }
+      btn.textContent = 'Save'; btn.classList.remove('running');
+    }
+
+    // =========================================================================
+    // UNDO
+    // =========================================================================
+    function pushUndo() {
+      const snap = JSON.stringify(hierarchy);
+      undoStack.push(snap);
+      if (undoStack.length > MAX_UNDO) undoStack.shift();
+    }
+
+    function undo() {
+      if (!undoStack.length) return toast('Nothing to undo', 'info');
+      hierarchy = JSON.parse(undoStack.pop());
+      isDirty = true;
+      updateStatus();
+      renderTree();
+      toast('Undone', 'info');
+    }
+
+    // =========================================================================
+    // HISTORY
+    // =========================================================================
+    async function recordHistory(entry) {
+      entry.role = activeRole;
+      entry.file = currentFile;
+      editHistory.push(entry);
+      renderHistory();
+      if (currentFile) {
+        fetch(`/api/history/${currentFile}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry),
+        });
+      }
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('historyList');
+      const subtitle = document.getElementById('historySubtitle');
+      const items = historyFilter === 'all'
+        ? editHistory
+        : editHistory.filter(e => e.action === historyFilter);
+
+      subtitle.textContent = `${editHistory.length} total edits`;
+      if (!items.length) {
+        container.innerHTML = '<div class="history-empty">No matching edits</div>';
+        return;
+      }
+
+      container.innerHTML = items.slice().reverse().map(e => {
+        const time = e.timestamp ? `<span class="he-time">${e.timestamp}</span>` : '';
+        let detail = '';
+        if (e.action === 'edit_summary') {
+          detail = `<span class="he-role">${e.role || ''}</span> ${e.segment_id || ''}<br>` +
+            `<span class="he-old">${esc(e.old_value || '')}</span><br>` +
+            `<span class="he-new">${esc(e.new_value || '')}</span>`;
+        } else if (e.action === 'merge') {
+          detail = `<span class="he-role">${e.role || ''}</span> ` +
+            `Merged ${(e.merged_ids||[]).join(', ')}<br>into ${e.result_id || ''}`;
+        } else if (e.action === 'split') {
+          detail = `<span class="he-role">${e.role || ''}</span> ` +
+            `Split ${e.source_id || ''} into ${(e.result_ids||[]).join(', ')}`;
+        } else if (e.action === 'move') {
+          detail = `<span class="he-role">${e.role || ''}</span> ` +
+            `Moved ${(e.moved_ids||[]).join(', ')}<br>` +
+            `from ${e.from_l1 || '?'} to ${e.to_l1 || '?'}`;
+        } else if (e.action === 'reorder') {
+          detail = `<span class="he-role">${e.role || ''}</span> ` +
+            `${e.segment_id || '?'} moved ${e.direction || '?'}`;
+        } else {
+          detail = esc(JSON.stringify(e));
+        }
+        return `<div class="history-entry">${time}` +
+          `<div class="he-action">${e.action || '?'}</div>` +
+          `<div class="he-detail">${detail}</div></div>`;
+      }).join('');
+      container.scrollTop = 0;
+    }
+
+    // =========================================================================
+    // ROLE TABS
+    // =========================================================================
+    function buildRoleTabs() {
+      const container = document.getElementById('roleTabs');
+      container.innerHTML = '';
+      if (!hierarchy) return;
+      const roles = Object.keys(hierarchy.roles);
+      roles.forEach(role => {
+        const rd = hierarchy.roles[role];
+        const tab = document.createElement('div');
+        tab.className = 'role-tab';
+        tab.dataset.role = role;
+        const l0 = rd.num_segments || (rd.level0_segments||[]).length;
+        const l1 = rd.num_level1_segments || (rd.level1_segments||[]).length;
+        const l2 = rd.num_level2_segments || (rd.level2_segments||[]).length;
+        const name = rd.level0_segments?.[0]?.role_human || role.replace(/_/g,' ');
+        tab.innerHTML = `${esc(name)}<span class="seg-count">${l2}/${l1}/${l0}</span>`;
+        tab.addEventListener('click', () => selectRole(role));
+        container.appendChild(tab);
+      });
+      if (roles.length) selectRole(roles[0]);
+    }
+
+    function selectRole(role) {
+      activeRole = role;
+      document.querySelectorAll('.role-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.role === role));
+      renderTree();
+    }
+
+    // =========================================================================
+    // TREE RENDERING
+    // =========================================================================
+    function renderTree() {
+      const area = document.getElementById('treeArea');
+      if (!hierarchy || !activeRole) {
+        area.innerHTML = '<div style="color:var(--muted);padding:20px;">No data</div>';
+        return;
+      }
+      const rd = hierarchy.roles[activeRole];
+      const l2segs = rd.level2_segments || [];
+      const l1segs = rd.level1_segments || [];
+      const l0segs = rd.level0_segments || [];
+
+      const l1Map = {}; l1segs.forEach(s => l1Map[s.segment_id] = s);
+      const l0Map = {}; l0segs.forEach(s => l0Map[s.segment_id] = s);
+
+      let html = '';
+
+      if (l2segs.length) {
+        l2segs.forEach(l2 => {
+          html += renderSegNode(l2, 'l2', () => {
+            const childIds = l2.child_ids || l2.segment_ids || [];
+            let inner = '';
+            childIds.forEach(cid => {
+              const l1 = l1Map[cid];
+              if (!l1) return;
+              inner += renderSegNode(l1, 'l1', () => {
+                const l0Ids = l1.segment_ids || [];
+                let l0html = '';
+                l0Ids.forEach(sid => {
+                  const l0 = l0Map[sid];
+                  if (!l0) return;
+                  l0html += renderL0Node(l0);
+                });
+                return l0html;
+              });
+            });
+            return inner;
+          });
+        });
+      } else if (l1segs.length) {
+        l1segs.forEach(l1 => {
+          html += renderSegNode(l1, 'l1', () => {
+            const l0Ids = l1.segment_ids || [];
+            let l0html = '';
+            l0Ids.forEach(sid => {
+              const l0 = l0Map[sid];
+              if (!l0) return;
+              l0html += renderL0Node(l0);
+            });
+            return l0html;
+          });
+        });
+      } else {
+        l0segs.forEach(l0 => { html += renderL0Node(l0); });
+      }
+
+      area.innerHTML = html;
+      updateSelectionHint();
+    }
+
+    function renderSegNode(seg, level, childrenFn) {
+      const dur = seg.duration_s != null ? seg.duration_s + 's' : '';
+      const ts = seg.time_start != null ? seg.time_start : '?';
+      const te = seg.time_end != null ? seg.time_end : '?';
+      const childHtml = childrenFn ? childrenFn() : '';
+      const hasChildren = childHtml.length > 0;
+      return `<div class="seg-node" data-id="${esc(seg.segment_id)}" data-level="${level}">
+        <div class="seg-header">
+          <input type="checkbox" class="seg-checkbox" data-id="${esc(seg.segment_id)}" data-level="${level}">
+          ${hasChildren ? `<span class="seg-expand" onclick="toggleExpand(this, event)">▼</span>` : ''}
+          <span class="seg-badge ${level}">${level.toUpperCase()}</span>
+          <span class="seg-id">${esc(seg.segment_id)}</span>
+          <span class="seg-time">${ts}–${te}s</span>
+          <span class="seg-summary" ondblclick="startEdit(this, '${esc(seg.segment_id)}', '${level}')">${esc(seg.summary || seg.description || '—')}</span>
+          <span class="seg-dur">${dur}</span>
+        </div>
+        ${hasChildren ? `<div class="seg-children">${childHtml}</div>` : ''}
+      </div>`;
+    }
+
+    const TOOL_ROLES = new Set(['instrument','saw','drill','hammer','c_arm','tracker','mako_robot']);
+
+    function renderL0Node(seg) {
+      const preds = seg.active_predicates || [];
+      const isToolRole = TOOL_ROLES.has(activeRole);
+      let predsHtml;
+      if (!preds.length) {
+        predsHtml = '<span class="idle-label">idle</span>';
+      } else {
+        predsHtml = preds.map(([p, o]) => {
+          const label = isToolRole
+            ? `${humanize(o)} ${humanizePred(p)}`
+            : `${humanizePred(p)} ${humanize(o)}`;
+          return `<span class="pred-badge" style="background:${predColor(p)}20;color:${predColor(p)};border-color:${predColor(p)}50">${esc(label)}</span>`;
+        }).join(' ');
+      }
+      const dur = seg.duration_s != null ? seg.duration_s + 's' : '';
+      const ts = seg.time_start != null ? seg.time_start : '?';
+      const te = seg.time_end != null ? seg.time_end : '?';
+      return `<div class="seg-node" data-id="${esc(seg.segment_id)}" data-level="l0">
+        <div class="seg-header">
+          <input type="checkbox" class="seg-checkbox" data-id="${esc(seg.segment_id)}" data-level="l0">
+          <span class="seg-badge l0">L0</span>
+          <span class="seg-id">${esc(seg.segment_id)}</span>
+          <span class="seg-time">${ts}–${te}s</span>
+          <span class="seg-summary" ondblclick="startEdit(this, '${esc(seg.segment_id)}', 'l0')">${predsHtml} <span style="color:var(--muted);font-size:9px">${esc(seg.description||'')}</span></span>
+          <span class="seg-dur">${dur}</span>
+        </div>
+      </div>`;
+    }
+
+    // =========================================================================
+    // EXPAND / COLLAPSE
+    // =========================================================================
+    function toggleExpand(el, event) {
+      event.stopPropagation();
+      const node = el.closest('.seg-node');
+      const children = node.querySelector('.seg-children');
+      if (!children) return;
+      const collapsed = children.classList.toggle('collapsed');
+      el.textContent = collapsed ? '▶' : '▼';
+    }
+
+    function toggleAllExpand(expand) {
+      document.querySelectorAll('.seg-children').forEach(c => c.classList.toggle('collapsed', !expand));
+      document.querySelectorAll('.seg-expand').forEach(e => e.textContent = expand ? '▼' : '▶');
+    }
+
+    // =========================================================================
+    // INLINE SUMMARY EDITING
+    // =========================================================================
+    function startEdit(el, segId, level) {
+      if (el.querySelector('textarea')) return;
+      const seg = findSegment(segId, level);
+      if (!seg) return;
+      const field = (level === 'l0') ? 'description' : 'summary';
+      const oldVal = seg[field] || '';
+      const ta = document.createElement('textarea');
+      ta.className = 'seg-summary-edit';
+      ta.value = oldVal;
+      ta.rows = 2;
+      el.innerHTML = '';
+      el.appendChild(ta);
+      ta.focus();
+      ta.select();
+
+      function finish() {
+        const newVal = ta.value.trim();
+        if (newVal !== oldVal) {
+          pushUndo();
+          seg[field] = newVal;
+          markDirty();
+          recordHistory({
+            action: 'edit_summary',
+            segment_id: segId,
+            level: level,
+            field: field,
+            old_value: oldVal,
+            new_value: newVal,
+          });
+        }
+        renderTree();
+      }
+
+      ta.addEventListener('blur', finish);
+      ta.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ta.blur(); }
+        if (e.key === 'Escape') { ta.value = oldVal; ta.blur(); }
+      });
+    }
+
+    // =========================================================================
+    // MERGE
+    // =========================================================================
+    function getChecked() {
+      const checks = [...document.querySelectorAll('.seg-checkbox:checked')];
+      return checks.map(c => ({ id: c.dataset.id, level: c.dataset.level }));
+    }
+
+    function mergeSelected() {
+      const sel = getChecked();
+      if (sel.length < 2) return toast('Select at least 2 segments to merge', 'error');
+
+      const levels = new Set(sel.map(s => s.level));
+      if (levels.size > 1) return toast('Can only merge segments at the same level', 'error');
+      const level = sel[0].level;
+
+      const rd = hierarchy.roles[activeRole];
+      let segList, childKey;
+      if (level === 'l2') { segList = rd.level2_segments; childKey = 'child_ids'; }
+      else if (level === 'l1') { segList = rd.level1_segments; childKey = 'segment_ids'; }
+      else if (level === 'l0') { segList = rd.level0_segments; childKey = null; }
+      else return toast('Unknown level', 'error');
+
+      if (!segList) return toast('No segments at this level', 'error');
+
+      const selIds = sel.map(s => s.id);
+      const indices = selIds.map(id => segList.findIndex(s => s.segment_id === id)).sort((a,b) => a - b);
+
+      if (indices.some(i => i < 0)) return toast('Segment not found', 'error');
+
+      for (let i = 1; i < indices.length; i++) {
+        if (indices[i] !== indices[i-1] + 1) return toast('Selected segments must be adjacent', 'error');
+      }
+
+      pushUndo();
+
+      const toMerge = indices.map(i => segList[i]);
+      const first = toMerge[0];
+      const last = toMerge[toMerge.length - 1];
+
+      const merged = { ...first };
+      merged.time_end = last.time_end;
+      if (merged.time_start != null && merged.time_end != null) {
+        merged.duration_s = merged.time_end - merged.time_start + 1;
+      }
+      if (childKey) {
+        merged[childKey] = toMerge.flatMap(s => s[childKey] || []);
+      }
+      if (level === 'l0') {
+        const allPreds = new Set();
+        toMerge.forEach(s => (s.active_predicates||[]).forEach(p => allPreds.add(JSON.stringify(p))));
+        merged.active_predicates = [...allPreds].map(p => JSON.parse(p));
+        merged.duration_frames = toMerge.reduce((sum, s) => sum + (s.duration_frames || 0), 0);
+      }
+      merged.summary = first.summary || first.description || '';
+
+      // Merge transcripts
+      if (toMerge.some(s => s.transcript?.length)) {
+        merged.transcript = toMerge.flatMap(s => s.transcript || []);
+      }
+
+      segList.splice(indices[0], toMerge.length, merged);
+
+      // Update parent references BEFORE reindex: replace all merged old IDs
+      // with the merged segment's current ID, so reindex can then rename it cleanly.
+      const mergedOldIds = new Set(toMerge.map(s => s.segment_id));
+      if (level === 'l1' && rd.level2_segments) {
+        rd.level2_segments.forEach(l2 => {
+          const key = l2.child_ids ? 'child_ids' : 'segment_ids';
+          const cids = l2[key] || [];
+          const newCids = [];
+          let replaced = false;
+          cids.forEach(cid => {
+            if (mergedOldIds.has(cid)) {
+              if (!replaced) { newCids.push(merged.segment_id); replaced = true; }
+            } else {
+              newCids.push(cid);
+            }
+          });
+          l2[key] = newCids;
+        });
+      }
+      if (level === 'l0' && rd.level1_segments) {
+        rd.level1_segments.forEach(l1 => {
+          const sids = l1.segment_ids || [];
+          const newSids = [];
+          let replaced = false;
+          sids.forEach(sid => {
+            if (mergedOldIds.has(sid)) {
+              if (!replaced) { newSids.push(merged.segment_id); replaced = true; }
+            } else {
+              newSids.push(sid);
+            }
+          });
+          l1.segment_ids = newSids;
+        });
+      }
+
+      // Now reindex: renames all segment IDs sequentially and updates parent refs
+      reindexSegments(segList, level);
+
+      updateSegmentCounts();
+      markDirty();
+      renderTree();
+
+      const mergedIdsList = toMerge.map(s => s.segment_id);
+      recordHistory({
+        action: 'merge',
+        level: level,
+        merged_ids: mergedIdsList,
+        result_id: merged.segment_id,
+      });
+      toast(`Merged ${toMerge.length} ${level.toUpperCase()} segments`, 'success');
+    }
+
+    // =========================================================================
+    // SPLIT
+    // =========================================================================
+    let splitTarget = null;
+
+    function openSplitModal() {
+      const sel = getChecked();
+      if (sel.length !== 1) return toast('Select exactly 1 segment to split', 'error');
+
+      const { id, level } = sel[0];
+      if (level === 'l0') return toast('Cannot split L0 segments (they are atomic)', 'error');
+
+      const seg = findSegment(id, level);
+      if (!seg) return toast('Segment not found', 'error');
+
+      const childKey = level === 'l2' ? 'child_ids' : 'segment_ids';
+      const childIds = seg[childKey] || seg.segment_ids || [];
+      if (childIds.length < 2) return toast('Segment has fewer than 2 children — cannot split', 'error');
+
+      splitTarget = { id, level, seg, childKey, childIds };
+
+      document.getElementById('splitInfo').innerHTML =
+        `<strong>${esc(id)}</strong> (${level.toUpperCase()}) — ${childIds.length} children<br>` +
+        `<span style="color:var(--muted);font-size:11px">${esc(seg.summary || '')}</span>`;
+
+      const listEl = document.getElementById('splitChildList');
+      listEl.innerHTML = childIds.map((cid, i) => {
+        const checked = i === Math.floor(childIds.length / 2) - 1 ? 'checked' : '';
+        return `<div class="split-child">` +
+          `<input type="radio" name="splitAfter" value="${i}" ${checked}>` +
+          `<span class="sc-id">${esc(cid)}</span>` +
+          `</div>`;
+      }).join('');
+
+      document.getElementById('splitSummary1').value = seg.summary || '';
+      document.getElementById('splitSummary2').value = '';
+      document.getElementById('splitModal').classList.add('open');
+    }
+
+    function confirmSplit() {
+      if (!splitTarget) return;
+      const { id, level, seg, childKey, childIds } = splitTarget;
+      const rd = hierarchy.roles[activeRole];
+
+      const radio = document.querySelector('input[name="splitAfter"]:checked');
+      if (!radio) return toast('Select split point', 'error');
+      const splitIdx = parseInt(radio.value);
+
+      const firstChildIds = childIds.slice(0, splitIdx + 1);
+      const secondChildIds = childIds.slice(splitIdx + 1);
+      if (!secondChildIds.length) return toast('Split point creates an empty second half', 'error');
+
+      const summary1 = document.getElementById('splitSummary1').value.trim() || seg.summary || '';
+      const summary2 = document.getElementById('splitSummary2').value.trim() || 'Split segment';
+
+      pushUndo();
+
+      let segList;
+      if (level === 'l2') segList = rd.level2_segments;
+      else if (level === 'l1') segList = rd.level1_segments;
+      else return;
+
+      const segIdx = segList.findIndex(s => s.segment_id === id);
+      if (segIdx < 0) return toast('Segment not found', 'error');
+
+      // Resolve time ranges from children
+      const childSegList = level === 'l2' ? rd.level1_segments : rd.level0_segments;
+      const childMap = {}; (childSegList || []).forEach(s => childMap[s.segment_id] = s);
+
+      function resolveTimeRange(ids) {
+        const first = childMap[ids[0]];
+        const last = childMap[ids[ids.length - 1]];
+        return {
+          time_start: first?.time_start ?? seg.time_start,
+          time_end: last?.time_end ?? seg.time_end,
+        };
+      }
+
+      const range1 = resolveTimeRange(firstChildIds);
+      const range2 = resolveTimeRange(secondChildIds);
+
+      const seg1 = {
+        ...seg,
+        [childKey]: firstChildIds,
+        summary: summary1,
+        time_start: range1.time_start,
+        time_end: range1.time_end,
+        duration_s: (range1.time_end != null && range1.time_start != null)
+          ? range1.time_end - range1.time_start + 1 : null,
+      };
+
+      const seg2 = {
+        ...seg,
+        segment_id: seg.segment_id + '_split',
+        [childKey]: secondChildIds,
+        summary: summary2,
+        time_start: range2.time_start,
+        time_end: range2.time_end,
+        duration_s: (range2.time_end != null && range2.time_start != null)
+          ? range2.time_end - range2.time_start + 1 : null,
+      };
+
+      segList.splice(segIdx, 1, seg1, seg2);
+      reindexSegments(segList, level);
+
+      // Update parent references if splitting L1 inside L2
+      if (level === 'l1' && rd.level2_segments) {
+        rd.level2_segments.forEach(l2 => {
+          const cids = l2.child_ids || l2.segment_ids || [];
+          const idx = cids.indexOf(id);
+          if (idx >= 0) {
+            cids.splice(idx, 1, seg1.segment_id, seg2.segment_id);
+          }
+        });
+      }
+
+      updateSegmentCounts();
+      markDirty();
+      renderTree();
+
+      recordHistory({
+        action: 'split',
+        level: level,
+        source_id: id,
+        result_ids: [seg1.segment_id, seg2.segment_id],
+        split_after_child: childIds[splitIdx],
+      });
+
+      document.getElementById('splitModal').classList.remove('open');
+      splitTarget = null;
+      toast(`Split ${level.toUpperCase()} into 2 segments`, 'success');
+    }
+
+    // =========================================================================
+    // MOVE SEGMENTS: L0 -> L1  or  L1 -> L2
+    // =========================================================================
+    let moveData = null;
+
+    function _childKey(seg) { return seg.child_ids ? 'child_ids' : 'segment_ids'; }
+
+    function _getChildren(parentSeg) { return parentSeg[_childKey(parentSeg)] || parentSeg.segment_ids || []; }
+
+    function _setChildren(parentSeg, ids) {
+      if (parentSeg.child_ids) parentSeg.child_ids = ids;
+      else parentSeg.segment_ids = ids;
+    }
+
+    function openMoveModal() {
+      const sel = getChecked();
+      if (!sel.length) return toast('Select segments to move', 'error');
+      const levels = new Set(sel.map(s => s.level));
+      if (levels.size > 1) return toast('Select segments at the same level', 'error');
+      const level = sel[0].level;
+      if (level !== 'l0' && level !== 'l1') return toast('Move works on L0 or L1 segments', 'error');
+
+      const rd = hierarchy.roles[activeRole];
+      const parentLevel = level === 'l0' ? 'l1' : 'l2';
+      const parentSegs = parentLevel === 'l1' ? (rd.level1_segments || []) : (rd.level2_segments || []);
+      if (!parentSegs.length) return toast(`No ${parentLevel.toUpperCase()} segments exist`, 'error');
+
+      const selIds = new Set(sel.map(s => s.id));
+
+      // Find the parent that owns these children
+      const sourceParent = parentSegs.find(p => _getChildren(p).some(cid => selIds.has(cid)));
+      if (!sourceParent) return toast(`Cannot find parent ${parentLevel.toUpperCase()}`, 'error');
+
+      const sourceChildIds = _getChildren(sourceParent);
+      const sourceChildSet = new Set(sourceChildIds);
+      for (const s of sel) {
+        if (!sourceChildSet.has(s.id)) return toast(`All selected must belong to the same ${parentLevel.toUpperCase()}`, 'error');
+      }
+
+      // Verify contiguous
+      const selIndices = [];
+      sourceChildIds.forEach((sid, i) => { if (selIds.has(sid)) selIndices.push(i); });
+      for (let i = 1; i < selIndices.length; i++) {
+        if (selIndices[i] !== selIndices[i-1] + 1) return toast('Selected segments must be adjacent', 'error');
+      }
+
+      const atStart = selIndices[0] === 0;
+      const atEnd = selIndices[selIndices.length - 1] === sourceChildIds.length - 1;
+      const isAll = selIds.size === sourceChildIds.length;
+      if (!atStart && !atEnd && !isAll) {
+        return toast('Selected segments must be at the start or end (or select all)', 'error');
+      }
+
+      moveData = {
+        level, parentLevel,
+        selIds: [...selIds],
+        sourceId: sourceParent.segment_id,
+        atStart, atEnd, isAll,
+      };
+
+      const sourceIdx = parentSegs.findIndex(s => s.segment_id === sourceParent.segment_id);
+      const levelLabel = level.toUpperCase();
+      const parentLabel = parentLevel.toUpperCase();
+
+      document.getElementById('moveInfo').innerHTML =
+        `Moving <strong>${selIds.size} ${levelLabel}</strong> segment(s) from ` +
+        `<strong>${esc(sourceParent.segment_id)}</strong>` +
+        `<br><span style="color:var(--muted);font-size:11px">${esc(sourceParent.summary || '')}</span>`;
+
+      let targetHtml = '';
+      targetHtml += `<div class="split-child">
+        <input type="radio" name="moveTarget" value="__new__" checked>
+        <span class="sc-id" style="color:var(--ok)">Create new ${parentLabel}</span>
+        <span style="color:var(--muted);font-size:9px">(inserts ${atStart ? 'before' : 'after'} current)</span>
+      </div>`;
+
+      parentSegs.forEach((p, i) => {
+        if (p.segment_id === sourceParent.segment_id) return;
+        const pos = i < sourceIdx ? 'above' : 'below';
+        targetHtml += `<div class="split-child">
+          <input type="radio" name="moveTarget" value="${esc(p.segment_id)}">
+          <span class="sc-id">${esc(p.segment_id)}</span>
+          <span style="color:var(--muted);font-size:9px">(${pos}) ${esc((p.summary||'').slice(0,60))}</span>
+        </div>`;
+      });
+
+      document.getElementById('moveTargetList').innerHTML = targetHtml;
+      document.getElementById('moveNewSummary').value = '';
+      document.getElementById('moveModal').classList.add('open');
+    }
+
+    function confirmMove() {
+      if (!moveData) return;
+      const { level, parentLevel, selIds, sourceId, atStart, atEnd, isAll } = moveData;
+      const selSet = new Set(selIds);
+      const rd = hierarchy.roles[activeRole];
+
+      const parentSegs = parentLevel === 'l1' ? (rd.level1_segments || []) : (rd.level2_segments || []);
+      const childSegs = level === 'l0' ? (rd.level0_segments || []) : (rd.level1_segments || []);
+      const childMap = {};
+      childSegs.forEach(s => childMap[s.segment_id] = s);
+
+      const radio = document.querySelector('input[name="moveTarget"]:checked');
+      if (!radio) return toast('Select a target', 'error');
+      const targetVal = radio.value;
+
+      pushUndo();
+
+      const sourceParent = parentSegs.find(s => s.segment_id === sourceId);
+      const sourceIdx = parentSegs.indexOf(sourceParent);
+
+      // Remove selected from source
+      _setChildren(sourceParent, _getChildren(sourceParent).filter(id => !selSet.has(id)));
+
+      let targetLabel;
+
+      if (targetVal === '__new__') {
+        const newSummary = document.getElementById('moveNewSummary').value.trim() || 'Moved segments';
+        const movedChildren = selIds.map(id => childMap[id]).filter(Boolean);
+        const newParent = {
+          segment_id: `${activeRole}_${parentLevel.toUpperCase()}_new`,
+          role: activeRole,
+          level: parentLevel === 'l1' ? 1 : 2,
+          role_human: sourceParent.role_human,
+          summary: newSummary,
+          time_start: movedChildren[0]?.time_start ?? null,
+          time_end: movedChildren[movedChildren.length-1]?.time_end ?? null,
+          duration_s: null,
+          transcript: movedChildren.flatMap(s => s.transcript || []),
+        };
+        if (parentLevel === 'l1') {
+          newParent.segment_ids = selIds;
+        } else {
+          newParent.child_ids = selIds;
+        }
+        if (newParent.time_start != null && newParent.time_end != null) {
+          newParent.duration_s = newParent.time_end - newParent.time_start + 1;
+        }
+        const insertIdx = atStart ? sourceIdx : sourceIdx + 1;
+        parentSegs.splice(insertIdx, 0, newParent);
+        targetLabel = `(new ${parentLevel.toUpperCase()})`;
+      } else {
+        const targetParent = parentSegs.find(s => s.segment_id === targetVal);
+        if (!targetParent) return toast('Target not found', 'error');
+        const targetIdx = parentSegs.indexOf(targetParent);
+        const existing = _getChildren(targetParent);
+        if (targetIdx < sourceIdx) {
+          _setChildren(targetParent, [...existing, ...selIds]);
+        } else {
+          _setChildren(targetParent, [...selIds, ...existing]);
+        }
+        targetLabel = targetVal;
+      }
+
+      // Remove empty source
+      if (!_getChildren(sourceParent).length) {
+        const idx = parentSegs.indexOf(sourceParent);
+        if (idx >= 0) parentSegs.splice(idx, 1);
+        // Also remove from grandparent if L1 removed from L2
+        if (parentLevel === 'l1' && rd.level2_segments) {
+          rd.level2_segments.forEach(l2 => {
+            const cids = _getChildren(l2);
+            _setChildren(l2, cids.filter(id => id !== sourceParent.segment_id));
+          });
+        }
+      }
+
+      // Refresh time ranges on all parents at this level
+      parentSegs.forEach(p => {
+        const kids = _getChildren(p).map(id => childMap[id]).filter(Boolean);
+        if (kids.length) {
+          p.time_start = kids[0].time_start;
+          p.time_end = kids[kids.length - 1].time_end;
+          p.duration_s = (p.time_start != null && p.time_end != null) ? p.time_end - p.time_start + 1 : null;
+          p.transcript = kids.flatMap(c => c.transcript || []);
+        }
+      });
+
+      // Reindex the parent level
+      reindexSegments(parentSegs, parentLevel);
+
+      // If we moved L1s between L2s, or created a new L1, ensure L2 child_ids are consistent
+      if (parentLevel === 'l1') {
+        rebuildL2ChildIds();
+        refreshL2TimeRanges();
+      }
+      if (parentLevel === 'l2') {
+        // Clean up empty L2s
+        rd.level2_segments = (rd.level2_segments || []).filter(l2 => _getChildren(l2).length > 0);
+        reindexSegments(rd.level2_segments, 'l2');
+      }
+
+      updateSegmentCounts();
+      markDirty();
+      renderTree();
+
+      recordHistory({
+        action: 'move',
+        level,
+        moved_ids: selIds,
+        from_l1: sourceId,
+        to_l1: targetLabel,
+      });
+
+      document.getElementById('moveModal').classList.remove('open');
+      moveData = null;
+      toast(`Moved ${selIds.length} ${level.toUpperCase()} segment(s)`, 'success');
+    }
+
+    function rebuildL2ChildIds() {
+      const rd = hierarchy.roles[activeRole];
+      const l1segs = rd.level1_segments || [];
+      const l2segs = rd.level2_segments || [];
+      if (!l2segs.length) return;
+
+      const assignedL1 = new Set();
+      l2segs.forEach(l2 => _getChildren(l2).forEach(id => assignedL1.add(id)));
+
+      l1segs.forEach(l1 => {
+        if (assignedL1.has(l1.segment_id)) return;
+        // Find the L2 whose last child is temporally closest before this L1
+        let bestL2 = null;
+        for (const l2 of l2segs) {
+          const cids = _getChildren(l2);
+          if (!cids.length) continue;
+          const lastChild = l1segs.find(s => s.segment_id === cids[cids.length - 1]);
+          if (lastChild && l1.time_start != null && lastChild.time_end != null &&
+              l1.time_start >= lastChild.time_start) {
+            bestL2 = l2;
+          }
+        }
+        if (!bestL2) bestL2 = l2segs[l2segs.length - 1];
+        const cids = _getChildren(bestL2);
+        cids.push(l1.segment_id);
+        cids.sort((a, b) => {
+          const ia = l1segs.findIndex(s => s.segment_id === a);
+          const ib = l1segs.findIndex(s => s.segment_id === b);
+          return ia - ib;
+        });
+        _setChildren(bestL2, cids);
+      });
+    }
+
+    function refreshL2TimeRanges() {
+      const rd = hierarchy.roles[activeRole];
+      const l1segs = rd.level1_segments || [];
+      (rd.level2_segments || []).forEach(l2 => {
+        const kids = _getChildren(l2).map(id => l1segs.find(s => s.segment_id === id)).filter(Boolean);
+        if (kids.length) {
+          l2.time_start = kids[0].time_start;
+          l2.time_end = kids[kids.length - 1].time_end;
+          l2.duration_s = (l2.time_start != null && l2.time_end != null) ? l2.time_end - l2.time_start + 1 : null;
+        }
+      });
+      rd.level2_segments = (rd.level2_segments || []).filter(l2 => _getChildren(l2).length > 0);
+    }
+
+    // =========================================================================
+    // REORDER: move segment up/down within its parent
+    // =========================================================================
+    function reorderSelected(dir) {
+      const sel = getChecked();
+      if (sel.length !== 1) return toast('Select exactly 1 segment to reorder', 'error');
+      const { id, level } = sel[0];
+      const rd = hierarchy.roles[activeRole];
+
+      // Determine which list this segment lives in, and optionally its parent
+      let segList, parentSeg, parentList;
+      if (level === 'l0') {
+        segList = rd.level0_segments || [];
+        // Find owning L1
+        parentSeg = (rd.level1_segments || []).find(p => (p.segment_ids || []).includes(id));
+      } else if (level === 'l1') {
+        segList = rd.level1_segments || [];
+        parentSeg = (rd.level2_segments || []).find(p => _getChildren(p).includes(id));
+      } else if (level === 'l2') {
+        segList = rd.level2_segments || [];
+        parentSeg = null;
+      } else {
+        return toast('Unknown level', 'error');
+      }
+
+      // Swap within the parent's child list (if it has one)
+      if (parentSeg) {
+        const childIds = level === 'l0' ? (parentSeg.segment_ids || []) : _getChildren(parentSeg);
+        const idx = childIds.indexOf(id);
+        if (idx < 0) return toast('Segment not found in parent', 'error');
+        const newIdx = idx + dir;
+        if (newIdx < 0 || newIdx >= childIds.length) return toast('Already at the edge', 'info');
+
+        pushUndo();
+        [childIds[idx], childIds[newIdx]] = [childIds[newIdx], childIds[idx]];
+      }
+
+      // Also swap in the flat segment list to keep it consistent
+      const flatIdx = segList.findIndex(s => s.segment_id === id);
+      if (flatIdx < 0) return toast('Segment not found', 'error');
+      const newFlatIdx = flatIdx + dir;
+
+      if (!parentSeg) {
+        // Top-level (L2 or orphan): just check bounds
+        if (newFlatIdx < 0 || newFlatIdx >= segList.length) return toast('Already at the edge', 'info');
+        pushUndo();
+      } else if (newFlatIdx < 0 || newFlatIdx >= segList.length) {
+        return toast('Already at the edge', 'info');
+      }
+
+      [segList[flatIdx], segList[newFlatIdx]] = [segList[newFlatIdx], segList[flatIdx]];
+
+      // Reindex IDs
+      reindexSegments(segList, level);
+
+      // If reordering L2, also reorder L2 child_ids to match
+      if (level === 'l2') {
+        // L2 has no parent list to fix, but refresh time ranges
+        (rd.level2_segments || []).forEach(l2 => {
+          const kids = _getChildren(l2).map(cid => (rd.level1_segments||[]).find(s => s.segment_id === cid)).filter(Boolean);
+          if (kids.length) {
+            l2.time_start = kids[0].time_start;
+            l2.time_end = kids[kids.length-1].time_end;
+            l2.duration_s = (l2.time_start != null && l2.time_end != null) ? l2.time_end - l2.time_start + 1 : null;
+          }
+        });
+      }
+
+      if (level === 'l1') {
+        refreshL2TimeRanges();
+      }
+
+      // Find the new ID of the moved segment so we can re-check it
+      const newId = segList[newFlatIdx].segment_id;
+
+      markDirty();
+      renderTree();
+
+      // Re-check the moved segment
+      setTimeout(() => {
+        const cb = document.querySelector(`.seg-checkbox[data-id="${newId}"]`);
+        if (cb) cb.checked = true;
+      }, 50);
+
+      recordHistory({
+        action: 'reorder',
+        level,
+        segment_id: id,
+        direction: dir > 0 ? 'down' : 'up',
+        new_position: newFlatIdx,
+      });
+      toast(`Moved ${level.toUpperCase()} ${dir > 0 ? 'down' : 'up'}`, 'success');
+    }
+
+    // =========================================================================
+    // HELPERS
+    // =========================================================================
+    function findSegment(id, level) {
+      const rd = hierarchy?.roles?.[activeRole];
+      if (!rd) return null;
+      if (level === 'l2') return (rd.level2_segments||[]).find(s => s.segment_id === id);
+      if (level === 'l1') return (rd.level1_segments||[]).find(s => s.segment_id === id);
+      if (level === 'l0') return (rd.level0_segments||[]).find(s => s.segment_id === id);
+      return null;
+    }
+
+    function reindexSegments(segList, level) {
+      segList.forEach((seg, i) => {
+        const oldId = seg.segment_id;
+        seg.segment_id = `${activeRole}_${level.toUpperCase()}_${String(i).padStart(3,'0')}`;
+        // Update parent references to the old ID
+        if (level === 'l1' && hierarchy.roles[activeRole].level2_segments) {
+          hierarchy.roles[activeRole].level2_segments.forEach(l2 => {
+            const key = l2.child_ids ? 'child_ids' : 'segment_ids';
+            const arr = l2[key] || [];
+            const idx = arr.indexOf(oldId);
+            if (idx >= 0) arr[idx] = seg.segment_id;
+          });
+        }
+        if (level === 'l0' && hierarchy.roles[activeRole].level1_segments) {
+          hierarchy.roles[activeRole].level1_segments.forEach(l1 => {
+            const sids = l1.segment_ids || [];
+            const idx = sids.indexOf(oldId);
+            if (idx >= 0) sids[idx] = seg.segment_id;
+          });
+        }
+      });
+    }
+
+    function updateSegmentCounts() {
+      const rd = hierarchy.roles[activeRole];
+      rd.num_segments = (rd.level0_segments||[]).length;
+      rd.num_level1_segments = (rd.level1_segments||[]).length;
+      rd.num_level2_segments = (rd.level2_segments||[]).length;
+      const meta = hierarchy.metadata || {};
+      meta.total_level0_segments = Object.values(hierarchy.roles).reduce((s, r) => s + (r.level0_segments||[]).length, 0);
+      meta.total_level1_segments = Object.values(hierarchy.roles).reduce((s, r) => s + (r.level1_segments||[]).length, 0);
+      meta.total_level2_segments = Object.values(hierarchy.roles).reduce((s, r) => s + (r.level2_segments||[]).length, 0);
+    }
+
+    function markDirty() {
+      isDirty = true;
+      updateStatus();
+    }
+
+    function updateStatus() {
+      const el = document.getElementById('statusText');
+      if (!currentFile) {
+        el.textContent = 'No file loaded';
+      } else {
+        el.textContent = isDirty ? `${currentFile} — unsaved changes` : `${currentFile} — saved`;
+      }
+      document.getElementById('saveBtn').classList.toggle('dirty', isDirty);
+    }
+
+    function updateSelectionHint() {
+      document.querySelectorAll('.seg-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => {
+          const checked = getChecked();
+          const hint = document.getElementById('selectionHint');
+          if (!checked.length) {
+            hint.textContent = 'Check boxes to select segments for merge/split';
+          } else {
+            const levels = [...new Set(checked.map(c => c.level))];
+            hint.textContent = `${checked.length} ${levels.join('/')} selected`;
+          }
+        });
+      });
+    }
+
+    function esc(text) {
+      return String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function humanize(id) {
+      const names = {
+        patient:'patient', nurse:'scrub nurse', mps:'robot technician',
+        instrument_table:'instrument table', anest:'anaesthetist',
+        ot:'operating table', drape:'surgical drape', circulator:'circulator nurse',
+        head_surgeon:'head surgeon', ae:'anaesthesia equipment',
+        assistant_surgeon:'assistant surgeon', mako_robot:'Mako robotic arm',
+        unrelated_person:'unrelated person', instrument:'surgical instrument',
+        saw:'bone saw', drill:'drill', hammer:'hammer', c_arm:'C-arm',
+        tracker:'infrared tracker', mps_workstation:'MPS workstation',
+      };
+      return names[id] || id.replace(/_/g,' ');
+    }
+
+    function humanizePred(id) {
+      const names = {
+        Holding:'holding', Manipulating:'manipulating', Preparing:'preparing',
+        Assisting:'assisting', Touching:'touching', Calibrating:'calibrating',
+        Drilling:'drilling', Sawing:'sawing', Hammering:'hammering',
+        Suturing:'suturing', Cutting:'cutting', Cementing:'cementing',
+        Cleaning:'cleaning', Scanning:'scanning',
+      };
+      return names[id] || id;
+    }
+
+    function predColor(pred) {
+      const colors = {
+        Manipulating:'#3b82f6', Calibrating:'#8b5cf6', Preparing:'#f59e0b',
+        Assisting:'#10b981', Holding:'#06b6d4', Touching:'#64748b',
+        Drilling:'#ef4444', Sawing:'#dc2626', Hammering:'#b91c1c',
+        Suturing:'#ec4899', Cutting:'#f97316', Cementing:'#8484ff',
+        Cleaning:'#22d3ee', Scanning:'#a78bfa',
+      };
+      return colors[pred] || '#94a3b8';
+    }
+
+    function toast(msg, type='info') {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = `toast ${type} show`;
+      clearTimeout(el._timer);
+      el._timer = setTimeout(() => el.classList.remove('show'), 2500);
+    }
+  </script>
+</body>
+</html>
