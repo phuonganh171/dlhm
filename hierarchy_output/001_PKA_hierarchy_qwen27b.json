@@ -2354,216 +2354,6 @@
           "transcript": []
         },
         {
-          "tp_start": "001670",
-          "tp_end": "001674",
-          "duration_frames": 5,
-          "active_predicates": [
-            [
-              "Assisting",
-              "nurse"
-            ],
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_063",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5645,
-          "time_end": 5649,
-          "duration_s": 5,
-          "description": "circulator nurse: is assisting scrub nurse; is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001675",
-          "tp_end": "001686",
-          "duration_frames": 11,
-          "active_predicates": [
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_064",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5650,
-          "time_end": 5666,
-          "duration_s": 17,
-          "description": "circulator nurse: is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001687",
-          "tp_end": "001688",
-          "duration_frames": 2,
-          "active_predicates": [
-            [
-              "Assisting",
-              "nurse"
-            ],
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_065",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5667,
-          "time_end": 5668,
-          "duration_s": 2,
-          "description": "circulator nurse: is assisting scrub nurse; is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001689",
-          "tp_end": "001692",
-          "duration_frames": 4,
-          "active_predicates": [
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_066",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5669,
-          "time_end": 5672,
-          "duration_s": 4,
-          "description": "circulator nurse: is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001693",
-          "tp_end": "001697",
-          "duration_frames": 5,
-          "active_predicates": [
-            [
-              "Assisting",
-              "mps"
-            ],
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_067",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5675,
-          "time_end": 5685,
-          "duration_s": 11,
-          "description": "circulator nurse: is assisting robot technician (MPS); is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001698",
-          "tp_end": "001702",
-          "duration_frames": 5,
-          "active_predicates": [
-            [
-              "Assisting",
-              "nurse"
-            ],
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_068",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5686,
-          "time_end": 5690,
-          "duration_s": 5,
-          "description": "circulator nurse: is assisting scrub nurse; is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001721",
-          "tp_end": "001733",
-          "duration_frames": 6,
-          "active_predicates": [],
-          "segment_id": "circulator_L0_069",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5747,
-          "time_end": 5767,
-          "duration_s": 21,
-          "description": "circulator nurse: no active interactions",
-          "transcript": []
-        },
-        {
-          "tp_start": "001734",
-          "tp_end": "001740",
-          "duration_frames": 7,
-          "active_predicates": [
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_070",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5768,
-          "time_end": 5778,
-          "duration_s": 11,
-          "description": "circulator nurse: is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001741",
-          "tp_end": "001747",
-          "duration_frames": 7,
-          "active_predicates": [
-            [
-              "Assisting",
-              "nurse"
-            ],
-            [
-              "Holding",
-              "instrument"
-            ]
-          ],
-          "segment_id": "circulator_L0_071",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5779,
-          "time_end": 5809,
-          "duration_s": 31,
-          "description": "circulator nurse: is assisting scrub nurse; is holding surgical instrument",
-          "transcript": []
-        },
-        {
-          "tp_start": "001756",
-          "tp_end": "001761",
-          "duration_frames": 6,
-          "active_predicates": [],
-          "segment_id": "circulator_L0_072",
-          "role": "circulator",
-          "level": 0,
-          "role_human": "circulator nurse",
-          "time_start": 5823,
-          "time_end": 5828,
-          "duration_s": 6,
-          "description": "circulator nurse: no active interactions",
-          "transcript": []
-        },
-        {
           "tp_start": "001762",
           "tp_end": "001769",
           "duration_frames": 8,
@@ -2573,7 +2363,7 @@
               "ot"
             ]
           ],
-          "segment_id": "circulator_L0_073",
+          "segment_id": "circulator_L0_063",
           "role": "circulator",
           "level": 0,
           "role_human": "circulator nurse",
@@ -2588,7 +2378,7 @@
           "tp_end": "001788",
           "duration_frames": 7,
           "active_predicates": [],
-          "segment_id": "circulator_L0_074",
+          "segment_id": "circulator_L0_064",
           "role": "circulator",
           "level": 0,
           "role_human": "circulator nurse",
@@ -2599,7 +2389,7 @@
           "transcript": []
         }
       ],
-      "num_segments": 75,
+      "num_segments": 65,
       "level1_segments": [
         {
           "segment_id": "circulator_L1_000",
@@ -2641,22 +2431,6 @@
           "level": 1,
           "role_human": "circulator nurse",
           "segment_ids": [
-            "circulator_L0_025",
-            "circulator_L0_026"
-          ],
-          "time_start": 909,
-          "time_end": 929,
-          "duration_s": 21,
-          "summary": "The circulator nurse continues to hold surgical instruments and assist the scrub nurse through the final recorded segments.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "circulator_L1_002",
-          "role": "circulator",
-          "level": 1,
-          "role_human": "circulator nurse",
-          "segment_ids": [
             "circulator_L0_020",
             "circulator_L0_021",
             "circulator_L0_022",
@@ -2667,6 +2441,22 @@
           "time_end": 889,
           "duration_s": 204,
           "summary": "The circulator nurse holds surgical instruments for an extended period while intermittently assisting the scrub nurse.",
+          "audio_summary": "",
+          "transcript": []
+        },
+        {
+          "segment_id": "circulator_L1_002",
+          "role": "circulator",
+          "level": 1,
+          "role_human": "circulator nurse",
+          "segment_ids": [
+            "circulator_L0_025",
+            "circulator_L0_026"
+          ],
+          "time_start": 909,
+          "time_end": 929,
+          "duration_s": 21,
+          "summary": "The circulator nurse continues to hold surgical instruments and assist the scrub nurse through the final recorded segments.",
           "audio_summary": "",
           "transcript": []
         },
@@ -2796,31 +2586,7 @@
           "role_human": "circulator nurse",
           "segment_ids": [
             "circulator_L0_063",
-            "circulator_L0_064",
-            "circulator_L0_065",
-            "circulator_L0_066",
-            "circulator_L0_067",
-            "circulator_L0_068",
-            "circulator_L0_069",
-            "circulator_L0_070",
-            "circulator_L0_071",
-            "circulator_L0_072"
-          ],
-          "time_start": 5645,
-          "time_end": 5828,
-          "duration_s": 184,
-          "summary": "The circulator nurse assists the scrub nurse and robot technician while holding surgical instruments.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "circulator_L1_010",
-          "role": "circulator",
-          "level": 1,
-          "role_human": "circulator nurse",
-          "segment_ids": [
-            "circulator_L0_073",
-            "circulator_L0_074"
+            "circulator_L0_064"
           ],
           "time_start": 5834,
           "time_end": 5955,
@@ -2830,7 +2596,7 @@
           "transcript": []
         }
       ],
-      "num_level1_segments": 11,
+      "num_level1_segments": 10,
       "level2_segments": [
         {
           "segment_id": "circulator_L2_000",
@@ -2839,8 +2605,8 @@
           "role_human": "circulator nurse",
           "child_ids": [
             "circulator_L1_000",
-            "circulator_L1_002",
             "circulator_L1_001",
+            "circulator_L1_002",
             "circulator_L1_003",
             "circulator_L1_004"
           ],
@@ -2857,13 +2623,12 @@
           "level": 2,
           "role_human": "circulator nurse",
           "child_ids": [
-            "circulator_L1_009",
             "circulator_L1_005",
             "circulator_L1_006"
           ],
-          "time_start": 5834,
+          "time_start": 2223,
           "time_end": 4943,
-          "duration_s": -890,
+          "duration_s": 2721,
           "summary": "The circulator nurse shifts focus to assist the assistant surgeon and perform patient preparation while maintaining instrument support.",
           "audio_summary": "",
           "transcript": []
@@ -2875,12 +2640,11 @@
           "role_human": "circulator nurse",
           "child_ids": [
             "circulator_L1_007",
-            "circulator_L1_008",
-            "circulator_L1_009"
+            "circulator_L1_008"
           ],
           "time_start": 4955,
-          "time_end": 5955,
-          "duration_s": 1001,
+          "time_end": 5633,
+          "duration_s": 679,
           "summary": "The circulator nurse manages imaging equipment, coordinates with the robot technician, and adjusts the operating table to facilitate the final stages of the surgery.",
           "audio_summary": "",
           "transcript": []
@@ -8922,76 +8686,6 @@
           "transcript": []
         },
         {
-          "tp_start": "001554",
-          "tp_end": "001581",
-          "duration_frames": 23,
-          "active_predicates": [
-            [
-              "Manipulating",
-              "mako_robot"
-            ]
-          ],
-          "segment_id": "mps_L0_107",
-          "role": "mps",
-          "level": 0,
-          "role_human": "robot technician (MPS)",
-          "time_start": 5234,
-          "time_end": 5351,
-          "duration_s": 118,
-          "description": "robot technician (MPS): is manipulating Mako robotic arm",
-          "transcript": []
-        },
-        {
-          "tp_start": "001582",
-          "tp_end": "001583",
-          "duration_frames": 2,
-          "active_predicates": [],
-          "segment_id": "mps_L0_108",
-          "role": "mps",
-          "level": 0,
-          "role_human": "robot technician (MPS)",
-          "time_start": 5357,
-          "time_end": 5363,
-          "duration_s": 7,
-          "description": "robot technician (MPS): no active interactions",
-          "transcript": []
-        },
-        {
-          "tp_start": "001584",
-          "tp_end": "001589",
-          "duration_frames": 6,
-          "active_predicates": [
-            [
-              "Manipulating",
-              "mako_robot"
-            ]
-          ],
-          "segment_id": "mps_L0_109",
-          "role": "mps",
-          "level": 0,
-          "role_human": "robot technician (MPS)",
-          "time_start": 5369,
-          "time_end": 5389,
-          "duration_s": 21,
-          "description": "robot technician (MPS): is manipulating Mako robotic arm",
-          "transcript": []
-        },
-        {
-          "tp_start": "001590",
-          "tp_end": "001599",
-          "duration_frames": 5,
-          "active_predicates": [],
-          "segment_id": "mps_L0_110",
-          "role": "mps",
-          "level": 0,
-          "role_human": "robot technician (MPS)",
-          "time_start": 5390,
-          "time_end": 5399,
-          "duration_s": 10,
-          "description": "robot technician (MPS): no active interactions",
-          "transcript": []
-        },
-        {
           "tp_start": "001600",
           "tp_end": "001607",
           "duration_frames": 8,
@@ -9001,7 +8695,7 @@
               "c_arm"
             ]
           ],
-          "segment_id": "mps_L0_111",
+          "segment_id": "mps_L0_107",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9016,7 +8710,7 @@
           "tp_end": "001614",
           "duration_frames": 7,
           "active_predicates": [],
-          "segment_id": "mps_L0_112",
+          "segment_id": "mps_L0_108",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9036,7 +8730,7 @@
               "patient"
             ]
           ],
-          "segment_id": "mps_L0_113",
+          "segment_id": "mps_L0_109",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9051,7 +8745,7 @@
           "tp_end": "001659",
           "duration_frames": 32,
           "active_predicates": [],
-          "segment_id": "mps_L0_114",
+          "segment_id": "mps_L0_110",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9071,7 +8765,7 @@
               "instrument_table"
             ]
           ],
-          "segment_id": "mps_L0_115",
+          "segment_id": "mps_L0_111",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9086,7 +8780,7 @@
           "tp_end": "001666",
           "duration_frames": 3,
           "active_predicates": [],
-          "segment_id": "mps_L0_116",
+          "segment_id": "mps_L0_112",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9106,7 +8800,7 @@
               "mako_robot"
             ]
           ],
-          "segment_id": "mps_L0_117",
+          "segment_id": "mps_L0_113",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9121,7 +8815,7 @@
           "tp_end": "001716",
           "duration_frames": 25,
           "active_predicates": [],
-          "segment_id": "mps_L0_118",
+          "segment_id": "mps_L0_114",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9141,7 +8835,7 @@
               "nurse"
             ]
           ],
-          "segment_id": "mps_L0_119",
+          "segment_id": "mps_L0_115",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9156,7 +8850,7 @@
           "tp_end": "001743",
           "duration_frames": 24,
           "active_predicates": [],
-          "segment_id": "mps_L0_120",
+          "segment_id": "mps_L0_116",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9176,7 +8870,7 @@
               "instrument"
             ]
           ],
-          "segment_id": "mps_L0_121",
+          "segment_id": "mps_L0_117",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9191,7 +8885,7 @@
           "tp_end": "001769",
           "duration_frames": 8,
           "active_predicates": [],
-          "segment_id": "mps_L0_122",
+          "segment_id": "mps_L0_118",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9211,7 +8905,7 @@
               "mako_robot"
             ]
           ],
-          "segment_id": "mps_L0_123",
+          "segment_id": "mps_L0_119",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9226,7 +8920,7 @@
           "tp_end": "001792",
           "duration_frames": 9,
           "active_predicates": [],
-          "segment_id": "mps_L0_124",
+          "segment_id": "mps_L0_120",
           "role": "mps",
           "level": 0,
           "role_human": "robot technician (MPS)",
@@ -9235,49 +8929,9 @@
           "duration_s": 67,
           "description": "robot technician (MPS): no active interactions",
           "transcript": []
-        },
-        {
-          "tp_start": "001793",
-          "tp_end": "001796",
-          "duration_frames": 4,
-          "active_predicates": [
-            [
-              "Manipulating",
-              "mps_station"
-            ]
-          ],
-          "segment_id": "mps_L0_125",
-          "role": "mps",
-          "level": 0,
-          "role_human": "robot technician (MPS)",
-          "time_start": 5985,
-          "time_end": 6003,
-          "duration_s": 19,
-          "description": "robot technician (MPS): is manipulating MPS workstation",
-          "transcript": []
-        },
-        {
-          "tp_start": "001797",
-          "tp_end": "001798",
-          "duration_frames": 2,
-          "active_predicates": [
-            [
-              "Manipulating",
-              "mako_robot"
-            ]
-          ],
-          "segment_id": "mps_L0_126",
-          "role": "mps",
-          "level": 0,
-          "role_human": "robot technician (MPS)",
-          "time_start": 6009,
-          "time_end": 6011,
-          "duration_s": 3,
-          "description": "robot technician (MPS): is manipulating Mako robotic arm",
-          "transcript": []
         }
       ],
-      "num_segments": 127,
+      "num_segments": 121,
       "level1_segments": [
         {
           "segment_id": "mps_L1_000",
@@ -9676,10 +9330,10 @@
             "mps_L0_109",
             "mps_L0_110"
           ],
-          "time_start": 5234,
-          "time_end": 5399,
-          "duration_s": 166,
-          "summary": "The robot technician manipulates the Mako robotic arm with short pauses interspersed throughout the activity.",
+          "time_start": 5400,
+          "time_end": 5594,
+          "duration_s": 195,
+          "summary": "The robot technician manipulated the C-arm, paused, and briefly touched the patient.",
           "audio_summary": "",
           "transcript": []
         },
@@ -9690,25 +9344,7 @@
           "role_human": "robot technician (MPS)",
           "segment_ids": [
             "mps_L0_111",
-            "mps_L0_112",
-            "mps_L0_113",
-            "mps_L0_114"
-          ],
-          "time_start": 5400,
-          "time_end": 5594,
-          "duration_s": 195,
-          "summary": "The robot technician manipulated the C-arm, paused, and briefly touched the patient.",
-          "audio_summary": "",
-          "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_022",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
-            "mps_L0_115",
-            "mps_L0_116"
+            "mps_L0_112"
           ],
           "time_start": 5595,
           "time_end": 5621,
@@ -9718,13 +9354,13 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_023",
+          "segment_id": "mps_L1_022",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
-            "mps_L0_117",
-            "mps_L0_118"
+            "mps_L0_113",
+            "mps_L0_114"
           ],
           "time_start": 5627,
           "time_end": 5730,
@@ -9734,13 +9370,13 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_024",
+          "segment_id": "mps_L1_023",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
-            "mps_L0_119",
-            "mps_L0_120"
+            "mps_L0_115",
+            "mps_L0_116"
           ],
           "time_start": 5735,
           "time_end": 5785,
@@ -9750,13 +9386,13 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_025",
+          "segment_id": "mps_L1_024",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
-            "mps_L0_121",
-            "mps_L0_122"
+            "mps_L0_117",
+            "mps_L0_118"
           ],
           "time_start": 5809,
           "time_end": 5871,
@@ -9766,13 +9402,13 @@
           "transcript": []
         },
         {
-          "segment_id": "mps_L1_026",
+          "segment_id": "mps_L1_025",
           "role": "mps",
           "level": 1,
           "role_human": "robot technician (MPS)",
           "segment_ids": [
-            "mps_L0_123",
-            "mps_L0_124"
+            "mps_L0_119",
+            "mps_L0_120"
           ],
           "time_start": 5883,
           "time_end": 5979,
@@ -9780,25 +9416,9 @@
           "summary": "The robot technician manipulated the Mako robotic arm and then paused.",
           "audio_summary": "",
           "transcript": []
-        },
-        {
-          "segment_id": "mps_L1_027",
-          "role": "mps",
-          "level": 1,
-          "role_human": "robot technician (MPS)",
-          "segment_ids": [
-            "mps_L0_125",
-            "mps_L0_126"
-          ],
-          "time_start": 5985,
-          "time_end": 6011,
-          "duration_s": 27,
-          "summary": "The robot technician manipulated the MPS workstation and then briefly adjusted the Mako robotic arm.",
-          "audio_summary": "",
-          "transcript": []
         }
       ],
-      "num_level1_segments": 28,
+      "num_level1_segments": 26,
       "level2_segments": [
         {
           "segment_id": "mps_L2_000",
@@ -9834,12 +9454,11 @@
             "mps_L1_011",
             "mps_L1_012",
             "mps_L1_013",
-            "mps_L1_014",
-            "mps_L1_027"
+            "mps_L1_014"
           ],
           "time_start": 779,
-          "time_end": 6011,
-          "duration_s": 5233,
+          "time_end": 3566,
+          "duration_s": 2788,
           "summary": "The technician engages in a prolonged phase of intermittent robotic arm manipulation, workstation interaction, and patient preparation.",
           "audio_summary": "",
           "transcript": []
@@ -9853,13 +9472,11 @@
             "mps_L1_015",
             "mps_L1_016",
             "mps_L1_017",
-            "mps_L1_019",
-            "mps_L1_020",
-            "mps_L1_027"
+            "mps_L1_019"
           ],
           "time_start": 3572,
-          "time_end": 6011,
-          "duration_s": 2440,
+          "time_end": 5228,
+          "duration_s": 1657,
           "summary": "The robot technician focuses on detailed system adjustments and continuous manipulation of the workstation and robotic arm.",
           "audio_summary": "",
           "transcript": []
@@ -9870,17 +9487,15 @@
           "level": 2,
           "role_human": "robot technician (MPS)",
           "child_ids": [
-            "mps_L1_027",
-            "mps_L1_020",
+            "mps_L1_021",
             "mps_L1_022",
             "mps_L1_023",
             "mps_L1_024",
-            "mps_L1_025",
-            "mps_L1_026"
+            "mps_L1_025"
           ],
-          "time_start": 5985,
+          "time_start": 5595,
           "time_end": 5979,
-          "duration_s": -5,
+          "duration_s": 385,
           "summary": "The technician performs final procedural tasks including C-arm manipulation, instrument table preparation, and brief robotic adjustments.",
           "audio_summary": "",
           "transcript": []
@@ -15724,7 +15339,7 @@
   },
   "metadata": {
     "total_roles": 15,
-    "total_level0_segments": 648,
+    "total_level0_segments": 632,
     "debounce_frames": 2,
     "take_dir": "/tmp/nhatvu/nas_mount_13597/MM-OR_data/MM-OR_processed/001_PKA",
     "tp_range": [
@@ -15736,7 +15351,7 @@
       329,
       6011
     ],
-    "total_level1_segments": 113,
+    "total_level1_segments": 110,
     "total_level2_segments": 36
   },
   "debounce_analysis": {

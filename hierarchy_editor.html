@@ -78,6 +78,8 @@
     .tree-toolbar .move-btn:hover { background: #2a5a4f; }
     .tree-toolbar .reorder-btn { background: #3a2a1a; border-color: #6a4a2a; min-width: 50px; }
     .tree-toolbar .reorder-btn:hover { background: #4a3a2a; }
+    .tree-toolbar .delete-btn { background: #5f1a1a; border-color: #8f2a2a; }
+    .tree-toolbar .delete-btn:hover { background: #7f2a2a; }
     .tree-toolbar .hint { font-size: 10px; color: var(--muted); }
 
     .tree-area { flex: 1; overflow-y: auto; padding: 8px 12px; }
@@ -224,6 +226,7 @@
           <button class="move-btn" id="moveBtn" title="Move selected segments to another parent group">Move to...</button>
           <button class="reorder-btn" id="moveUpBtn" title="Move selected segment up">&#9650; Up</button>
           <button class="reorder-btn" id="moveDownBtn" title="Move selected segment down">&#9660; Down</button>
+          <button class="delete-btn" id="deleteBtn" title="Delete selected segments (and their descendants)">Delete</button>
           <button id="expandAllBtn">Expand all</button>
           <button id="collapseAllBtn">Collapse all</button>
           <span class="hint" id="selectionHint">Check boxes to select segments for merge/split</span>
@@ -246,6 +249,7 @@
           <button data-filter="split">Splits</button>
           <button data-filter="move">Moves</button>
           <button data-filter="reorder">Reorder</button>
+          <button data-filter="delete">Deletes</button>
         </div>
         <div class="history-list" id="historyList">
           <div class="history-empty">No edits recorded</div>
@@ -325,6 +329,7 @@
     document.getElementById('moveBtn').addEventListener('click', openMoveModal);
     document.getElementById('moveUpBtn').addEventListener('click', () => reorderSelected(-1));
     document.getElementById('moveDownBtn').addEventListener('click', () => reorderSelected(1));
+    document.getElementById('deleteBtn').addEventListener('click', deleteSelected);
     document.getElementById('moveCancel').addEventListener('click', () => {
       document.getElementById('moveModal').classList.remove('open');
     });
@@ -478,6 +483,12 @@
         } else if (e.action === 'reorder') {
           detail = `<span class="he-role">${e.role || ''}</span> ` +
             `${e.segment_id || '?'} moved ${e.direction || '?'}`;
+        } else if (e.action === 'delete') {
+          const casc = e.cascade && (e.cascade.l1 || e.cascade.l0)
+            ? `<br><span style="color:var(--muted)">+ ${e.cascade.l1 || 0} L1, ${e.cascade.l0 || 0} L0 (descendants)</span>`
+            : '';
+          detail = `<span class="he-role">${e.role || ''}</span> ` +
+            `Deleted ${(e.deleted_ids || []).join(', ')}${casc}`;
         } else {
           detail = esc(JSON.stringify(e));
         }
@@ -1289,6 +1300,111 @@
         new_position: newFlatIdx,
       });
       toast(`Moved ${level.toUpperCase()} ${dir > 0 ? 'down' : 'up'}`, 'success');
+    }
+
+    // =========================================================================
+    // DELETE: remove selected segment(s) and all their descendants
+    // =========================================================================
+    function deleteSelected() {
+      const sel = getChecked();
+      if (!sel.length) return toast('Select segment(s) to delete', 'error');
+      const levels = new Set(sel.map(s => s.level));
+      if (levels.size > 1) return toast('Select segments at the same level', 'error');
+      const level = sel[0].level;
+      const rd = hierarchy.roles[activeRole];
+
+      const l1Map = {}; (rd.level1_segments || []).forEach(s => l1Map[s.segment_id] = s);
+      const l2Map = {}; (rd.level2_segments || []).forEach(s => l2Map[s.segment_id] = s);
+
+      // Collect the full set of nodes to remove (cascade to descendants)
+      const l0ToDelete = new Set();
+      const l1ToDelete = new Set();
+      const l2ToDelete = new Set();
+
+      if (level === 'l0') {
+        sel.forEach(s => l0ToDelete.add(s.id));
+      } else if (level === 'l1') {
+        sel.forEach(s => {
+          l1ToDelete.add(s.id);
+          (l1Map[s.id]?.segment_ids || []).forEach(cid => l0ToDelete.add(cid));
+        });
+      } else if (level === 'l2') {
+        sel.forEach(s => {
+          l2ToDelete.add(s.id);
+          _getChildren(l2Map[s.id] || {}).forEach(l1id => {
+            l1ToDelete.add(l1id);
+            (l1Map[l1id]?.segment_ids || []).forEach(cid => l0ToDelete.add(cid));
+          });
+        });
+      } else {
+        return toast('Unknown level', 'error');
+      }
+
+      const cascadeNote = (level !== 'l0' && (l1ToDelete.size || l0ToDelete.size))
+        ? ` and their descendants (${l1ToDelete.size} L1, ${l0ToDelete.size} L0)`
+        : '';
+      const msg = `Delete ${sel.length} ${level.toUpperCase()} segment(s)${cascadeNote}?\n\n` +
+        `They will be removed from the hierarchy entirely. You can still Undo (Ctrl+Z) before saving.`;
+      if (!confirm(msg)) return;
+
+      pushUndo();
+
+      // Remove L0s and detach them from their L1 parents
+      if (l0ToDelete.size) {
+        rd.level0_segments = (rd.level0_segments || []).filter(s => !l0ToDelete.has(s.segment_id));
+        (rd.level1_segments || []).forEach(l1 => {
+          l1.segment_ids = (l1.segment_ids || []).filter(id => !l0ToDelete.has(id));
+        });
+      }
+      // Remove explicitly-targeted L1s and detach them from their L2 parents
+      if (l1ToDelete.size) {
+        rd.level1_segments = (rd.level1_segments || []).filter(s => !l1ToDelete.has(s.segment_id));
+        (rd.level2_segments || []).forEach(l2 => {
+          _setChildren(l2, _getChildren(l2).filter(id => !l1ToDelete.has(id)));
+        });
+      }
+      // Remove explicitly-targeted L2s
+      if (l2ToDelete.size) {
+        rd.level2_segments = (rd.level2_segments || []).filter(s => !l2ToDelete.has(s.segment_id));
+      }
+
+      // Clean up any L1 groups left empty (e.g. after deleting all their L0s)
+      rd.level1_segments = (rd.level1_segments || []).filter(l1 => (l1.segment_ids || []).length > 0);
+      const liveL1 = new Set((rd.level1_segments || []).map(s => s.segment_id));
+      (rd.level2_segments || []).forEach(l2 => {
+        _setChildren(l2, _getChildren(l2).filter(id => liveL1.has(id)));
+      });
+      // Clean up any L2 groups left empty
+      rd.level2_segments = (rd.level2_segments || []).filter(l2 => _getChildren(l2).length > 0);
+
+      // Reindex IDs bottom-up (each reindex also fixes immediate parent references)
+      reindexSegments(rd.level0_segments || [], 'l0');
+      reindexSegments(rd.level1_segments || [], 'l1');
+      reindexSegments(rd.level2_segments || [], 'l2');
+
+      // Refresh time ranges from the (renamed) children
+      const l0M = {}; (rd.level0_segments || []).forEach(s => l0M[s.segment_id] = s);
+      (rd.level1_segments || []).forEach(l1 => {
+        const kids = (l1.segment_ids || []).map(id => l0M[id]).filter(Boolean);
+        if (kids.length) {
+          l1.time_start = kids[0].time_start;
+          l1.time_end = kids[kids.length - 1].time_end;
+          l1.duration_s = (l1.time_start != null && l1.time_end != null) ? l1.time_end - l1.time_start + 1 : null;
+        }
+      });
+      refreshL2TimeRanges();
+
+      updateSegmentCounts();
+      markDirty();
+      renderTree();
+
+      recordHistory({
+        action: 'delete',
+        level,
+        deleted_ids: sel.map(s => s.id),
+        cascade: { l1: l1ToDelete.size, l0: l0ToDelete.size },
+      });
+      toast(`Deleted ${sel.length} ${level.toUpperCase()} segment(s)${cascadeNote ? ' + descendants' : ''}`, 'success');
     }
 
     // =========================================================================
