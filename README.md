@@ -21,6 +21,8 @@ bash script/run.sh --all     # all takes with scene graphs
 | `hierarchy_output/<TAKE>_hierarchy_qwen27b.html` | Static hierarchy HTML viewer |
 | `<TAKE>_hierarchy_video_sync_qwen27b.html` | Interactive video-synced player |
 
+### The JSON files under `hierarchy_output/` are the annotations that will be used as ground truth for model later.
+
 ## Interactive web viewer
 
 ```bash
