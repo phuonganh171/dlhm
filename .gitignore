@@ -39,6 +39,8 @@ viewer_links/
 
 # Jupyter
 .ipynb_checkpoints/
+first_annotation_output/
+first_annotation_v1/
 
 # IDE / editor
 .vscode/

@@ -2640,7 +2640,8 @@
           "role_human": "circulator nurse",
           "child_ids": [
             "circulator_L1_007",
-            "circulator_L1_008"
+            "circulator_L1_008",
+            "circulator_L1_009"
           ],
           "time_start": 4955,
           "time_end": 5633,
@@ -9472,7 +9473,9 @@
             "mps_L1_015",
             "mps_L1_016",
             "mps_L1_017",
-            "mps_L1_019"
+            "mps_L1_018",
+            "mps_L1_019",
+            "mps_L1_020"
           ],
           "time_start": 3572,
           "time_end": 5228,

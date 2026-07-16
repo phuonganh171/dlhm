@@ -4076,7 +4076,8 @@
           "level": 2,
           "role_human": "head surgeon",
           "child_ids": [
-            "head_surgeon_L1_002"
+            "head_surgeon_L1_002",
+            "head_surgeon_L1_003"
           ],
           "time_start": 2464,
           "time_end": 3413,
