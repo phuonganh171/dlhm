@@ -87,18 +87,23 @@ trap cleanup EXIT
 echo "[2/4] Preparing training data..."
 
 if [ ! -f "$TRAIN_DATA" ]; then
-    echo "  Building JSONL samples..."
+    echo "  Building JSONL samples (no temporal augmentation)..."
     python -m data_pipeline.build_samples \
         --split train \
         --no-augment \
         --output-dir "$SAMPLES_DIR"
 
-    echo "  Converting to LLaVA JSON..."
+    echo "  Converting Phase 1 LLaVA JSON (no memory only)..."
     python "$BASELINE_DIR/convert_to_llava_json.py" \
         --samples-dir "$SAMPLES_DIR" \
         --output-dir "$BASELINE_DIR/data" \
         --processed-root "$MM_OR_PROCESSED_ROOT" \
         --splits train val
+
+    # Phase 1 must not leave train_with_memory.json around, otherwise Phase 2
+    # would skip rebuilding and miss temporal augmentation.
+    rm -f "$BASELINE_DIR/data/train_with_memory.json" \
+          "$BASELINE_DIR/data/val_with_memory.json"
 fi
 
 echo "  Training data: $TRAIN_DATA"
