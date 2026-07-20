@@ -55,4 +55,17 @@ Thumbs.db
 /first_annotation_output
 mm_or.zip
 logs/
+mm-or/
+
+# Data pipeline generated files (large JSONL samples)
+data_pipeline/samples/
+data_pipeline/trivial_results/
+wandb/
+
+# Baseline 1 cloned repos and outputs
+baseline_mm-or/ORacle/
+baseline_mm-or/checkpoints/
+baseline_mm-or/predictions/
+baseline_mm-or/data/
+PLAN.md
 
