@@ -6,7 +6,9 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=5
 #SBATCH --mem=48G
-#SBATCH --gres=gpu:1,VRAM:48G
+#SBATCH --gres=gpu:a40:1,VRAM:48G
+# Torch 2.0.1+cu118 has no sm_120 kernels — exclude Blackwell (node22).
+#SBATCH --exclude=node22
 #SBATCH --time=0-12:00:00
 #SBATCH --output=logs/b1_eval_%j.out
 #SBATCH --error=logs/b1_eval_%j.err
@@ -17,10 +19,24 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# Paths
+# Paths + conda env
 # ---------------------------------------------------------------------------
 WORKDIR="/storage/user/vun/vun/dlhm"
 BASELINE_DIR="$WORKDIR/baseline_mm-or"
+ORACLE_DIR="$BASELINE_DIR/ORacle"
+LLAVA_DIR="$ORACLE_DIR/LLaVA"
+CONDA_ROOT="${CONDA_ROOT:-$HOME/miniconda3}"
+ENV_NAME="dlhm-b1"
+
+# shellcheck disable=SC1091
+source "$CONDA_ROOT/etc/profile.d/conda.sh"
+conda activate "$ENV_NAME"
+# ORacle pins torch+cu118; bitsandbytes needs the toolkit libs
+if command -v module >/dev/null 2>&1; then
+    module load cuda/11.8.0
+fi
+export LD_LIBRARY_PATH="${CUDA_HOME:+$CUDA_HOME/lib64:}${LD_LIBRARY_PATH:-}"
+export PYTHONPATH="$LLAVA_DIR:${PYTHONPATH:-}"
 
 RCLONE="$HOME/.local/bin/rclone"
 NAS_REMOTE="nas:ge42faj"
@@ -39,6 +55,7 @@ mkdir -p logs "$PRED_DIR"
 echo "======================================"
 echo "Baseline 1 — Evaluation"
 echo "Job $SLURM_JOB_ID on $(hostname)"
+echo "Python: $(which python)"
 echo "Model: $MODEL_PATH"
 echo "Started: $(date)"
 echo "======================================"
@@ -91,6 +108,11 @@ fi
 
 echo "  Test samples: $(wc -l < "$TEST_SAMPLES") frames"
 
+python -c "import transformers, peft, llava; print('  deps OK')" || {
+    echo "ERROR: env '$ENV_NAME' incomplete. Run: bash baseline_mm-or/setup.sh" >&2
+    exit 1
+}
+
 # ---------------------------------------------------------------------------
 # 3. Run inference — autoregressive memory
 # ---------------------------------------------------------------------------
@@ -121,8 +143,6 @@ python "$BASELINE_DIR/inference.py" \
 # 5. Evaluate and log to wandb
 # ---------------------------------------------------------------------------
 echo "[5/5] Evaluating and logging to wandb..."
-
-pip install --quiet wandb nltk rouge-score 2>/dev/null || true
 
 python "$BASELINE_DIR/eval_predictions.py" \
     --gt "$TEST_SAMPLES" \

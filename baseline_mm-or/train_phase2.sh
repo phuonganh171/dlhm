@@ -6,7 +6,9 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=5
 #SBATCH --mem=48G
-#SBATCH --gres=gpu:1,VRAM:48G
+#SBATCH --gres=gpu:a40:1,VRAM:48G
+# Torch 2.0.1+cu118 has no sm_120 kernels — exclude Blackwell (node22).
+#SBATCH --exclude=node22
 #SBATCH --time=1-00:00:00
 #SBATCH --output=logs/b1_phase2_%j.out
 #SBATCH --error=logs/b1_phase2_%j.err
@@ -19,12 +21,24 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# Paths
+# Paths + conda env
 # ---------------------------------------------------------------------------
 WORKDIR="/storage/user/vun/vun/dlhm"
 BASELINE_DIR="$WORKDIR/baseline_mm-or"
 ORACLE_DIR="$BASELINE_DIR/ORacle"
 LLAVA_DIR="$ORACLE_DIR/LLaVA"
+CONDA_ROOT="${CONDA_ROOT:-$HOME/miniconda3}"
+ENV_NAME="dlhm-b1"
+
+# shellcheck disable=SC1091
+source "$CONDA_ROOT/etc/profile.d/conda.sh"
+conda activate "$ENV_NAME"
+# ORacle pins torch+cu118; bitsandbytes needs the toolkit libs
+if command -v module >/dev/null 2>&1; then
+    module load cuda/11.8.0
+fi
+export LD_LIBRARY_PATH="${CUDA_HOME:+$CUDA_HOME/lib64:}${LD_LIBRARY_PATH:-}"
+export PYTHONPATH="$LLAVA_DIR:${PYTHONPATH:-}"
 
 RCLONE="$HOME/.local/bin/rclone"
 NAS_REMOTE="nas:ge42faj"
@@ -49,6 +63,7 @@ mkdir -p logs "$CKPT_DIR"
 echo "======================================"
 echo "Baseline 1 — Phase 2 Training (With Memory)"
 echo "Job $SLURM_JOB_ID on $(hostname)"
+echo "Python: $(which python)"
 echo "Started: $(date)"
 echo "======================================"
 
@@ -100,27 +115,32 @@ trap cleanup EXIT
 # ---------------------------------------------------------------------------
 echo "[2/3] Preparing training data..."
 
-if [ ! -f "$TRAIN_DATA" ]; then
-    echo "  Building JSONL samples (with augmentation)..."
-    python -m data_pipeline.build_samples \
-        --split train \
-        --output-dir "$SAMPLES_DIR"
+# Always rebuild with-memory JSON against the live NAS mount (and temporal aug).
+echo "  Building JSONL samples (with augmentation)..."
+python -m data_pipeline.build_samples \
+    --split train \
+    --output-dir "$SAMPLES_DIR"
 
-    echo "  Converting to LLaVA JSON..."
-    python "$BASELINE_DIR/convert_to_llava_json.py" \
-        --samples-dir "$SAMPLES_DIR" \
-        --output-dir "$BASELINE_DIR/data" \
-        --processed-root "$MM_OR_PROCESSED_ROOT" \
-        --splits train val
-fi
+echo "  Converting to LLaVA JSON (skip missing images)..."
+python "$BASELINE_DIR/convert_to_llava_json.py" \
+    --samples-dir "$SAMPLES_DIR" \
+    --output-dir "$BASELINE_DIR/data" \
+    --processed-root "$MM_OR_PROCESSED_ROOT" \
+    --splits train val
 
 echo "  Training data: $TRAIN_DATA"
 echo "  Samples: $(python -c "import json; print(len(json.load(open('$TRAIN_DATA'))))")"
+echo "  image_folder: $MM_OR_PROCESSED_ROOT"
 
 # ---------------------------------------------------------------------------
-# 3. Launch training (curriculum from Phase 1)
+# 3. Verify env, then launch training (curriculum from Phase 1)
 # ---------------------------------------------------------------------------
-echo "[3/3] Starting Phase 2 training..."
+echo "[3/3] Checking deps and starting Phase 2 training..."
+
+python -c "import transformers, peft, bitsandbytes, deepspeed, llava; print('  deps OK')" || {
+    echo "ERROR: env '$ENV_NAME' incomplete. Run: bash baseline_mm-or/setup.sh" >&2
+    exit 1
+}
 
 export WANDB_PROJECT="dlhm-hierarchy-baselines"
 export GPUS_PER_NODE=1
@@ -143,7 +163,7 @@ python -m torch.distributed.run \
     --model_name_or_path liuhaotian/llava-v1.5-7b \
     --version v1 \
     --data_path "$TRAIN_DATA" \
-    --image_folder / \
+    --image_folder "$MM_OR_PROCESSED_ROOT" \
     --vision_tower openai/clip-vit-large-patch14-336 \
     --mm_projector_type mlp2x_gelu \
     --mm_vision_select_layer -2 \
@@ -153,12 +173,13 @@ python -m torch.distributed.run \
     --group_by_modality_length True \
     --bf16 True \
     --output_dir "$CKPT_DIR" \
-    --num_train_epochs 10 \
+    --num_train_epochs 1 \
     --per_device_train_batch_size 4 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 4 \
     --evaluation_strategy "no" \
-    --save_strategy "epoch" \
+    --save_strategy "steps" \
+    --save_steps 500 \
     --save_total_limit 3 \
     --learning_rate 1e-5 \
     --max_grad_norm 0.1 \

@@ -38,6 +38,7 @@ from .config import (
 )
 from .hierarchy_utils import (
     HierarchyIndex,
+    all_colorimages_exist,
     load_frame_map,
     resolve_image_paths,
 )
@@ -114,10 +115,20 @@ def build_samples_for_l2_segment(
 
         # Resolve camera image paths (relative to take_dir)
         if dry_run:
-            image_paths = [f"colorimage/camera{c:02d}_colorimage-{tp_id}.jpg" for c in [1, 2, 3, 4]]
+            image_paths = [
+                f"colorimage/camera{c:02d}_colorimage-{tp_id}.jpg" for c in range(1, 5)
+            ]
         else:
             image_paths = resolve_image_paths(take_dir, frame_map, tp_id)  # type: ignore[arg-type]
             if not image_paths:
+                continue
+            # Skip timepoints where any mapped colorimage file is missing on disk
+            if not all_colorimages_exist(take_dir, image_paths):
+                missing = [p for p in image_paths if not (take_dir / p).is_file()]
+                logger.debug(
+                    "Skipping %s/%s/%s tp=%s — missing images: %s",
+                    take, role, l2_seg_id, tp_id, missing,
+                )
                 continue
 
         # Format memory string (with augmentation during training)

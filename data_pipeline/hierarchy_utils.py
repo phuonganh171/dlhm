@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from .config import (
     ALL_CAMERAS,
-    CAMERA_KEYS,
+    AZURE_FRAME_KEY,
     COLORIMAGE_TEMPLATE,
     HIERARCHY_DIR,
     HIERARCHY_PATTERN,
@@ -314,36 +314,33 @@ def resolve_image_paths(
     cameras: List[str] | None = None,
 ) -> List[str]:
     """
-    Return list of colorimage paths for a timepoint, relative to take_dir.
+    Return colorimage paths for all Azure Kinect views at a timepoint.
 
-    Parameters
-    ----------
-    cameras : list of camera IDs, e.g. ["camera01", "camera03"].
-              Defaults to ALL_CAMERAS.
-
-    Returns paths like "colorimage/camera01_colorimage-000329.jpg".
+    Uses frame_map[tp][azure] as the shared frame id for camera01–camera04
+    (relative to take_dir), e.g. ``colorimage/camera01_colorimage-000329.jpg``.
     """
+    _ = take_dir  # paths are relative; existence is checked by the caller
     cameras = cameras or ALL_CAMERAS
     raw = frame_map.get(tp_id)
     if raw is None:
         return []
 
-    # Map camera IDs back to the keys in the frame_map entry
-    cam_id_to_key = {v: k for k, v in CAMERA_KEYS.items()}
+    frame_id = raw.get(AZURE_FRAME_KEY)
+    if isinstance(frame_id, dict):
+        frame_id = frame_id.get("frame_id", frame_id.get("id"))
+    if frame_id is None:
+        return []
 
-    paths: List[str] = []
-    for cam_id in cameras:
-        src_key = cam_id_to_key.get(cam_id)
-        if src_key is None or src_key not in raw:
-            continue
-        frame_id = raw[src_key]
-        if isinstance(frame_id, dict):
-            frame_id = frame_id.get("frame_id", frame_id.get("id"))
-        if frame_id is None:
-            continue
-        paths.append(COLORIMAGE_TEMPLATE.format(cam=cam_id, frame_id=int(frame_id)))
+    fid = int(frame_id)
+    return [
+        COLORIMAGE_TEMPLATE.format(cam=cam_id, frame_id=fid)
+        for cam_id in cameras
+    ]
 
-    return paths
+
+def all_colorimages_exist(take_dir: Path, rel_paths: List[str]) -> bool:
+    """True iff every path relative to take_dir exists as a file."""
+    return bool(rel_paths) and all((take_dir / p).is_file() for p in rel_paths)
 
 
 def resolve_image_paths_absolute(

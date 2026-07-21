@@ -25,17 +25,24 @@ HIERARCHY_DIR = PROJECT_ROOT / "hierarchy_output"
 HIERARCHY_PATTERN = "{take}_hierarchy_qwen27b.json"
 
 # ---------------------------------------------------------------------------
-# Camera mapping  (same as scene_graph_utils.COLORIMAGE_CAMERA_KEYS)
+# Azure Kinect multi-view (colorimage/camera01–camera04)
+#
+# All four ceiling RGB streams share the frame-map key ``azure``.
+# Limited to 4 views to match ORacle's image pooler (4*576=2304 tokens).
+# Simstation / trackercam / tracker are not used for this baseline.
 # ---------------------------------------------------------------------------
 
-CAMERA_KEYS: Dict[str, str] = {
-    "azure": "camera01",
-    "simstation": "camera02",
-    "trackercam": "camera03",
-    "tracker": "camera04",
-}
+AZURE_FRAME_KEY = "azure"
 
-ALL_CAMERAS: List[str] = list(CAMERA_KEYS.values())
+ALL_CAMERAS: List[str] = [
+    "camera01",
+    "camera02",
+    "camera03",
+    "camera04",
+]
+
+# Kept for callers that still expect a name→id map; every view uses azure.
+CAMERA_KEYS: Dict[str, str] = {AZURE_FRAME_KEY: "camera01"}
 
 # ---------------------------------------------------------------------------
 # Image filename template
