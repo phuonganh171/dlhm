@@ -185,6 +185,120 @@ except Exception:
     print("  patched llama_patch.py")
 else:
     print("  llama_patch.py already patched")
+
+# 4) llava_trainer.py: save/load HF LR scheduler under DeepSpeed (transformers 4.31 gap).
+# Without this, preempt/requeue restarts warmup because HF skips scheduler.pt with DeepSpeed.
+trainer_text = trainer.read_text()
+if "_save_hf_lr_scheduler" in trainer_text:
+    print("  llava_trainer.py scheduler resume already patched")
+else:
+    old_ckpt = '''    def _save_checkpoint(self, model, trial, metrics=None):
+        if getattr(self.args, 'tune_mm_mlp_adapter', False):
+            from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+            checkpoint_folder = f"{PREFIX_CHECKPOINT_DIR}-{self.state.global_step}"
+
+            run_dir = self._get_output_dir(trial=trial)
+            output_dir = os.path.join(run_dir, checkpoint_folder)
+
+            # Only save Adapter
+            keys_to_match = ['mm_projector', 'vision_resampler']
+            if getattr(self.args, "use_im_start_end", False):
+                keys_to_match.extend(['embed_tokens', 'embed_in'])
+
+            weight_to_save = get_mm_adapter_state_maybe_zero_3(self.model.named_parameters(), keys_to_match)
+
+            if self.args.local_rank == 0 or self.args.local_rank == -1:
+                self.model.config.save_pretrained(output_dir)
+                torch.save(weight_to_save, os.path.join(output_dir, f'mm_projector.bin'))
+        else:
+            super(LLaVATrainer, self)._save_checkpoint(model, trial, metrics)
+
+    def _save(self, output_dir: Optional[str] = None, state_dict=None):
+        if getattr(self.args, 'tune_mm_mlp_adapter', False):
+            pass
+        else:
+            super(LLaVATrainer, self)._save(output_dir, state_dict)
+'''
+    new_ckpt = '''    def _hf_scheduler_path(self, checkpoint_dir: str) -> str:
+        return os.path.join(checkpoint_dir, "scheduler.pt")
+
+    def _save_hf_lr_scheduler(self, trial=None):
+        """Persist HF LR scheduler. transformers 4.31 skips this under DeepSpeed."""
+        if not self.args.should_save or self.lr_scheduler is None:
+            return
+        from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+
+        checkpoint_folder = f"{PREFIX_CHECKPOINT_DIR}-{self.state.global_step}"
+        output_dir = os.path.join(self._get_output_dir(trial=trial), checkpoint_folder)
+        path = self._hf_scheduler_path(output_dir)
+        try:
+            torch.save(self.lr_scheduler.state_dict(), path)
+            logger.info("Saved HF LR scheduler state to %s", path)
+        except Exception as exc:  # noqa: BLE001 — best-effort; training must continue
+            logger.warning("Could not save HF LR scheduler state to %s: %s", path, exc)
+
+    def _load_hf_lr_scheduler(self, checkpoint: str) -> None:
+        path = self._hf_scheduler_path(checkpoint)
+        if self.lr_scheduler is None:
+            return
+        if not os.path.isfile(path):
+            logger.warning(
+                "DeepSpeed resume without %s; HF LR schedule may restart from warmup.",
+                path,
+            )
+            return
+        try:
+            state = torch.load(path, map_location="cpu")
+            self.lr_scheduler.load_state_dict(state)
+            logger.info("Loaded HF LR scheduler state from %s", path)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Could not load HF LR scheduler state from %s: %s", path, exc)
+
+    def _save_checkpoint(self, model, trial, metrics=None):
+        if getattr(self.args, 'tune_mm_mlp_adapter', False):
+            from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+            checkpoint_folder = f"{PREFIX_CHECKPOINT_DIR}-{self.state.global_step}"
+
+            run_dir = self._get_output_dir(trial=trial)
+            output_dir = os.path.join(run_dir, checkpoint_folder)
+
+            # Only save Adapter
+            keys_to_match = ['mm_projector', 'vision_resampler']
+            if getattr(self.args, "use_im_start_end", False):
+                keys_to_match.extend(['embed_tokens', 'embed_in'])
+
+            weight_to_save = get_mm_adapter_state_maybe_zero_3(self.model.named_parameters(), keys_to_match)
+
+            if self.args.local_rank == 0 or self.args.local_rank == -1:
+                self.model.config.save_pretrained(output_dir)
+                torch.save(weight_to_save, os.path.join(output_dir, f'mm_projector.bin'))
+        else:
+            super(LLaVATrainer, self)._save_checkpoint(model, trial, metrics)
+            # HF assumes DeepSpeed owns the scheduler and skips scheduler.pt; we still use
+            # an HF cosine scheduler (no "scheduler" key in deepspeed_zero2.json).
+            self._save_hf_lr_scheduler(trial)
+
+    def _load_optimizer_and_scheduler(self, checkpoint):
+        """Load optimizer/scheduler; restore HF scheduler under DeepSpeed (HF 4.31 gap)."""
+        if checkpoint is None:
+            return
+        if getattr(self, "is_deepspeed_enabled", False):
+            # Parent returns early here and never loads scheduler.pt.
+            self._load_hf_lr_scheduler(checkpoint)
+            return
+        super()._load_optimizer_and_scheduler(checkpoint)
+
+    def _save(self, output_dir: Optional[str] = None, state_dict=None):
+        if getattr(self.args, 'tune_mm_mlp_adapter', False):
+            pass
+        else:
+            super(LLaVATrainer, self)._save(output_dir, state_dict)
+'''
+    if old_ckpt in trainer_text:
+        trainer.write_text(trainer_text.replace(old_ckpt, new_ckpt))
+        print("  patched llava_trainer.py (DeepSpeed LR scheduler resume)")
+    else:
+        print("  WARN: could not apply scheduler resume patch; check llava_trainer.py")
 PY
 fi
 
