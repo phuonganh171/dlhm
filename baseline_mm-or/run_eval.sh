@@ -9,12 +9,22 @@
 #SBATCH --gres=gpu:a40:1,VRAM:48G
 # Torch 2.0.1+cu118 has no sm_120 kernels — exclude Blackwell (node22).
 #SBATCH --exclude=node22
-#SBATCH --time=0-12:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --output=logs/b1_eval_%j.out
 #SBATCH --error=logs/b1_eval_%j.err
 
-# Evaluate trained Baseline 1 model on the test split.
-# Runs inference (autoregressive and GT memory), evaluates, and logs to wandb.
+# Evaluate trained Baseline 1 model on (a subset of) the test split.
+#
+# target ~1 day at ~10 s/frame:
+#   - predicted memory only (skip GT ablation unless RUN_GT_MEMORY=1)
+#   - takes 014_PKA,033_PKA,038_TKA (~6.8k frames ≈ 19 h for one pass)
+#
+# Overrides (env):
+#   MODEL_PATH       checkpoint dir (default: phase2_with_memory)
+#   EVAL_TAKES       comma-separated takes (default: 014_PKA,033_PKA,038_TKA)
+#                    set empty EVAL_TAKES= to use all test takes
+#   EVAL_MAX_GROUPS  optional cap on (take, role, L2) groups
+#   RUN_GT_MEMORY=1  also run GT-memory ablation (≈2× time)
 
 set -euo pipefail
 
@@ -48,6 +58,10 @@ PRED_DIR="$BASELINE_DIR/predictions"
 
 # Which checkpoint to evaluate (default: Phase 2 with memory)
 MODEL_PATH="${MODEL_PATH:-$BASELINE_DIR/checkpoints/phase2_with_memory}"
+# 1-day subset (override with EVAL_TAKES= for full test)
+EVAL_TAKES="${EVAL_TAKES-014_PKA,033_PKA,038_TKA}"
+EVAL_MAX_GROUPS="${EVAL_MAX_GROUPS:-}"
+RUN_GT_MEMORY="${RUN_GT_MEMORY:-0}"
 
 cd "$WORKDIR"
 mkdir -p logs "$PRED_DIR"
@@ -57,6 +71,9 @@ echo "Baseline 1 — Evaluation"
 echo "Job $SLURM_JOB_ID on $(hostname)"
 echo "Python: $(which python)"
 echo "Model: $MODEL_PATH"
+echo "EVAL_TAKES: ${EVAL_TAKES:-<all>}"
+echo "EVAL_MAX_GROUPS: ${EVAL_MAX_GROUPS:-<none>}"
+echo "RUN_GT_MEMORY: $RUN_GT_MEMORY"
 echo "Started: $(date)"
 echo "======================================"
 
@@ -113,8 +130,16 @@ python -c "import transformers, peft, llava; print('  deps OK')" || {
     exit 1
 }
 
+INFER_EXTRA=()
+if [ -n "${EVAL_TAKES}" ]; then
+    INFER_EXTRA+=(--takes "$EVAL_TAKES")
+fi
+if [ -n "${EVAL_MAX_GROUPS}" ]; then
+    INFER_EXTRA+=(--max-groups "$EVAL_MAX_GROUPS")
+fi
+
 # ---------------------------------------------------------------------------
-# 3. Run inference — autoregressive memory
+# 3. Run inference — autoregressive memory (primary, 1-day default)
 # ---------------------------------------------------------------------------
 PRED_AUTO="$PRED_DIR/pred_autoregressive.jsonl"
 
@@ -124,20 +149,30 @@ python "$BASELINE_DIR/inference.py" \
     --test-samples "$TEST_SAMPLES" \
     --processed-root "$MM_OR_PROCESSED_ROOT" \
     --output "$PRED_AUTO" \
-    --memory-mode predicted
+    --memory-mode predicted \
+    "${INFER_EXTRA[@]}"
+
+PRED_ARGS=("$PRED_AUTO")
+NAME_ARGS=("b1_autoregressive")
 
 # ---------------------------------------------------------------------------
-# 4. Run inference — GT memory (oracle, for ablation)
+# 4. Optional: GT memory ablation (≈2× wall time — off by default)
 # ---------------------------------------------------------------------------
-PRED_GT="$PRED_DIR/pred_gt_memory.jsonl"
-
-echo "[4/5] Running inference (GT memory)..."
-python "$BASELINE_DIR/inference.py" \
-    --model-path "$MODEL_PATH" \
-    --test-samples "$TEST_SAMPLES" \
-    --processed-root "$MM_OR_PROCESSED_ROOT" \
-    --output "$PRED_GT" \
-    --memory-mode gt
+if [ "$RUN_GT_MEMORY" = "1" ]; then
+    PRED_GT="$PRED_DIR/pred_gt_memory.jsonl"
+    echo "[4/5] Running inference (GT memory)..."
+    python "$BASELINE_DIR/inference.py" \
+        --model-path "$MODEL_PATH" \
+        --test-samples "$TEST_SAMPLES" \
+        --processed-root "$MM_OR_PROCESSED_ROOT" \
+        --output "$PRED_GT" \
+        --memory-mode gt \
+        "${INFER_EXTRA[@]}"
+    PRED_ARGS+=("$PRED_GT")
+    NAME_ARGS+=("b1_gt_memory")
+else
+    echo "[4/5] Skipping GT-memory ablation (set RUN_GT_MEMORY=1 to enable)."
+fi
 
 # ---------------------------------------------------------------------------
 # 5. Evaluate and log to wandb
@@ -146,8 +181,8 @@ echo "[5/5] Evaluating and logging to wandb..."
 
 python "$BASELINE_DIR/eval_predictions.py" \
     --gt "$TEST_SAMPLES" \
-    --predictions "$PRED_AUTO" "$PRED_GT" \
-    --names "b1_autoregressive" "b1_gt_memory" \
+    --predictions "${PRED_ARGS[@]}" \
+    --names "${NAME_ARGS[@]}" \
     --model-info "$MODEL_PATH" \
     --project "dlhm-hierarchy-baselines"
 

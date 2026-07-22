@@ -184,6 +184,36 @@ def group_by_role_l2(
     return groups
 
 
+def filter_samples(
+    samples: List[Dict[str, Any]],
+    takes: Optional[List[str]] = None,
+    max_groups: Optional[int] = None,
+) -> List[Dict[str, Any]]:
+    """
+    Optionally keep only selected takes and/or the first N (take, role, L2)
+    groups (sorted). Whole L2 groups are kept so temporal memory stays valid.
+    """
+    if takes:
+        take_set = set(takes)
+        samples = [
+            s for s in samples
+            if s.get("take", s["id"].split("/")[0]) in take_set
+        ]
+    if max_groups is None:
+        return samples
+
+    groups = group_by_role_l2(samples)
+    keep_keys = set(sorted(groups.keys())[: max(0, max_groups)])
+    return [
+        s for s in samples
+        if (
+            s.get("take", s["id"].split("/")[0]),
+            s["role"],
+            s["l2_segment_id"],
+        ) in keep_keys
+    ]
+
+
 def run_inference(
     model,
     tokenizer,
@@ -319,6 +349,14 @@ def main() -> None:
         "--max-new-tokens", type=int, default=256,
         help="Maximum tokens to generate per frame",
     )
+    parser.add_argument(
+        "--takes", type=str, default="",
+        help="Comma-separated take names to evaluate (default: all in the JSONL)",
+    )
+    parser.add_argument(
+        "--max-groups", type=int, default=None,
+        help="Evaluate only the first N (take, role, L2) groups after filtering",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -338,6 +376,15 @@ def main() -> None:
     logger.info("Loading test samples from %s ...", args.test_samples)
     samples = load_test_samples(args.test_samples)
     logger.info("Loaded %d test samples", len(samples))
+
+    take_list = [t.strip() for t in args.takes.split(",") if t.strip()] or None
+    if take_list or args.max_groups is not None:
+        before = len(samples)
+        samples = filter_samples(samples, takes=take_list, max_groups=args.max_groups)
+        logger.info(
+            "Filtered samples: %d → %d (takes=%s max_groups=%s)",
+            before, len(samples), take_list or "all", args.max_groups,
+        )
 
     predictions = run_inference(
         model, tokenizer, image_processor,
