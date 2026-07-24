@@ -93,7 +93,7 @@ else
         "json-tricks==3.17.3" \
         "pytorch-lightning==2.1.2" \
         "torchinfo==1.8.0" \
-        "tqdm==4.61.0" \
+        "tqdm>=4.64.0" \
         "bitsandbytes==0.44.1" \
         "opencv-python==4.10.0.84" \
         "editdistance==0.8.1" \
