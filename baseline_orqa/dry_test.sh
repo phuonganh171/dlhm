@@ -241,6 +241,7 @@ compile(Path("$BASELINE/patches/image_only_pooler.py").read_text(), "patch.py", 
 compile(Path("$BASELINE/patches/eval_dataset_path.py").read_text(), "eval_patch.py", "exec")
 compile(Path("$BASELINE/patches/optional_pc_audio.py").read_text(), "pc_patch.py", "exec")
 compile(Path("$BASELINE/patches/collator_skip_hierarchy_ids.py").read_text(), "collator_patch.py", "exec")
+compile(Path("$BASELINE/patches/skip_image_load_tokenize.py").read_text(), "skip_img_patch.py", "exec")
 print("  compile OK")
 PY
 ok "parse + compile"

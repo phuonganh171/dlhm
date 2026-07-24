@@ -140,6 +140,8 @@ echo "  Applying optional pc/audio aligner patch..."
 python "$SCRIPT_DIR/patches/optional_pc_audio.py" "$ORQA_DIR"
 echo "  Applying collator hierarchy-id patch..."
 python "$SCRIPT_DIR/patches/collator_skip_hierarchy_ids.py" "$ORQA_DIR"
+echo "  Applying skip-image-load-on-tokenize patch..."
+python "$SCRIPT_DIR/patches/skip_image_load_tokenize.py" "$ORQA_DIR"
 # flash-attn (ORQA recommends 2.6.1; soft-fail if build fails)
 # Keep pip nvidia-* lib dirs on LD_LIBRARY_PATH: loading a cluster CUDA module
 # alone can hide libcudnn.so.9 that torch resolves via ~/.local nvidia wheels.

@@ -246,6 +246,44 @@ def filter_samples(
     ]
 
 
+def load_existing_predictions(path: Path) -> Dict[str, Dict[str, Any]]:
+    """Load prior predictions keyed by sample id (for resume)."""
+    if not path.is_file():
+        return {}
+    by_id: Dict[str, Dict[str, Any]] = {}
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                pred = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            pid = pred.get("id")
+            if pid:
+                by_id[pid] = pred
+    return by_id
+
+
+def group_is_complete(
+    frames: List[Dict[str, Any]],
+    existing: Dict[str, Dict[str, Any]],
+) -> bool:
+    """True if every frame id in the group already has a prediction."""
+    if not frames:
+        return True
+    return all(s["id"] in existing for s in frames)
+
+
+def append_predictions(path: Path, preds: List[Dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        for pred in preds:
+            f.write(json.dumps(pred, ensure_ascii=False) + "\n")
+        f.flush()
+
+
 def run_inference(
     model,
     tokenizer,
@@ -254,18 +292,59 @@ def run_inference(
     processed_root: Path,
     memory_mode: str = "predicted",
     max_new_tokens: int = 256,
+    output_path: Optional[Path] = None,
+    resume: bool = True,
 ) -> List[Dict[str, Any]]:
     """
     Run inference on all test samples grouped by (role, L2 segment).
 
     For each group, walk frames sequentially, building temporal memory
     from either the model's predictions or ground-truth states.
+
+    If ``output_path`` is set, each finished L2 group is flushed to disk.
+    With ``resume=True``, complete groups already in that file are skipped
+    (partial groups are re-run so temporal memory stays consistent).
     """
     groups = group_by_role_l2(samples)
-    predictions: List[Dict[str, Any]] = []
     total_groups = len(groups)
 
+    existing: Dict[str, Dict[str, Any]] = {}
+    if output_path is not None:
+        if resume:
+            existing = load_existing_predictions(output_path)
+            if existing:
+                logger.info(
+                    "Resume: loaded %d existing predictions from %s",
+                    len(existing), output_path,
+                )
+        else:
+            if output_path.exists():
+                output_path.unlink()
+                logger.info("Fresh run: removed %s", output_path)
+
+    predictions: List[Dict[str, Any]] = list(existing.values())
+    skipped = 0
+    ran = 0
+
     for group_idx, ((take, role, l2_seg), frames) in enumerate(sorted(groups.items())):
+        if resume and group_is_complete(frames, existing):
+            skipped += 1
+            logger.info(
+                "[%d/%d] SKIP (done) %s / %s / %s (%d frames)",
+                group_idx + 1, total_groups, take, role, l2_seg, len(frames),
+            )
+            continue
+
+        # Drop any partial rows for this group so we can rewrite cleanly
+        if output_path is not None and any(s["id"] in existing for s in frames):
+            keep_ids = {s["id"] for s in frames}
+            existing = {i: p for i, p in existing.items() if i not in keep_ids}
+            predictions = [p for p in predictions if p.get("id") not in keep_ids]
+            # Rewrite file without partial group (small enough for eval subsets)
+            with open(output_path, "w", encoding="utf-8") as f:
+                for pred in predictions:
+                    f.write(json.dumps(pred, ensure_ascii=False) + "\n")
+
         logger.info(
             "[%d/%d] %s / %s / %s (%d frames)",
             group_idx + 1, total_groups, take, role, l2_seg, len(frames),
@@ -275,6 +354,7 @@ def run_inference(
 
         prev_l0: Optional[str] = None
         prev_l1: Optional[str] = None
+        group_preds: List[Dict[str, Any]] = []
 
         for frame_idx, sample in enumerate(frames):
             tp_id = sample["tp_id"]
@@ -341,11 +421,25 @@ def run_inference(
                 "gt_l1": sample.get("gt_l1", ""),
                 "gt_l2": sample.get("gt_l2", ""),
             }
-            predictions.append(pred)
+            group_preds.append(pred)
+            existing[pred["id"]] = pred
 
             if (frame_idx + 1) % 50 == 0:
                 logger.info("  Frame %d/%d", frame_idx + 1, len(frames))
 
+        predictions.extend(group_preds)
+        ran += 1
+        if output_path is not None:
+            append_predictions(output_path, group_preds)
+            logger.info(
+                "  Checkpointed %d frames → %s (%d total preds on disk)",
+                len(group_preds), output_path, len(existing),
+            )
+
+    logger.info(
+        "Inference done: ran %d groups, skipped %d already-complete, %d predictions",
+        ran, skipped, len(predictions),
+    )
     return predictions
 
 
@@ -389,6 +483,10 @@ def main() -> None:
         "--max-groups", type=int, default=None,
         help="Evaluate only the first N (take, role, L2) groups after filtering",
     )
+    parser.add_argument(
+        "--no-resume", action="store_true",
+        help="Ignore existing --output and start fresh (default: resume/skip completed L2 groups)",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -418,24 +516,31 @@ def main() -> None:
             before, len(samples), take_list or "all", args.max_groups,
         )
 
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     predictions = run_inference(
         model, tokenizer, image_processor,
         samples, processed_root,
         memory_mode=args.memory_mode,
         max_new_tokens=args.max_new_tokens,
+        output_path=args.output,
+        resume=not args.no_resume,
     )
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    # Canonical rewrite (dedupe by id) so the file matches in-memory results
+    by_id = {p["id"]: p for p in predictions}
+    ordered_ids = [s["id"] for s in samples if s["id"] in by_id]
+    # Keep any extras last
+    ordered_ids += [i for i in by_id if i not in set(ordered_ids)]
     with open(args.output, "w", encoding="utf-8") as f:
-        for pred in predictions:
-            f.write(json.dumps(pred, ensure_ascii=False) + "\n")
+        for pid in ordered_ids:
+            f.write(json.dumps(by_id[pid], ensure_ascii=False) + "\n")
 
-    logger.info("Wrote %d predictions to %s", len(predictions), args.output)
+    logger.info("Wrote %d predictions to %s", len(by_id), args.output)
 
-    correct_l0 = sum(1 for p in predictions if p["pred_l0"] == p["gt_l0"])
-    correct_l1 = sum(1 for p in predictions if p["pred_l1"] == p["gt_l1"])
-    correct_l2 = sum(1 for p in predictions if p["pred_l2"] == p["gt_l2"])
-    total = len(predictions) or 1
+    correct_l0 = sum(1 for p in by_id.values() if p["pred_l0"] == p["gt_l0"])
+    correct_l1 = sum(1 for p in by_id.values() if p["pred_l1"] == p["gt_l1"])
+    correct_l2 = sum(1 for p in by_id.values() if p["pred_l2"] == p["gt_l2"])
+    total = len(by_id) or 1
     logger.info(
         "Quick exact-match: L0=%.1f%% L1=%.1f%% L2=%.1f%%",
         100 * correct_l0 / total, 100 * correct_l1 / total, 100 * correct_l2 / total,

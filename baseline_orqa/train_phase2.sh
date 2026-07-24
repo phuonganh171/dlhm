@@ -165,6 +165,10 @@ if [ ! -d "$ORQA_DIR/.git" ] || [ ! -d "$LLAMA_FACTORY_DIR" ]; then
     exit 1
 fi
 
+python "$BASELINE_DIR/patches/optional_pc_audio.py" "$ORQA_DIR"
+python "$BASELINE_DIR/patches/collator_skip_hierarchy_ids.py" "$ORQA_DIR"
+python "$BASELINE_DIR/patches/skip_image_load_tokenize.py" "$ORQA_DIR"
+
 python -c "import transformers, peft, bitsandbytes; from llamafactory.train.tuner import run_exp; print('  deps OK')" || {
     echo "ERROR: env '$ENV_NAME' incomplete. Run: bash baseline_orqa/setup.sh" >&2
     exit 1
