@@ -1,0 +1,61 @@
+### Baseline 2 Phase 1 — ORQA base (no temporal memory)
+### Matches official qwen2vl_lora_sft_QA.yaml curriculum stage 1.
+### Paths with __PLACEHOLDER__ are rewritten by train_phase1.sh.
+
+### model
+model_name_or_path: Qwen/Qwen2-VL-2B-Instruct
+quantization_bit: 4
+quantization_method: bitsandbytes
+
+### method
+stage: sft
+do_train: true
+do_eval: true
+finetuning_type: lora
+lora_target: all
+
+### dataset
+dataset: orqa
+eval_dataset: orqa
+template: qwen2_vl
+cutoff_len: 2048
+preprocessing_num_workers: 8
+overwrite_cache: false
+
+### output / data
+data_json_file: __DATA_JSON__
+eval_data_json_file: __EVAL_DATA_JSON__
+# Must be a filename with extension (e.g. *.arrow); HF datasets needs '.' for num_proc>1
+cache_file_name: __CACHE_DIR__
+eval_cache_file_name: __EVAL_CACHE_DIR__
+# Prefix for relative image paths in the JSON (MM-OR_processed root)
+image_dir: __IMAGE_DIR__
+fix_number_of_image_tokens: 578
+report_to: wandb
+# ORQA base config unfreezes last 8 ViT layers
+unfreeze_last_n_vision_tower_layers: 8
+output_dir: __OUTPUT_DIR__
+run_name: b2_phase1_hierarchy_no_memory
+logging_steps: 10
+save_steps: 500
+save_total_limit: 3
+plot_loss: true
+overwrite_output_dir: false
+flash_attn: fa2
+image_resolution: 112896  # 336*336
+
+### train (ORQA paper: Adam lr=1e-4, batch 4, 1 epoch)
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 2
+learning_rate: 1.0e-4
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+gradient_checkpointing: true
+
+### eval
+per_device_eval_batch_size: 4
+eval_strategy: steps
+eval_steps: 500

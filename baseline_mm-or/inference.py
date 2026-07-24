@@ -47,8 +47,27 @@ from data_pipeline.temporal_memory import (
 )
 
 
+def resolve_model_path(model_path: str) -> Path:
+    """Use ``model_path`` if it has adapters; else latest ``checkpoint-*``."""
+    root = Path(model_path)
+    if (root / "adapter_config.json").exists() or (root / "adapter_model.bin").exists():
+        return root
+    ckpts = sorted(
+        root.glob("checkpoint-*"),
+        key=lambda p: int(p.name.split("-")[-1]) if p.name.split("-")[-1].isdigit() else -1,
+    )
+    if ckpts:
+        return ckpts[-1]
+    return root
+
+
 def load_model(model_path: str, model_base: str = "liuhaotian/llava-v1.5-7b"):
-    """Load the fine-tuned ORacle LLaVA model with LoRA weights."""
+    """Load the fine-tuned ORacle LLaVA model with LoRA weights.
+
+    ``load_pretrained_model`` only wires the vision tower / image processor when
+    the model *name* contains ``llava`` (and LoRA when it contains ``lora``).
+    Checkpoint dirs like ``phase2_with_memory`` do not, so we force those tags.
+    """
     oracle_llava = Path(__file__).resolve().parent / "ORacle" / "LLaVA"
     if str(oracle_llava) not in sys.path:
         sys.path.insert(0, str(oracle_llava))
@@ -56,11 +75,24 @@ def load_model(model_path: str, model_base: str = "liuhaotian/llava-v1.5-7b"):
     from llava.mm_utils import get_model_name_from_path
     from llava.model.builder import load_pretrained_model
 
-    model_name = get_model_name_from_path(model_path)
+    resolved = resolve_model_path(model_path)
+    model_name = get_model_name_from_path(str(resolved))
+    # Builder branches on substrings in model_name — not on config.model_type.
+    if "llava" not in model_name.lower():
+        model_name = f"llava_{model_name}"
+    if "lora" not in model_name.lower():
+        model_name = f"{model_name}_lora"
+
+    logger.info("Loading model from %s (name=%s)", resolved, model_name)
     tokenizer, model, image_processor, context_len = load_pretrained_model(
-        model_path, model_base, model_name,
+        str(resolved), model_base, model_name,
         load_8bit=False, load_4bit=False,
     )
+    if image_processor is None:
+        raise RuntimeError(
+            "image_processor is None after load — vision tower was not initialized. "
+            f"model_name={model_name!r} path={resolved}"
+        )
     model.config.mv_type = "learned"
     model.config.tokenizer_padding_side = "left"
     model.eval()

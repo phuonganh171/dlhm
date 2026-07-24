@@ -69,3 +69,10 @@ baseline_mm-or/predictions/
 baseline_mm-or/data/
 PLAN.md
 
+# Baseline 2 (ORQA) cloned repos and outputs
+baseline_orqa/ORQA/
+baseline_orqa/checkpoints/
+baseline_orqa/predictions/
+baseline_orqa/data/
+baseline_orqa/configs/*.runtime.yaml
+
