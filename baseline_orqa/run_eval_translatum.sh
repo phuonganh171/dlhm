@@ -35,9 +35,10 @@ conda activate "$ENV_NAME"
 source "$BASELINE_DIR/lib_cuda_env.sh"
 export PYTHONPATH="$LLAMA_FACTORY_DIR/src:${ORQA_DIR}:${PYTHONPATH:-}"
 
-RCLONE="$HOME/.local/bin/rclone"
-NAS_REMOTE="nas:ge42faj"
-NAS_MOUNT="/tmp/${USER}/nas_mount_orqa"
+# ---------------------------------------------------------------------------
+# MM-OR dataset (local cluster path — no NAS mount needed)
+# ---------------------------------------------------------------------------
+export MM_OR_PROCESSED_ROOT="/home/guests/shared/ORDatasets/MM-OR"
 
 SAMPLES_DIR="$WORKDIR/data_pipeline/samples"
 TEST_SAMPLES="$SAMPLES_DIR/test.jsonl"
@@ -56,18 +57,20 @@ echo "Baseline 2 — Evaluation"
 echo "Job $SLURM_JOB_ID on $(hostname)"
 echo "Python: $(which python)"
 echo "Model: $MODEL_PATH"
+echo "MM_OR_PROCESSED_ROOT: $MM_OR_PROCESSED_ROOT"
 echo "EVAL_TAKES: ${EVAL_TAKES:-<all>}"
 echo "Started: $(date)"
 echo "======================================"
 
 # ---------------------------------------------------------------------------
-# 1. Mount NAS
+# 1. Verify dataset is accessible
 # ---------------------------------------------------------------------------
-echo "[1/5] Mounting NAS..."
-# shellcheck disable=SC1091
-source "$BASELINE_DIR/lib_nas_mount.sh"
-b2_mount_nas 3 90 || exit 1
-trap b2_unmount_nas EXIT
+echo "[1/5] Verifying dataset access..."
+if [ ! -d "$MM_OR_PROCESSED_ROOT/001_PKA" ]; then
+    echo "ERROR: MM-OR dataset not found at $MM_OR_PROCESSED_ROOT" >&2
+    exit 1
+fi
+echo "  Dataset OK: $MM_OR_PROCESSED_ROOT"
 
 # ---------------------------------------------------------------------------
 # 2. Build test samples if needed

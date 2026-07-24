@@ -46,9 +46,10 @@ fi
 export LD_LIBRARY_PATH="${CUDA_HOME:+$CUDA_HOME/lib64:}${LD_LIBRARY_PATH:-}"
 export PYTHONPATH="$LLAVA_DIR:${PYTHONPATH:-}"
 
-RCLONE="$HOME/.local/bin/rclone"
-NAS_REMOTE="nas:ge42faj"
-NAS_MOUNT="/tmp/${USER}/nas_mount_$$"
+# ---------------------------------------------------------------------------
+# MM-OR dataset (local cluster path — no NAS mount needed)
+# ---------------------------------------------------------------------------
+export MM_OR_PROCESSED_ROOT="/home/guests/shared/ORDatasets/MM-OR"
 
 SAMPLES_DIR="$WORKDIR/data_pipeline/samples"
 TEST_SAMPLES="$SAMPLES_DIR/test.jsonl"
@@ -69,6 +70,7 @@ echo "Baseline 1 — Evaluation"
 echo "Job $SLURM_JOB_ID on $(hostname)"
 echo "Python: $(which python)"
 echo "Model: $MODEL_PATH"
+echo "MM_OR_PROCESSED_ROOT: $MM_OR_PROCESSED_ROOT"
 echo "EVAL_TAKES: ${EVAL_TAKES:-<all>}"
 echo "EVAL_MAX_GROUPS: ${EVAL_MAX_GROUPS:-<none>}"
 echo "RUN_GT_MEMORY: $RUN_GT_MEMORY"
@@ -76,60 +78,14 @@ echo "Started: $(date)"
 echo "======================================"
 
 # ---------------------------------------------------------------------------
-# 1. Mount NAS (rclone can be slow/flaky on some nodes — retry + longer wait)
+# 1. Verify dataset is accessible
 # ---------------------------------------------------------------------------
-echo "[1/5] Mounting NAS..."
-mkdir -p "$NAS_MOUNT"
-
-mount_nas() {
-    local log="$WORKDIR/logs/rclone_mount_${SLURM_JOB_ID:-$$}.log"
-    mkdir -p "$(dirname "$log")"
-    # Clear a stale dead mount point if present
-    if mountpoint -q "$NAS_MOUNT" 2>/dev/null; then
-        fusermount -uz "$NAS_MOUNT" 2>/dev/null || true
-    fi
-    $RCLONE mount "$NAS_REMOTE" "$NAS_MOUNT" \
-        --vfs-cache-mode full \
-        --dir-cache-time 72h \
-        --poll-interval 1m \
-        --log-file "$log" \
-        --log-level INFO \
-        --daemon
-    export MM_OR_PROCESSED_ROOT="$NAS_MOUNT/MM-OR_data/MM-OR_processed"
-    local i
-    for i in $(seq 1 90); do
-        if [ -d "$MM_OR_PROCESSED_ROOT/001_PKA" ]; then
-            echo "[nas] Ready: $MM_OR_PROCESSED_ROOT (after ${i}s)"
-            return 0
-        fi
-        sleep 1
-    done
-    echo "[nas] WARN: mount not ready after 90s (log: $log)" >&2
-    tail -20 "$log" 2>/dev/null || true
-    fusermount -uz "$NAS_MOUNT" 2>/dev/null || true
-    return 1
-}
-
-mounted=0
-for attempt in 1 2 3; do
-    echo "[nas] Mount attempt $attempt/3 → $NAS_MOUNT"
-    if mount_nas; then
-        mounted=1
-        break
-    fi
-    sleep 5
-done
-if [ "$mounted" -ne 1 ]; then
-    echo "[nas] ERROR: mount failed after 3 attempts" >&2
+echo "[1/5] Verifying dataset access..."
+if [ ! -d "$MM_OR_PROCESSED_ROOT/001_PKA" ]; then
+    echo "ERROR: MM-OR dataset not found at $MM_OR_PROCESSED_ROOT" >&2
     exit 1
 fi
-
-cleanup() {
-    echo "[cleanup] Unmounting NAS..."
-    fusermount -uz "$NAS_MOUNT" 2>/dev/null || true
-    rmdir "$NAS_MOUNT" 2>/dev/null || true
-}
-trap cleanup EXIT
+echo "  Dataset OK: $MM_OR_PROCESSED_ROOT"
 
 # ---------------------------------------------------------------------------
 # 2. Build test samples if needed

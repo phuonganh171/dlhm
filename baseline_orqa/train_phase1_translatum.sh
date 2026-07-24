@@ -30,16 +30,16 @@ conda activate "$ENV_NAME"
 source "$BASELINE_DIR/lib_cuda_env.sh"
 export PYTHONPATH="$LLAMA_FACTORY_DIR/src:${ORQA_DIR}:${PYTHONPATH:-}"
 
-RCLONE="$HOME/.local/bin/rclone"
-NAS_REMOTE="nas:ge42faj"
-# Stable path so tokenized caches / relative image_dir stay valid across jobs on a node
-NAS_MOUNT="/tmp/${USER}/nas_mount_orqa"
+# ---------------------------------------------------------------------------
+# MM-OR dataset (local cluster path — no NAS mount needed)
+# ---------------------------------------------------------------------------
+export MM_OR_PROCESSED_ROOT="/home/guests/shared/ORDatasets/MM-OR"
+
 SAMPLES_DIR="$WORKDIR/data_pipeline/samples"
 
 TRAIN_DATA="$BASELINE_DIR/data/train_no_memory.json"
 VAL_DATA="$BASELINE_DIR/data/val_no_memory.json"
 CKPT_DIR="$BASELINE_DIR/checkpoints/phase1_no_memory"
-# HF datasets format_cache_file_name requires a '.' (extension) when num_proc>1
 CACHE_ROOT="$BASELINE_DIR/data/cache"
 CACHE_FILE="$CACHE_ROOT/train_no_memory.arrow"
 EVAL_CACHE_FILE="$CACHE_ROOT/val_no_memory.arrow"
@@ -49,22 +49,23 @@ CFG_RUNTIME="$BASELINE_DIR/configs/hierarchy_lora_sft_phase1.runtime.yaml"
 cd "$WORKDIR"
 mkdir -p logs "$CKPT_DIR" "$CACHE_ROOT"
 
-# shellcheck disable=SC1091
-source "$BASELINE_DIR/lib_nas_mount.sh"
-
 echo "======================================"
 echo "Baseline 2 — Phase 1 (No Memory / ORQA base)"
 echo "Job $SLURM_JOB_ID on $(hostname)"
 echo "Python: $(which python)"
+echo "MM_OR_PROCESSED_ROOT: $MM_OR_PROCESSED_ROOT"
 echo "Started: $(date)"
 echo "======================================"
 
 # ---------------------------------------------------------------------------
-# 1. Mount NAS
+# 1. Verify dataset is accessible
 # ---------------------------------------------------------------------------
-echo "[1/4] Mounting NAS..."
-b2_mount_nas 3 90 || exit 1
-trap b2_unmount_nas EXIT
+echo "[1/4] Verifying dataset access..."
+if [ ! -d "$MM_OR_PROCESSED_ROOT/001_PKA" ]; then
+    echo "ERROR: MM-OR dataset not found at $MM_OR_PROCESSED_ROOT" >&2
+    exit 1
+fi
+echo "  Dataset OK: $MM_OR_PROCESSED_ROOT"
 
 # ---------------------------------------------------------------------------
 # 2. Build samples + convert (no temporal aug; strip memory in JSON)
@@ -90,7 +91,7 @@ python "$BASELINE_DIR/convert_to_qwen_json.py" \
     --augment-views \
     --relative-images
 
-# Drop stale tokenized caches (old absolute /tmp/nas_mount_PID paths)
+# Drop stale tokenized caches
 rm -rf "$CACHE_ROOT"
 mkdir -p "$CACHE_ROOT"
 
@@ -103,7 +104,7 @@ echo "  Train: $TRAIN_DATA ($(python -c "import json; print(len(json.load(open('
 echo "  Val:   $VAL_DATA ($(python -c "import json; print(len(json.load(open('$VAL_DATA'))))") samples)"
 echo "  image_dir: $MM_OR_PROCESSED_ROOT"
 
-# Sanity: relative paths + openable under mount
+# Sanity: relative paths + openable under dataset root
 python - <<PY
 import json, random
 from pathlib import Path
